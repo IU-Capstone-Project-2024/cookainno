@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
                 val camViewModel = CamViewModel()
                 val recipesViewModel = RecipesViewModel()
                 val profileViewModel = ProfileViewModel()
+                //
                 App(authViewModel, camViewModel, recipesViewModel, profileViewModel)
             }
         }
