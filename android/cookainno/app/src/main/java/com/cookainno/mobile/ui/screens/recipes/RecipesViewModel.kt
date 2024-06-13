@@ -1,4 +1,4 @@
-package com.cookainno.mobile.ui.screens.home
+package com.cookainno.mobile.ui.screens.recipes
 
 import androidx.lifecycle.ViewModel
 
