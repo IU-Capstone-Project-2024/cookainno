@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -49,6 +47,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -66,9 +67,16 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.hilt.android)
     implementation(libs.androidx.navigation.compose)
-    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.coil.compose)
+
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.runtime.livedata)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -77,8 +85,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-kapt {
-    correctErrorTypes = true
 }
