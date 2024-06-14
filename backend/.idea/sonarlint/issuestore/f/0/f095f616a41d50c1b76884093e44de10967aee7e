@@ -1,0 +1,21 @@
+
+t
+java:S1874S"1Remove this use of "setClaims"; it is deprecated.(ùÅ¼Ï8¥•‰»2J$0eea3357-2ced-44ec-bcb0-f633f6097738
+u
+java:S1874S"2Remove this use of "setSubject"; it is deprecated.(ùÅ¼Ï8¦•‰»2J$62b2ddf7-67af-44ba-9976-5d12d5108f5a
+v
+java:S1874T"3Remove this use of "setIssuedAt"; it is deprecated.(øÔ÷ò8¦•‰»2J$f586d68b-ca2d-4a3f-8b8b-54e14cfb1d0a
+}
+java:S1874U"5Remove this use of "setExpiration"; it is deprecated.(æ¯¢¨ıÿÿÿÿ8©•‰»2J$c78a8a10-12af-40a3-b431-0bbf9f9da7cb
+x
+java:S1874V"0Remove this use of "signWith"; it is deprecated.(¹›‘Èúÿÿÿÿ8à¸ˆ»2J$9c17cf21-1f11-4bcc-86d8-c7e049cd2eda
+‚
+java:S1874V":Remove this use of "SignatureAlgorithm"; it is deprecated.(¹›‘Èúÿÿÿÿ8à¸ˆ»2J$622e9b07-de13-4df1-a388-1c820af93462
+‚
+java:S1874V":Remove this use of "SignatureAlgorithm"; it is deprecated.(¹›‘Èúÿÿÿÿ8«•‰»2J$737f781b-16ac-40a3-9915-faeff0a0c1b8
+x
+java:S1874t"5Remove this use of "setSigningKey"; it is deprecated.(˜©Ü‰8²•‰»2J$25830fc3-a1f3-45cf-b764-0dd685d1b137
+y
+java:S1874t"6Remove this use of "parseClaimsJws"; it is deprecated.(˜©Ü‰8²•‰»2J$62332e52-7901-4cd6-b275-581020f2167c
+r
+java:S1874u"/Remove this use of "getBody"; it is deprecated.(ÊÄ¿Ì8²•‰»2J$a1229ee1-f36d-4778-b0a3-ccc16ff2162e
