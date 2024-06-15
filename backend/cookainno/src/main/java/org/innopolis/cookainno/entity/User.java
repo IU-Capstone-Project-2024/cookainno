@@ -42,6 +42,15 @@ public class User implements UserDetails {
     @Column(name = "confirmation_code")
     private String confirmationCode;
 
+    @Column(name = "height")
+    private int height;
+
+    @Column(name = "weight")
+    private int weight;
+
+    @Column(name = "age")
+    private int age;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
