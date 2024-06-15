@@ -27,6 +27,6 @@ public class FavouriteRecipe {
     @Column(name = "instructions", nullable = false)
     private String instructions;
 
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "dateAdded", nullable = false)
+    private LocalDateTime dateAdded;
 }
