@@ -1,4 +1,4 @@
-package org.innopolis.cookainno.services;
+package org.innopolis.cookainno.service;
 
 import org.innopolis.cookainno.entity.User;
 import io.jsonwebtoken.Claims;
