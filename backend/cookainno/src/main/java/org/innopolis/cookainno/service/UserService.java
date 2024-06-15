@@ -1,5 +1,7 @@
 package org.innopolis.cookainno.service;
 
+import org.innopolis.cookainno.dto.SaveUserInfoRequest;
+import org.innopolis.cookainno.dto.SaveUserInfoResponse;
 import org.innopolis.cookainno.entity.Role;
 import org.innopolis.cookainno.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.innopolis.cookainno.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -97,5 +100,29 @@ public class UserService {
         var user = getCurrentUser();
         user.setRole(Role.ROLE_ADMIN);
         save(user);
+    }
+
+    /**
+     * User info update
+     * @param request new user data
+     * @return updated user data
+     */
+    @Transactional
+    public SaveUserInfoResponse updateUserInfo(SaveUserInfoRequest request) {
+        User user = repository.findById(request.getUserId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setHeight(request.getHeight());
+        user.setWeight(request.getWeight());
+        user.setDateOfBirth(request.getDateOfBirth());
+
+        repository.save(user);
+
+        return new SaveUserInfoResponse(
+                user.getId(),
+                user.getHeight(),
+                user.getWeight(),
+                user.getDateOfBirth()
+        );
     }
 }
