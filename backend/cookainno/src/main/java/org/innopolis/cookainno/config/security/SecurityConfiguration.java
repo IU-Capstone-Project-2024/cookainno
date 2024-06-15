@@ -1,4 +1,4 @@
-package org.innopolis.cookainno.config;
+package org.innopolis.cookainno.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

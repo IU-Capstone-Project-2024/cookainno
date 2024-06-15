@@ -19,7 +19,7 @@ public class ExampleController {
     @GetMapping
     @Operation(summary = "Доступен только авторизованным пользователям")
     public String example() {
-        return "Hello, world!";
+        return "Привет, гениальным андроид developerам!";
     }
 
     @GetMapping("/admin")

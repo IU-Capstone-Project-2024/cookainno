@@ -1,4 +1,4 @@
-package org.innopolis.cookainno.config;
+package org.innopolis.cookainno.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
