@@ -1,0 +1,9 @@
+
+‡	java:S112#"FDefine and throw a dedicated exception instead of using a generic one.(®°Ì~8“®Š»2J$8b16086e-5e6c-4a00-b135-ef7372f28f22
+	java:S112'"FDefine and throw a dedicated exception instead of using a generic one.(–‘í€ùÿÿÿÿ8•®Š»2J$3d17728b-795e-4d2f-8269-8d5cc01d6160
+‹
+java:S6355T"HAdd 'since' and/or 'forRemoval' arguments to the @Deprecated annotation.(õˆúš8£®Š»2J$9a0d30a6-aae5-41c3-af6b-895f96532b55
+x
+java:S1133U"5Do not forget to remove this deprecated code someday.(Ø“à8£®Š»2J$8f78c544-c6cb-41b9-8e28-b5506efc173c
+k
+java:S1123U"(Add the missing @deprecated Javadoc tag.(Ø“à8£®Š»2J$443209f7-71d5-40a2-973b-a3bfa484dd3e

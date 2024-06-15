@@ -1,6 +1,6 @@
 package org.innopolis.cookainno;
 
-import configs.ApplicationConfiguration;
+import org.innopolis.cookainno.config.ApplicationConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

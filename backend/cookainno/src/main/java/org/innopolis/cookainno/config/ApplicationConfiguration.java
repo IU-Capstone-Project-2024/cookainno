@@ -1,4 +1,4 @@
-package configs;
+package org.innopolis.cookainno.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
