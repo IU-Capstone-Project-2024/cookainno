@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.innopolis.cookainno.services.JwtService;
-import org.innopolis.cookainno.services.UserService;
+import org.innopolis.cookainno.service.JwtService;
+import org.innopolis.cookainno.service.UserService;
 
 import java.io.IOException;
 

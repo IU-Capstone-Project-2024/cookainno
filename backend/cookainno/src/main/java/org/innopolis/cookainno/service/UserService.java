@@ -1,8 +1,9 @@
-package org.innopolis.cookainno.services;
+package org.innopolis.cookainno.service;
 
 import org.innopolis.cookainno.entity.Role;
 import org.innopolis.cookainno.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.innopolis.cookainno.exception.UserAlreadyExistsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,11 +33,11 @@ public class UserService {
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
             // Заменить на свои исключения
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
         }
 
         if (repository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Пользователь с таким email уже существует");
+            throw new UserAlreadyExistsException("Пользователь с таким email уже существует");
         }
 
         return save(user);
@@ -51,6 +52,16 @@ public class UserService {
         return repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
 
+    }
+
+    /**
+     * Получение пользователя по почте
+     *
+     * @return пользователь
+     */
+    public User getByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
     }
 
     /**
