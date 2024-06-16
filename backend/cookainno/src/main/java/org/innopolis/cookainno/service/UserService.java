@@ -1,16 +1,16 @@
 package org.innopolis.cookainno.service;
 
+import lombok.RequiredArgsConstructor;
 import org.innopolis.cookainno.dto.SaveUserInfoRequest;
 import org.innopolis.cookainno.dto.SaveUserInfoResponse;
 import org.innopolis.cookainno.entity.Role;
 import org.innopolis.cookainno.entity.User;
-import lombok.RequiredArgsConstructor;
 import org.innopolis.cookainno.exception.UserAlreadyExistsException;
+import org.innopolis.cookainno.exception.UserNotFoundException;
+import org.innopolis.cookainno.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.innopolis.cookainno.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -35,7 +35,6 @@ public class UserService {
      */
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
-            // Заменить на свои исключения
             throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
         }
 
@@ -53,7 +52,7 @@ public class UserService {
      */
     public User getByUsername(String username) {
         return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UserNotFoundException("Пользователь с таким username не найден"));
 
     }
 
@@ -64,7 +63,7 @@ public class UserService {
      */
     public User getByEmail(String email) {
         return repository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+                .orElseThrow(() -> new UserNotFoundException("Пользователь с такиим email не найден"));
     }
 
     /**
@@ -104,13 +103,14 @@ public class UserService {
 
     /**
      * User info update
+     *
      * @param request new user data
      * @return updated user data
      */
     @Transactional
     public SaveUserInfoResponse updateUserInfo(SaveUserInfoRequest request) {
         User user = repository.findById(request.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setHeight(request.getHeight());
         user.setWeight(request.getWeight());

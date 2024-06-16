@@ -15,7 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+
     /**
      * Регистрация пользователя
      *
@@ -32,14 +33,13 @@ public class AuthenticationService {
      * @return сообщение о проверке кода на почту
      */
     public JwtAuthenticationResponse signUp(SignUpRequest request) throws MessagingException {
-
         var user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ROLE_USER)
                 .isEnabled(false)
-                .confirmationCode(UUID.randomUUID().toString())
+                .confirmationCode(String.format("%04d", new Random().nextInt(10000)))
                 .build();
 
         userService.create(user);

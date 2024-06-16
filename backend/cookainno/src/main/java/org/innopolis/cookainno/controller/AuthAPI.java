@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.innopolis.cookainno.dto.ConfirmEmailRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public interface AuthAPI {
 
     @Operation(summary = "User Registration")
@@ -33,7 +35,8 @@ public interface AuthAPI {
     @Operation(summary = "Confirm User Email")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Email confirmed successfully", content = @Content(schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid confirmation code", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            @ApiResponse(responseCode = "400", description = "Invalid confirmation code", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
     })
     @PostMapping("/confirm-email")
     ResponseEntity<String> confirmEmail(@RequestBody @Valid ConfirmEmailRequest request, BindingResult bindingResult);
@@ -42,7 +45,8 @@ public interface AuthAPI {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User authenticated successfully", content = @Content(schema = @Schema(implementation = JwtAuthenticationResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid credentials", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Email not confirmed", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+            @ApiResponse(responseCode = "403", description = "Email not confirmed", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
     })
     @PostMapping("/sign-in")
     ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid SignInRequest request, BindingResult bindingResult);
