@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "favouriteRecipes")
+@Table(name = "favourite_recipes")
 public class FavouriteRecipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +27,6 @@ public class FavouriteRecipe {
     @Column(name = "instructions", nullable = false)
     private String instructions;
 
-    @Column(name = "dateAdded", nullable = false)
+    @Column(name = "date_added", nullable = false)
     private LocalDateTime dateAdded;
 }
