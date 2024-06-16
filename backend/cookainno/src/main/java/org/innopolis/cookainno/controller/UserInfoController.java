@@ -35,5 +35,3 @@ public class UserInfoController implements UserInfoAPI {
         return ResponseEntity.ok(response);
     }
 }
-
-

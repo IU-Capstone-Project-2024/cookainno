@@ -6,6 +6,8 @@ import org.innopolis.cookainno.dto.FavouriteRecipeResponse;
 import org.innopolis.cookainno.dto.UpdateFavouriteRecipeRequest;
 import org.innopolis.cookainno.entity.FavouriteRecipe;
 import org.innopolis.cookainno.entity.User;
+import org.innopolis.cookainno.exception.RecipeNotFoundException;
+import org.innopolis.cookainno.exception.UserNotFoundException;
 import org.innopolis.cookainno.repository.FavouriteRecipeRepository;
 import org.innopolis.cookainno.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -25,7 +27,7 @@ public class FavouriteRecipeService {
 
     public FavouriteRecipeResponse addFavouriteRecipe(AddFavouriteRecipeRequest request) {
         User user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         FavouriteRecipe recipe = FavouriteRecipe.builder()
                 .user(user)
@@ -51,7 +53,7 @@ public class FavouriteRecipeService {
 
     public FavouriteRecipeResponse updateFavouriteRecipe(UpdateFavouriteRecipeRequest request) {
         FavouriteRecipe recipe = favouriteRecipeRepository.findById(request.recipeId())
-                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
         recipe.setName(request.name());
         recipe.setInstructions(request.instructions());

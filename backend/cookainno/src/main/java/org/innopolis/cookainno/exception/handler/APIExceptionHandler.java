@@ -43,4 +43,11 @@ public class APIExceptionHandler {
                 .status(exception.getStatusCode())
                 .body(new APIErrorResponse(exception.getStatusCode(), exception));
     }
+
+    @ExceptionHandler(value = RecipeNotFoundException.class)
+    public ResponseEntity<APIErrorResponse> handleConflictException(RecipeNotFoundException exception) {
+        return ResponseEntity
+                .status(exception.getStatusCode())
+                .body(new APIErrorResponse(exception.getStatusCode(), exception));
+    }
 }
