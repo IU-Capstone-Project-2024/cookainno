@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.map
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "data_store_prefs")
 
 class PreferencesRepository(private val context: Context) {
-
     private val dataStore: DataStore<Preferences> = context.dataStore
 
     suspend fun saveData(key: String, value: String) {
@@ -20,11 +19,15 @@ class PreferencesRepository(private val context: Context) {
         }
     }
 
-    val getData: (String) -> Flow<String?> = { key ->
-        val dataStoreKey = stringPreferencesKey(key)
-        context.dataStore.data
-            .map { preferences ->
-                preferences[dataStoreKey]
-            }
+    companion object {
+        private const val USER_TOKEN_KEY = "user_token"
+    }
+
+    fun getTokenFlow(): Flow<String?> {
+        val dataStoreKey = stringPreferencesKey(USER_TOKEN_KEY)
+        return context.dataStore.data.map { preferences ->
+            preferences[dataStoreKey]
+        }
     }
 }
+

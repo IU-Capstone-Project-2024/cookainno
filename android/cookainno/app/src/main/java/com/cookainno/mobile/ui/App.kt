@@ -9,8 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.ui.screens.LoadingScreen
-import com.cookainno.mobile.ui.screens.auth.AuthScreen
+import com.cookainno.mobile.ui.screens.auth.RegistrationScreen
 import com.cookainno.mobile.ui.screens.auth.AuthViewModel
+import com.cookainno.mobile.ui.screens.auth.ConfirmationCodeScreen
+import com.cookainno.mobile.ui.screens.auth.LoginScreen
 import com.cookainno.mobile.ui.screens.camera.CamViewModel
 import com.cookainno.mobile.ui.screens.home.HomeScreen
 import com.cookainno.mobile.ui.screens.profile.ProfileViewModel
@@ -32,7 +34,7 @@ fun App(
             LoadingScreen()
         }
     } else {
-        val startScreen = if (isSignedIn) NavRoutes.HOME.name else NavRoutes.AUTH.name
+        val startScreen = if (isSignedIn) NavRoutes.HOME.name else NavRoutes.REGISTRATION.name
         NavHost(navController = navController, startDestination = startScreen) {
             composable(NavRoutes.HOME.name) {
                 HomeScreen(
@@ -41,8 +43,14 @@ fun App(
                     profileViewModel = profileViewModel
                 )
             }
-            composable(NavRoutes.AUTH.name) {
-                AuthScreen()
+            composable(NavRoutes.REGISTRATION.name) {
+                RegistrationScreen(authViewModel = authViewModel, navController = navController)
+            }
+            composable(NavRoutes.CONFIRMATION.name) {
+                ConfirmationCodeScreen(authViewModel = authViewModel, navController = navController)
+            }
+            composable(NavRoutes.LOGIN.name) {
+                LoginScreen(authViewModel = authViewModel, navController = navController)
             }
         }
     }
