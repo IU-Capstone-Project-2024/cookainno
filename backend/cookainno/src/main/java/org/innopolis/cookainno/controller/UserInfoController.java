@@ -1,6 +1,5 @@
 package org.innopolis.cookainno.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.innopolis.cookainno.dto.GetUserInfoResponse;
@@ -16,16 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserInfoController implements UserInfoAPI {
-
     private final UserService service;
 
-    @Override
+    @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GetUserInfoResponse> getUserInfoById(@PathVariable("id") Long id) {
         GetUserInfoResponse response = service.getUserInfoById(id);
         return ResponseEntity.ok(response);
     }
 
-    @Override
+    @PutMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<SaveUserInfoResponse> saveUserInfo(@RequestBody @Valid SaveUserInfoRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
@@ -35,3 +35,5 @@ public class UserInfoController implements UserInfoAPI {
         return ResponseEntity.ok(response);
     }
 }
+
+

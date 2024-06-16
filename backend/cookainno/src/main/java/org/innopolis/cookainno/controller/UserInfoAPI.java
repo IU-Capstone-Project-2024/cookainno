@@ -10,7 +10,6 @@ import org.innopolis.cookainno.dto.GetUserInfoResponse;
 import org.innopolis.cookainno.dto.SaveUserInfoRequest;
 import org.innopolis.cookainno.dto.SaveUserInfoResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,6 @@ public interface UserInfoAPI {
     ResponseEntity<GetUserInfoResponse> getUserInfoById(@PathVariable("id") Long id);
 
     @Operation(summary = "Update user info. Accessible only to authorized users", security = @SecurityRequirement(name = "bearerAuth"))
-    @PreAuthorize("isAuthenticated()")
     @PutMapping
     ResponseEntity<SaveUserInfoResponse> saveUserInfo(@RequestBody @Valid SaveUserInfoRequest request, BindingResult bindingResult);
 }

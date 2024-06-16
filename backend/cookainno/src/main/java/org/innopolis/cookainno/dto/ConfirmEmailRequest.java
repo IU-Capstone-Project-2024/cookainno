@@ -14,7 +14,7 @@ public class ConfirmEmailRequest {
     @Email(message = "Email address must be in the format user@yandex.ru")
     private String email;
 
-    @Schema(description = "Confirmation code", example = "123456")
+    @Schema(description = "Confirmation code", example = "1234")
     @NotBlank(message = "Confirmation code cannot be blank")
     private String confirmationCode;
 }
