@@ -3,26 +3,29 @@ package org.innopolis.cookainno.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.innopolis.cookainno.dto.GetUserInfoResponse;
 import org.innopolis.cookainno.dto.SaveUserInfoRequest;
 import org.innopolis.cookainno.dto.SaveUserInfoResponse;
 import org.innopolis.cookainno.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserInfoController {
+public class UserInfoController implements UserInfoAPI {
 
     private final UserService service;
 
-    @PutMapping
-    @PreAuthorize("isAuthenticated()")
+    @Override
+    public ResponseEntity<GetUserInfoResponse> getUserInfoById(@PathVariable("id") Long id) {
+        GetUserInfoResponse response = service.getUserInfoById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<SaveUserInfoResponse> saveUserInfo(@RequestBody @Valid SaveUserInfoRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();

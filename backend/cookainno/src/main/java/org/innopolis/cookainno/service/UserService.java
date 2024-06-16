@@ -1,6 +1,7 @@
 package org.innopolis.cookainno.service;
 
 import lombok.RequiredArgsConstructor;
+import org.innopolis.cookainno.dto.GetUserInfoResponse;
 import org.innopolis.cookainno.dto.SaveUserInfoRequest;
 import org.innopolis.cookainno.dto.SaveUserInfoResponse;
 import org.innopolis.cookainno.entity.Role;
@@ -12,6 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 @Service
 @RequiredArgsConstructor
@@ -123,6 +127,27 @@ public class UserService {
                 user.getHeight(),
                 user.getWeight(),
                 user.getDateOfBirth()
+        );
+    }
+
+    /**
+     * Получение информации о пользователе по ID
+     *
+     * @return информация о пользователе
+     */
+    public GetUserInfoResponse getUserInfoById(Long id) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        int age = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
+
+        return new GetUserInfoResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getHeight(),
+                user.getWeight(),
+                age
         );
     }
 }
