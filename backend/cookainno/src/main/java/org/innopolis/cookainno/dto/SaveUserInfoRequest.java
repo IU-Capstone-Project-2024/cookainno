@@ -1,4 +1,3 @@
-// SaveUserInfoRequest.java
 package org.innopolis.cookainno.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

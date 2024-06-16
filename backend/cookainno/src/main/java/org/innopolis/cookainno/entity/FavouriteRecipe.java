@@ -18,7 +18,7 @@ public class FavouriteRecipe {
     private Long id;
 
     @ManyToOne
-    @MapsId("userId")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "name", nullable = false)

@@ -25,7 +25,15 @@ public class EmailService {
         helper.setTo(to);
         helper.setSubject("Email Confirmation");
 
-        String htmlContent = "<p>✅ Your confirmation code is: <strong>" + confirmationCode + "</strong></p>";
+        String htmlContent = "<div style='font-family: Arial, sans-serif; color: #333;'>"
+                + "<h2 style='text-align: center; color: #4CAF50;'>Email Confirmation</h2>"
+                + "<p style='text-align: center;'>Thank you for registering. Please use the following confirmation code to complete your registration:</p>"
+                + "<div style='font-size: 24px; font-weight: bold; margin: 20px auto; padding: 10px; width: 150px; text-align: center; background-color: #f9f9f9; border: 2px solid #4CAF50; border-radius: 5px;'>"
+                + confirmationCode
+                + "</div>"
+                + "<p style='text-align: center;'>If you did not register for this service, please ignore this email.</p>"
+                + "<p style='text-align: center;'>Best regards,<br/>CookAInno Team</p>"
+                + "</div>";
         helper.setText(htmlContent, true);
 
         mailSender.send(message);
