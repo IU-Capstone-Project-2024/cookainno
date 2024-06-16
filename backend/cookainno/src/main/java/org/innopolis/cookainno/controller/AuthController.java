@@ -1,6 +1,5 @@
 package org.innopolis.cookainno.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication")
 public class AuthController implements AuthAPI {
     private final AuthenticationService authenticationService;
 

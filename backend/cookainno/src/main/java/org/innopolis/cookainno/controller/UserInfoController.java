@@ -1,4 +1,3 @@
-// UserInfoController.java
 package org.innopolis.cookainno.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,19 +9,19 @@ import org.innopolis.cookainno.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
-@Tag(name = "UserInfo")
-public class UserInfoController implements UserInfoAPI {
+public class UserInfoController {
 
     private final UserService service;
 
-    @Override
+    @PutMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<SaveUserInfoResponse> saveUserInfo(@RequestBody @Valid SaveUserInfoRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

@@ -1,9 +1,6 @@
 package org.innopolis.cookainno.exception.handler;
 
-import org.innopolis.cookainno.exception.EmailNotConfirmedException;
-import org.innopolis.cookainno.exception.InvalidConfirmationCodeException;
-import org.innopolis.cookainno.exception.UserAlreadyExistsException;
-import org.innopolis.cookainno.exception.ValidationException;
+import org.innopolis.cookainno.exception.*;
 import org.innopolis.cookainno.exception.model.APIErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +24,7 @@ public class APIExceptionHandler {
     }
 
     @ExceptionHandler(value = EmailNotConfirmedException.class)
-    public ResponseEntity<APIErrorResponse> handleConflictException(EmailNotConfirmedException exception) {
+    public ResponseEntity<APIErrorResponse> handleEmailNotConfirmedException(EmailNotConfirmedException exception) {
         return ResponseEntity
                 .status(exception.getStatusCode())
                 .body(new APIErrorResponse(exception.getStatusCode(), exception));
@@ -35,6 +32,13 @@ public class APIExceptionHandler {
 
     @ExceptionHandler(value = UserAlreadyExistsException.class)
     public ResponseEntity<APIErrorResponse> handleConflictException(UserAlreadyExistsException exception) {
+        return ResponseEntity
+                .status(exception.getStatusCode())
+                .body(new APIErrorResponse(exception.getStatusCode(), exception));
+    }
+
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public ResponseEntity<APIErrorResponse> handleConflictException(UserNotFoundException exception) {
         return ResponseEntity
                 .status(exception.getStatusCode())
                 .body(new APIErrorResponse(exception.getStatusCode(), exception));
