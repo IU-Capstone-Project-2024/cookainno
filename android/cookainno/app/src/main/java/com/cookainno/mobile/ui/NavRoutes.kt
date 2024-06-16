@@ -2,7 +2,9 @@ package com.cookainno.mobile.ui
 
 enum class NavRoutes {
     HOME,
-    AUTH,
+    REGISTRATION,
+    CONFIRMATION,
+    LOGIN,
     RECIPES,
     CAMERA,
     PROFILE;
