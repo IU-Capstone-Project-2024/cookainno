@@ -21,7 +21,7 @@ import com.cookainno.mobile.ui.NavRoutes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(authViewModel: AuthViewModel, navController: NavHostController) {
+fun LoginScreen(authViewModel: UserViewModel, navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val registrationError by authViewModel.registrationError.collectAsState()
     val username by authViewModel.username.collectAsState()

@@ -1,6 +1,7 @@
 package com.cookainno.mobile.data.repository
 
 import android.util.Log
+import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.ConfirmationRequest
 import com.cookainno.mobile.data.model.LoginRequest
 import com.cookainno.mobile.data.model.LoginResponse
@@ -15,12 +16,16 @@ import java.io.IOException
 class AuthRepository(private val preferencesRepository: PreferencesRepository) {
 
     private var authService: AuthService = Retrofit.Builder()
-        .baseUrl("http://10.91.55.113:8080/") // server base url
+        .baseUrl(Constants.BASE_URL) // server base url
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(AuthService::class.java)
 
-    suspend fun register(username: String, email: String, password: String): Result<RegistrationResponse> {
+    suspend fun register(
+        username: String,
+        email: String,
+        password: String
+    ): Result<RegistrationResponse> {
         return try {
             val response = authService.registerUser(RegistrationRequest(username, email, password))
             if (response.isSuccessful && response.body() != null) {
@@ -70,7 +75,7 @@ class AuthRepository(private val preferencesRepository: PreferencesRepository) {
             val response = authService.loginUser(LoginRequest(username, password))
             if (response.isSuccessful && response.body() != null) {
                 response.body()?.token?.let { token ->
-                    preferencesRepository.saveData("user_token", token)
+                    preferencesRepository.saveToken(token)
                 }
                 Result.success(response.body()!!)
             } else {
@@ -80,11 +85,13 @@ class AuthRepository(private val preferencesRepository: PreferencesRepository) {
             Result.failure(e)
         }
     }
-    private suspend fun storeToken(token: String) {
-        preferencesRepository.saveData("user_token", token)
-    }
 
-    suspend fun getToken(): String? {
-        return preferencesRepository.getTokenFlow().first()
+    suspend fun logout(): Boolean {
+        return try {
+            preferencesRepository.deleteToken()
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 }
