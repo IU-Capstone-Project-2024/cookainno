@@ -10,21 +10,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.ui.screens.LoadingScreen
 import com.cookainno.mobile.ui.screens.auth.RegistrationScreen
-import com.cookainno.mobile.ui.screens.auth.AuthViewModel
+import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.auth.ConfirmationCodeScreen
 import com.cookainno.mobile.ui.screens.auth.LoginScreen
 import com.cookainno.mobile.ui.screens.camera.CamViewModel
 import com.cookainno.mobile.ui.screens.home.HomeScreen
-import com.cookainno.mobile.ui.screens.profile.ProfileViewModel
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun App(
-    authViewModel: AuthViewModel,
+    authViewModel: UserViewModel,
     camViewModel: CamViewModel,
-    recipesViewModel: RecipesViewModel,
-    profileViewModel: ProfileViewModel
+    recipesViewModel: RecipesViewModel
 ) {
     val navController = rememberNavController()
     val isSignedIn by authViewModel.isSignedIn.collectAsState()
@@ -34,13 +32,13 @@ fun App(
             LoadingScreen()
         }
     } else {
-        val startScreen = if (isSignedIn) NavRoutes.HOME.name else NavRoutes.REGISTRATION.name
+        val startScreen = if (isSignedIn) NavRoutes.HOME.name else NavRoutes.LOGIN.name
         NavHost(navController = navController, startDestination = startScreen) {
             composable(NavRoutes.HOME.name) {
                 HomeScreen(
+                    authViewModel = authViewModel,
                     camViewModel = camViewModel,
-                    recipesViewModel = recipesViewModel,
-                    profileViewModel = profileViewModel
+                    recipesViewModel = recipesViewModel
                 )
             }
             composable(NavRoutes.REGISTRATION.name) {

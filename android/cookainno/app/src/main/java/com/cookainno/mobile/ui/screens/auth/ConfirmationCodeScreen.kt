@@ -24,7 +24,7 @@ import com.cookainno.mobile.ui.NavRoutes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ConfirmationCodeScreen(authViewModel: AuthViewModel, navController: NavHostController) {
+fun ConfirmationCodeScreen(authViewModel: UserViewModel, navController: NavHostController) {
     val confirmationCode by authViewModel.confirmationCode.collectAsState()
     val navigateToMain by authViewModel.navigateToMain.collectAsState()
     if (navigateToMain) {

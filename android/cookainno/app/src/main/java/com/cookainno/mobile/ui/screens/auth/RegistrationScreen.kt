@@ -30,7 +30,7 @@ import com.cookainno.mobile.ui.NavRoutes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegistrationScreen(authViewModel: AuthViewModel, navController: NavHostController) {
+fun RegistrationScreen(authViewModel: UserViewModel, navController: NavHostController) {
     val username by authViewModel.username.collectAsState()
     val email by authViewModel.email.collectAsState()
     val password by authViewModel.password.collectAsState()

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class AuthViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
+class UserViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
     private val _isSignedIn = MutableStateFlow(false)
     val isSignedIn: StateFlow<Boolean> = _isSignedIn
 
@@ -72,7 +72,11 @@ class AuthViewModel(private val preferencesRepository: PreferencesRepository) : 
         _registrationError.value = null
         viewModelScope.launch {
             _isLoading.value = true
-            val result = authRepository.register(username = _username.value, email = _email.value, password = _password.value)
+            val result = authRepository.register(
+                username = _username.value,
+                email = _email.value,
+                password = _password.value
+            )
             if (result.isSuccess) {
                 _navigateToConfirmation.value = true
             } else {
@@ -86,9 +90,13 @@ class AuthViewModel(private val preferencesRepository: PreferencesRepository) : 
         _registrationError.value = null
         viewModelScope.launch {
             _isLoading.value = true
-            val result = authRepository.confirm(email = _email.value, confirmationCode = _confirmationCode.value)
+            val result = authRepository.confirm(
+                email = _email.value,
+                confirmationCode = _confirmationCode.value
+            )
             if (result.isSuccess) {
-                val loginResult = authRepository.login(username = _username.value, password = _password.value)
+                val loginResult =
+                    authRepository.login(username = _username.value, password = _password.value)
                 if (loginResult.isSuccess) {
                     _navigateToMain.value = true
                 } else {
@@ -106,13 +114,20 @@ class AuthViewModel(private val preferencesRepository: PreferencesRepository) : 
         _registrationError.value = null
         viewModelScope.launch {
             _isLoading.value = true
-            val result = authRepository.login(username = _username.value, password = _password.value)
+            val result =
+                authRepository.login(username = _username.value, password = _password.value)
             if (result.isSuccess) {
                 _navigateToMain.value = true
             } else {
                 _registrationError.value = result.exceptionOrNull()?.message
             }
             _isLoading.value = false
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            authRepository.logout()
         }
     }
 }
