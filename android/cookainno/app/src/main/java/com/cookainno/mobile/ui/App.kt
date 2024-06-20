@@ -13,8 +13,9 @@ import com.cookainno.mobile.ui.screens.auth.RegistrationScreen
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.auth.ConfirmationCodeScreen
 import com.cookainno.mobile.ui.screens.auth.LoginScreen
-import com.cookainno.mobile.ui.screens.camera.CamViewModel
+import com.cookainno.mobile.ui.screens.ingredients.CamViewModel
 import com.cookainno.mobile.ui.screens.home.HomeScreen
+import com.cookainno.mobile.ui.screens.ingredients.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -22,7 +23,8 @@ import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 fun App(
     authViewModel: UserViewModel,
     camViewModel: CamViewModel,
-    recipesViewModel: RecipesViewModel
+    recipesViewModel: RecipesViewModel,
+    ingredientsViewModel: IngredientsViewModel
 ) {
     val navController = rememberNavController()
     val isSignedIn by authViewModel.isSignedIn.collectAsState()
@@ -38,7 +40,8 @@ fun App(
                 HomeScreen(
                     authViewModel = authViewModel,
                     camViewModel = camViewModel,
-                    recipesViewModel = recipesViewModel
+                    recipesViewModel = recipesViewModel,
+                    ingredientsViewModel = ingredientsViewModel
                 )
             }
             composable(NavRoutes.REGISTRATION.name) {

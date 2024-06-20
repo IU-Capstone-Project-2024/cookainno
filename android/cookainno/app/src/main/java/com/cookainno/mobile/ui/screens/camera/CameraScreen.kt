@@ -11,12 +11,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.cookainno.mobile.ui.screens.ingredients.CamViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CameraScreen(camViewModel: CamViewModel) {
-    val imageBitmap by camViewModel.imageBitmap.observeAsState()
-    val imageUri by camViewModel.imageUri.observeAsState()
     Column {
         Text(text = "Choose the image of fridge to recognize:")
         Spacer(modifier = Modifier.height(10.dp))
@@ -31,21 +30,5 @@ fun CameraScreen(camViewModel: CamViewModel) {
         }) {
             Text(text = "Choose from gallery")
         }
-        if (imageBitmap != null || imageUri != null) {
-
-        }
-//        Spacer(modifier = Modifier.height(20.dp))
-//        imageBitmap?.let { bitmap ->
-//            Image(
-//                bitmap = bitmap.asImageBitmap(),
-//                contentDescription = "Captured image",
-//                modifier = Modifier.fillMaxWidth(),
-//                contentScale = ContentScale.Fit
-//            )
-//        }
-//        Spacer(modifier = Modifier.height(20.dp))
-//        imageUri?.let { uri ->
-//            Image(painter = rememberAsyncImagePainter(uri), contentDescription = "Selected image")
-//        }
     }
 }

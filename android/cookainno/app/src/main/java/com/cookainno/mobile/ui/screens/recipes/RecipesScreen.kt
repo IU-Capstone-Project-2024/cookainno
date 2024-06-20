@@ -23,8 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,16 +34,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.cookainno.mobile.R
-import com.cookainno.mobile.ui.screens.camera.CamViewModel
-
-@Composable
-fun RecipesScreen(camViewModel: CamViewModel, recipesViewModel: RecipesViewModel) {
-    val res by recipesViewModel.okExample.collectAsState()
-    recipesViewModel.example()
-    //Text(text = "Test auth call: ${if (res) "Res OK" else "Res FAIL"}")
-    RecipesScreen()
-}
+import com.cookainno.mobile.ui.NavRoutes
 
 data class Recipe(
     val imageResId: Int,
@@ -53,7 +44,7 @@ data class Recipe(
 )
 
 @Composable
-fun RecipesScreen() {
+fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val recipes = listOf(
         Recipe(R.drawable.apple, R.string.apple),
         Recipe(R.drawable.kartoshka, R.string.kartoshka),
@@ -76,7 +67,7 @@ fun RecipesScreen() {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        TopBar(searchQuery.value) {
+        TopBar(searchQuery.value, navController) {
             searchQuery.value = it
         }
         LazyVerticalGrid(
@@ -93,7 +84,7 @@ fun RecipesScreen() {
 }
 
 @Composable
-fun TopBar(query: TextFieldValue, onQueryChanged: (TextFieldValue) -> Unit) {
+fun TopBar(query: TextFieldValue, navController: NavHostController, onQueryChanged: (TextFieldValue) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -109,7 +100,7 @@ fun TopBar(query: TextFieldValue, onQueryChanged: (TextFieldValue) -> Unit) {
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        // Handle camera icon click
+
                     },
                     modifier = Modifier.size(60.dp)
                 ){
@@ -130,12 +121,12 @@ fun TopBar(query: TextFieldValue, onQueryChanged: (TextFieldValue) -> Unit) {
         Spacer(modifier = Modifier.width(16.dp))
         IconButton(
             onClick = {
-                // Handle camera icon click
+                navController.navigate(NavRoutes.INGREDIENTS.name)
             },
             modifier = Modifier.size(60.dp)
         ) {
             Icon(
-                painter = painterResource(R.drawable.camera), // Replace with your camera icon resource
+                painter = painterResource(R.drawable.camera),
                 contentDescription = "Camera",
                 modifier = Modifier.size(50.dp),
                 tint = Color.Unspecified
