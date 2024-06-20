@@ -33,7 +33,6 @@ class PreferencesRepository(private val context: Context) {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         context.startActivity(intent)
-        Runtime.getRuntime().exit(0)
     }
 
     companion object {

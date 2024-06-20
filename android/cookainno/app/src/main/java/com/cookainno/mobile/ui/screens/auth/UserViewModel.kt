@@ -70,6 +70,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     fun signUp() {
         _registrationError.value = null
+        _navigateToConfirmation.value = false
         viewModelScope.launch {
             _isLoading.value = true
             val result = authRepository.register(
@@ -112,6 +113,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     fun signIn() {
         _registrationError.value = null
+        _navigateToMain.value = false
         viewModelScope.launch {
             _isLoading.value = true
             val result =
