@@ -6,7 +6,7 @@
 1. Use ```pip install -r requirements.txt``` to install requirements.
 2. Set ```image_path``` and ```confidence``` in the code and run it.
 
-Propbably it would be better to create script that accept ```image_path``` and ```confidence``` as arguments.
+Probably it would be better to create script that accept ```image_path``` and ```confidence``` as arguments.
 
 ### Progress
 
