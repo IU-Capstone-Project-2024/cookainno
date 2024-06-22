@@ -1,0 +1,32 @@
+names:
+- Apples
+- Banana
+- Bun
+- Cabbage
+- Cold Drink
+- Dry Fruit
+- Eggs
+- Grapes
+- Green Seeds
+- Milk
+- Oil
+- Pineapple
+- Snacks
+- Vegetables
+- Water Bottle
+- bell pepper
+- bread
+- carrot
+- cucumber
+- fasol
+- garlic
+- hot pepper
+- onion
+- peas
+- salad
+- tin
+- tomato
+nc: 27
+
+test: /data
+
