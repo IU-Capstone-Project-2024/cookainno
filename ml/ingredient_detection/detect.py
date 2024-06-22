@@ -26,7 +26,6 @@ class GroceryItemDetector:
     def detect(self, image_path):
         results = self.model(image_path, conf=self.conf, data=self.data)
         detected_items = self.get_list_of_detected_items(results)
-        print(detected_items)
         return detected_items
 
 
@@ -39,7 +38,8 @@ def main():
     image_path = 'data/Retail-Cart-fast_mov-43_jpg.rf.6940ef907e87f0956850883ecdc982f0.jpg'
 
     detector = GroceryItemDetector(model_path, data_path, conf)
-    detector.detect(image_path)
+    result = detector.detect(image_path)
+    print(result)
 
 if __name__ == "__main__":
     main()
