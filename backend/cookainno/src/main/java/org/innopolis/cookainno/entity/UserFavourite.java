@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "favourite_recipes")
-public class FavouriteRecipe {
+@Table(name = "user_favourites")
+public class UserFavourite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,11 +21,9 @@ public class FavouriteRecipe {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "instructions", nullable = false)
-    private String instructions;
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
 
     @Column(name = "date_added", nullable = false)
     private LocalDateTime dateAdded;
