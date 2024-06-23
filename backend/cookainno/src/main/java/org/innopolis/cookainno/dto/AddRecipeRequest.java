@@ -9,4 +9,5 @@ public class AddRecipeRequest {
     private String name;
     private String instructions;
     private String ingredients;
+    private String imageUrl;
 }

@@ -24,6 +24,20 @@ public class RecipeController implements RecipeAPI {
     }
 
     @Override
+    public ResponseEntity<RecipeResponse> updateRecipe(
+            @PathVariable Long id,
+            @RequestBody AddRecipeRequest request) {
+        RecipeResponse response = recipeService.updateRecipe(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<RecipeResponse> getRecipeById(@PathVariable Long id) {
+        RecipeResponse response = recipeService.getRecipeById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.noContent().build();

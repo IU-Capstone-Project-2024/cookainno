@@ -22,6 +22,25 @@ public interface RecipeAPI {
     @PostMapping("/add")
     ResponseEntity<RecipeResponse> addRecipe(@RequestBody AddRecipeRequest request);
 
+    @Operation(summary = "Update a recipe by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recipe updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "404", description = "Recipe not found")
+    })
+    @PutMapping("/{id}/update")
+    ResponseEntity<RecipeResponse> updateRecipe(
+            @PathVariable Long id,
+            @RequestBody AddRecipeRequest request);
+
+    @Operation(summary = "Get a recipe by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recipe retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Recipe not found")
+    })
+    @GetMapping("/{id}")
+    ResponseEntity<RecipeResponse> getRecipeById(@PathVariable Long id);
+
     @Operation(summary = "Delete a recipe by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Recipe deleted successfully"),

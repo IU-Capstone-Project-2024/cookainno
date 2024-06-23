@@ -26,6 +26,7 @@ public class RecipeService {
                 .name(request.getName())
                 .instructions(request.getInstructions())
                 .ingredients(request.getIngredients())
+                .imageUrl(request.getImageUrl())
                 .build();
         recipeRepository.save(recipe);
         return RecipeResponse.builder()
@@ -34,6 +35,47 @@ public class RecipeService {
                 .instructions(recipe.getInstructions())
                 .ingredients(recipe.getIngredients())
                 .likes(0L)
+                .imageUrl(recipe.getImageUrl())
+                .build();
+    }
+
+    @Transactional
+    public RecipeResponse updateRecipe(Long recipeId, AddRecipeRequest request) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        // Update the recipe fields
+        recipe.setName(request.getName());
+        recipe.setInstructions(request.getInstructions());
+        recipe.setIngredients(request.getIngredients());
+        recipe.setImageUrl(request.getImageUrl()); // Update image URL if needed
+
+        recipeRepository.save(recipe);
+
+        // Return updated recipe details
+        return RecipeResponse.builder()
+                .id(recipe.getId())
+                .name(recipe.getName())
+                .instructions(recipe.getInstructions())
+                .ingredients(recipe.getIngredients())
+                .likes((long) recipe.getUserFavourites().size())
+                .imageUrl(recipe.getImageUrl()) // Include image URL in response
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public RecipeResponse getRecipeById(Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        // Return full recipe details
+        return RecipeResponse.builder()
+                .id(recipe.getId())
+                .name(recipe.getName())
+                .instructions(recipe.getInstructions())
+                .ingredients(recipe.getIngredients())
+                .likes((long) recipe.getUserFavourites().size())
+                .imageUrl(recipe.getImageUrl()) // Include image URL in response
                 .build();
     }
 
@@ -54,6 +96,7 @@ public class RecipeService {
                         .instructions(recipe.getInstructions())
                         .ingredients(recipe.getIngredients())
                         .likes((long) recipe.getUserFavourites().size())
+                        .imageUrl(recipe.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -68,6 +111,7 @@ public class RecipeService {
                         .instructions(recipe.getInstructions())
                         .ingredients(recipe.getIngredients())
                         .likes((long) recipe.getUserFavourites().size())
+                        .imageUrl(recipe.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }

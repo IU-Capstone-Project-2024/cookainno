@@ -11,4 +11,5 @@ public class RecipeResponse {
     private String instructions;
     private String ingredients;
     private Long likes;
+    private String imageUrl;
 }
