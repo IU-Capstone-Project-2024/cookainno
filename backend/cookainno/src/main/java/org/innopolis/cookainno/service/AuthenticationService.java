@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final EmailService emailService;
 
     /**
-     * Регистрация пользователя
+     * Регистрация пользователя с отправкой кода на почту
      *
      * @param request данные пользователя
      * @return сообщение о проверке кода на почту
@@ -47,6 +47,28 @@ public class AuthenticationService {
         emailService.sendConfirmationEmail(user.getEmail(), user.getConfirmationCode());
 
         return new JwtAuthenticationResponse("User registered successfully. Please check your email for the confirmation code.");
+    }
+
+    /**
+     * Регистрация пользователя без кода
+     *
+     * @param request данные пользователя
+     * @return сообщение о проверке кода на почту
+     */
+    public JwtAuthenticationResponse signUp_Без_СМС_и_Регистрации(SignUpRequest request) {
+        var user = User.builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.ROLE_USER)
+                .isEnabled(false)
+                .confirmationCode(String.format("%04d", new Random().nextInt(10000)))
+                .build();
+
+        userService.create(user);
+
+        var jwt = jwtService.generateToken(user);
+        return new JwtAuthenticationResponse(jwt);
     }
 
     /**
