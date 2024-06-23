@@ -1,10 +1,14 @@
 package org.innopolis.cookainno.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.innopolis.cookainno.dto.*;
+import org.innopolis.cookainno.dto.AddRecipeRequest;
+import org.innopolis.cookainno.dto.RecipeResponse;
 import org.innopolis.cookainno.service.RecipeService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

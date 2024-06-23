@@ -32,6 +32,15 @@ public interface AuthAPI {
     @PostMapping("/sign-up")
     ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody @Valid SignUpRequest request, BindingResult bindingResult) throws MessagingException;
 
+    @Operation(summary = "User Registration Without Mail Confirmation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User registered successfully", content = @Content(schema = @Schema(implementation = JwtAuthenticationResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Request was malformed", content = @Content(schema = @Schema(implementation = APIErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "User already exists", content = @Content(schema = @Schema(implementation = APIErrorResponse.class)))
+    })
+    @PostMapping("/sign-up_Без_СМС_и_Регистрации")
+    ResponseEntity<JwtAuthenticationResponse> signUp_Без_СМС_и_Регистрации(@RequestBody @Valid SignUpRequest request, BindingResult bindingResult) throws MessagingException;
+
     @Operation(summary = "Confirm User Email")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Email confirmed successfully", content = @Content(schema = @Schema(implementation = String.class))),

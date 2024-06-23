@@ -32,6 +32,15 @@ public class AuthController implements AuthAPI {
     }
 
     @Override
+    public ResponseEntity<JwtAuthenticationResponse> signUp_Без_СМС_и_Регистрации(@RequestBody @Valid SignUpRequest request, BindingResult bindingResult) throws MessagingException {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            throw new ValidationException(errors.getFirst());
+        }
+        return ResponseEntity.ok(authenticationService.signUp_Без_СМС_и_Регистрации(request));
+    }
+
+    @Override
     public ResponseEntity<String> confirmEmail(@RequestBody @Valid ConfirmEmailRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult.getFieldErrors().getFirst());
@@ -45,7 +54,6 @@ public class AuthController implements AuthAPI {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult.getFieldErrors().getFirst());
         }
-
         return ResponseEntity.ok(authenticationService.signIn(request));
     }
 }
