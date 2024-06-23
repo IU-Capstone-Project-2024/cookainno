@@ -9,8 +9,8 @@ import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.ingredients.CamViewModel
 import com.cookainno.mobile.ui.screens.ingredients.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
-import com.cookainno.mobile.ui.theme.CookainnoTheme
 import com.cookainno.mobile.utilities.ImageUtility
+import com.example.compose.CookainnoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
