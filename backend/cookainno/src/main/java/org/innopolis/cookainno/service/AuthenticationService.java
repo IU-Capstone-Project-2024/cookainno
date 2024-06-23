@@ -46,14 +46,14 @@ public class AuthenticationService {
 
         emailService.sendConfirmationEmail(user.getEmail(), user.getConfirmationCode());
 
-        return new JwtAuthenticationResponse("User registered successfully. Please check your email for the confirmation code.");
+        return new JwtAuthenticationResponse("User registered successfully. Please check your email for the confirmation code.", user.getId());
     }
 
     /**
      * Регистрация пользователя без кода
      *
      * @param request данные пользователя
-     * @return сообщение о проверке кода на почту
+     * @return jwt
      */
     public JwtAuthenticationResponse signUp_Без_СМС_и_Регистрации(SignUpRequest request) {
         var user = User.builder()
@@ -68,7 +68,7 @@ public class AuthenticationService {
         userService.create(user);
 
         var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+        return new JwtAuthenticationResponse(jwt, user.getId());
     }
 
     /**
@@ -95,10 +95,6 @@ public class AuthenticationService {
      * @return токен
      */
     public JwtAuthenticationResponse signIn(SignInRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword()
-        ));
 
         var user = userService
                 .userDetailsService()
@@ -107,8 +103,12 @@ public class AuthenticationService {
         if (!user.isEnabled()) {
             throw new EmailNotConfirmedException("Email not confirmed");
         }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.getUsername(),
+                request.getPassword()
+        ));
 
         var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt);
+        return new JwtAuthenticationResponse(jwt, ((User) user).getId());
     }
 }

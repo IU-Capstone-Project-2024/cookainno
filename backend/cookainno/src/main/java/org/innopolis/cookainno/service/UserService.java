@@ -153,6 +153,7 @@ public class UserService {
 
     /**
      * Удаление аккаунта пользователя
+     *
      * @param id идентификатор пользователя
      */
     public void deleteUserById(Long id) {

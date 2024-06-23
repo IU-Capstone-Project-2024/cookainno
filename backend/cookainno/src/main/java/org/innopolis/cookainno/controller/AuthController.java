@@ -54,7 +54,6 @@ public class AuthController implements AuthAPI {
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult.getFieldErrors().getFirst());
         }
-
         return ResponseEntity.ok(authenticationService.signIn(request));
     }
 }

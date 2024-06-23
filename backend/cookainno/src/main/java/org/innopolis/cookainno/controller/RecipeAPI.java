@@ -3,9 +3,9 @@ package org.innopolis.cookainno.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.innopolis.cookainno.dto.*;
+import org.innopolis.cookainno.dto.AddRecipeRequest;
+import org.innopolis.cookainno.dto.RecipeResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
