@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -16,11 +17,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
@@ -41,47 +48,67 @@ fun HomeScreen(
     ingredientsViewModel: IngredientsViewModel
 ) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
+
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            Row(
+            Surface(
+                shape = RoundedCornerShape(40.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background),
-                horizontalArrangement = Arrangement.Center,
+                    .padding(horizontal = 80.dp, vertical = 10.dp)
             ) {
-                IconButton(
-                    onClick = {
-                        navController.navigate(NavRoutes.CAMERA.name)
-                    },
+                Row(
                     modifier = Modifier
-                        .padding(10.dp)
-                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.onBackground),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Favourite icon"
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(NavRoutes.RECIPES.name)
-                    },
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .weight(1f)
-                ) {
-                    Icon(imageVector = Icons.Default.Home, contentDescription = "Home icon")
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(NavRoutes.PROFILE.name)
-                    },
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .weight(1f)
-                ) {
-                    Icon(imageVector = Icons.Default.Person, contentDescription = "Profile icon")
+                    IconButton(
+                        onClick = {
+                            navController.navigate(NavRoutes.CAMERA.name)
+                        },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Favourite icon",
+                            tint = if (currentRoute == NavRoutes.CAMERA.name) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.graphicsLayer(alpha = 1f)
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            navController.navigate(NavRoutes.RECIPES.name)
+                        },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home icon",
+                            tint = if (currentRoute == NavRoutes.RECIPES.name) Color.White else (MaterialTheme.colorScheme.onPrimaryContainer),
+                            modifier = Modifier.graphicsLayer(alpha = 1f)
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            navController.navigate(NavRoutes.PROFILE.name)
+                        },
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .weight(1f)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Profile icon",
+                            tint = if (currentRoute == NavRoutes.PROFILE.name) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    }
                 }
             }
         }
@@ -102,7 +129,11 @@ fun HomeScreen(
                     ProfileScreen(authViewModel = authViewModel)
                 }
                 composable(NavRoutes.INGREDIENTS.name) {
-                    IngredientsScreen(camViewModel = camViewModel, ingredientsViewModel = ingredientsViewModel, navController = navController)
+                    IngredientsScreen(
+                        camViewModel = camViewModel,
+                        ingredientsViewModel = ingredientsViewModel,
+                        navController = navController
+                    )
                 }
             }
         }
