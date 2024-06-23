@@ -27,7 +27,7 @@ public interface UserInfoAPI {
 
     @Operation(summary = "Update user info. Accessible only to authorized users", security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/update")
+    @PutMapping()
     ResponseEntity<SaveUserInfoResponse> saveUserInfo(@RequestBody @Valid SaveUserInfoRequest request, BindingResult bindingResult);
 
     @Operation(summary = "Delete user account by ID. Accessible only to authorized users", security = @SecurityRequirement(name = "bearerAuth"))
@@ -36,6 +36,6 @@ public interface UserInfoAPI {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteUserById(@PathVariable("id") Long id);
 }

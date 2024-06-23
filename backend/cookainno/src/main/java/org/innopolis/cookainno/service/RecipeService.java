@@ -3,6 +3,7 @@ package org.innopolis.cookainno.service;
 import lombok.RequiredArgsConstructor;
 import org.innopolis.cookainno.dto.AddRecipeRequest;
 import org.innopolis.cookainno.dto.RecipeResponse;
+import org.innopolis.cookainno.dto.UpdateRecipeRequest;
 import org.innopolis.cookainno.entity.Recipe;
 import org.innopolis.cookainno.exception.RecipeNotFoundException;
 import org.innopolis.cookainno.repository.RecipeRepository;
@@ -40,8 +41,8 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeResponse updateRecipe(Long recipeId, AddRecipeRequest request) {
-        Recipe recipe = recipeRepository.findById(recipeId)
+    public RecipeResponse updateRecipe(UpdateRecipeRequest request) {
+        Recipe recipe = recipeRepository.findById(request.getId())
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
         // Update the recipe fields

@@ -3,6 +3,7 @@ package org.innopolis.cookainno.controller;
 import lombok.RequiredArgsConstructor;
 import org.innopolis.cookainno.dto.AddRecipeRequest;
 import org.innopolis.cookainno.dto.RecipeResponse;
+import org.innopolis.cookainno.dto.UpdateRecipeRequest;
 import org.innopolis.cookainno.service.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +26,8 @@ public class RecipeController implements RecipeAPI {
 
     @Override
     public ResponseEntity<RecipeResponse> updateRecipe(
-            @PathVariable Long id,
-            @RequestBody AddRecipeRequest request) {
-        RecipeResponse response = recipeService.updateRecipe(id, request);
+            @RequestBody UpdateRecipeRequest request) {
+        RecipeResponse response = recipeService.updateRecipe(request);
         return ResponseEntity.ok(response);
     }
 
