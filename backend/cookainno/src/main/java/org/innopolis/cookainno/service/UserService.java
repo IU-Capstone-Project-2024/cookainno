@@ -157,7 +157,7 @@ public class UserService {
      */
     public void deleteUserById(Long id) {
         if (!repository.existsById(id)) {
-            throw new RuntimeException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         repository.deleteById(id);
     }
