@@ -59,4 +59,28 @@ public class RecipeController implements RecipeAPI {
         List<RecipeResponse> responses = recipeService.getRecipesSortedByLikes(page, size);
         return ResponseEntity.ok(responses);
     }
+
+    @Override
+    public ResponseEntity<Void> addRecipeToFavorites(Long userId, Long recipeId) {
+        recipeService.addRecipeToFavorites(userId, recipeId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<List<RecipeResponse>> getFavoriteRecipes(Long userId, int page, int size, boolean oldestFirst) {
+        List<RecipeResponse> recipes = recipeService.getFavoriteRecipes(userId, page, size, oldestFirst);
+        return ResponseEntity.ok(recipes);
+    }
+
+    @Override
+    public ResponseEntity<Void> removeRecipeFromFavorites(Long userId, Long recipeId) {
+        recipeService.removeRecipeFromFavorites(userId, recipeId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<RecipeResponse>> searchFavoriteRecipesByName(Long userId, String name, int page, int size) {
+        List<RecipeResponse> recipes = recipeService.searchFavoriteRecipesByName(userId, name, page, size);
+        return ResponseEntity.ok(recipes);
+    }
 }

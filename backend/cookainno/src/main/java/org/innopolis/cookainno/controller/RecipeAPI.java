@@ -67,4 +67,49 @@ public interface RecipeAPI {
     ResponseEntity<List<RecipeResponse>> getRecipesSortedByLikes(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size);
+
+    @Operation(summary = "Add recipe to favorites for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Recipe added to favorites successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "404", description = "Recipe or User not found")
+    })
+    @PostMapping("/{userId}/favorites/{recipeId}")
+    ResponseEntity<Void> addRecipeToFavorites(
+            @PathVariable Long userId,
+            @PathVariable Long recipeId);
+
+    @Operation(summary = "Get paged favorite recipes for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Favorite recipes retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @GetMapping("/{userId}/favorites")
+    ResponseEntity<List<RecipeResponse>> getFavoriteRecipes(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "true") boolean oldestFirst);
+
+    @Operation(summary = "Search user's favorite recipes by name with pagination")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Favorite recipes retrieved successfully")
+    })
+    @GetMapping("/{userId}/favorites/search")
+    ResponseEntity<List<RecipeResponse>> searchFavoriteRecipesByName(
+            @PathVariable Long userId,
+            @RequestParam String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size);
+
+    @Operation(summary = "Remove recipe from favorites for a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Recipe removed from favorites successfully"),
+            @ApiResponse(responseCode = "404", description = "Recipe or User not found")
+    })
+    @DeleteMapping("/{userId}/favorites/{recipeId}")
+    ResponseEntity<Void> removeRecipeFromFavorites(
+            @PathVariable Long userId,
+            @PathVariable Long recipeId);
 }
