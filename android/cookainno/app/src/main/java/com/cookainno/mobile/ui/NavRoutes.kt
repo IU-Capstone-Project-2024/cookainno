@@ -7,6 +7,7 @@ enum class NavRoutes {
     LOGIN,
     RECIPES,
     INGREDIENTS,
+    GENERATED,
     CAMERA,
-    PROFILE;
+    PROFILE
 }

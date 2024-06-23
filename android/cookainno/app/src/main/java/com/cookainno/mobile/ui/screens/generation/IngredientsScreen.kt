@@ -1,4 +1,4 @@
-package com.cookainno.mobile.ui.screens.ingredients
+package com.cookainno.mobile.ui.screens.generation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,15 +29,19 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.cookainno.mobile.ui.NavRoutes
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,9 +51,24 @@ fun IngredientsScreen(
     navController: NavController
 ) {
     val ingredientList = ingredientsViewModel.ingredients.collectAsState().value
+    val generatedRecipes = ingredientsViewModel.recipes.collectAsState().value
     val showCamera by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = generatedRecipes) {
+        if (generatedRecipes.isNotEmpty()) {
+            coroutineScope.launch {
+                navController.navigate(NavRoutes.GENERATED.name) {
+                    popUpTo(NavRoutes.INGREDIENTS.name) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -62,7 +81,7 @@ fun IngredientsScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        // handle move to recipes
+                        ingredientsViewModel.generateRecipes() // check for null ingredients
                     }) {
                         Icon(Icons.AutoMirrored.Filled.NavigateNext, contentDescription = "Next")
                     }
@@ -135,6 +154,9 @@ fun IngredientsScreen(
                         Icon(Icons.Default.Add, contentDescription = "Add Ingredient")
                         Text("Add Ingredient")
                     }
+                }
+                item {
+                    Text(text = "$ingredientList")
                 }
             }
         }

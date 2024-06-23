@@ -13,9 +13,9 @@ import com.cookainno.mobile.ui.screens.auth.RegistrationScreen
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.auth.ConfirmationCodeScreen
 import com.cookainno.mobile.ui.screens.auth.LoginScreen
-import com.cookainno.mobile.ui.screens.ingredients.CamViewModel
+import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.home.HomeScreen
-import com.cookainno.mobile.ui.screens.ingredients.IngredientsViewModel
+import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
