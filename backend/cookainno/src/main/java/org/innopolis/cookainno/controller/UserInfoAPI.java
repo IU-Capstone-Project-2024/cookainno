@@ -10,6 +10,7 @@ import org.innopolis.cookainno.dto.GetUserInfoResponse;
 import org.innopolis.cookainno.dto.SaveUserInfoRequest;
 import org.innopolis.cookainno.dto.SaveUserInfoResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,16 @@ public interface UserInfoAPI {
     ResponseEntity<GetUserInfoResponse> getUserInfoById(@PathVariable("id") Long id);
 
     @Operation(summary = "Update user info. Accessible only to authorized users", security = @SecurityRequirement(name = "bearerAuth"))
-    @PutMapping
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update")
     ResponseEntity<SaveUserInfoResponse> saveUserInfo(@RequestBody @Valid SaveUserInfoRequest request, BindingResult bindingResult);
+
+    @Operation(summary = "Delete user account by ID. Accessible only to authorized users", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User account deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}/delete")
+    ResponseEntity<Void> deleteUserById(@PathVariable("id") Long id);
 }

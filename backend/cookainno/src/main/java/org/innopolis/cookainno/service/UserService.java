@@ -150,4 +150,15 @@ public class UserService {
                 age
         );
     }
+
+    /**
+     * Удаление аккаунта пользователя
+     * @param id идентификатор пользователя
+     */
+    public void deleteUserById(Long id) {
+        if (!repository.existsById(id)) {
+            throw new UserNotFoundException("User not found");
+        }
+        repository.deleteById(id);
+    }
 }
