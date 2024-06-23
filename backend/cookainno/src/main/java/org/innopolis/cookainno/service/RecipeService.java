@@ -3,6 +3,7 @@ package org.innopolis.cookainno.service;
 import lombok.RequiredArgsConstructor;
 import org.innopolis.cookainno.dto.AddRecipeRequest;
 import org.innopolis.cookainno.dto.RecipeResponse;
+import org.innopolis.cookainno.dto.UpdateRecipeRequest;
 import org.innopolis.cookainno.entity.Recipe;
 import org.innopolis.cookainno.exception.RecipeNotFoundException;
 import org.innopolis.cookainno.repository.RecipeRepository;
@@ -26,6 +27,7 @@ public class RecipeService {
                 .name(request.getName())
                 .instructions(request.getInstructions())
                 .ingredients(request.getIngredients())
+                .imageUrl(request.getImageUrl())
                 .build();
         recipeRepository.save(recipe);
         return RecipeResponse.builder()
@@ -34,6 +36,47 @@ public class RecipeService {
                 .instructions(recipe.getInstructions())
                 .ingredients(recipe.getIngredients())
                 .likes(0L)
+                .imageUrl(recipe.getImageUrl())
+                .build();
+    }
+
+    @Transactional
+    public RecipeResponse updateRecipe(UpdateRecipeRequest request) {
+        Recipe recipe = recipeRepository.findById(request.getId())
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        // Update the recipe fields
+        recipe.setName(request.getName());
+        recipe.setInstructions(request.getInstructions());
+        recipe.setIngredients(request.getIngredients());
+        recipe.setImageUrl(request.getImageUrl()); // Update image URL if needed
+
+        recipeRepository.save(recipe);
+
+        // Return updated recipe details
+        return RecipeResponse.builder()
+                .id(recipe.getId())
+                .name(recipe.getName())
+                .instructions(recipe.getInstructions())
+                .ingredients(recipe.getIngredients())
+                .likes((long) recipe.getUserFavourites().size())
+                .imageUrl(recipe.getImageUrl()) // Include image URL in response
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public RecipeResponse getRecipeById(Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
+
+        // Return full recipe details
+        return RecipeResponse.builder()
+                .id(recipe.getId())
+                .name(recipe.getName())
+                .instructions(recipe.getInstructions())
+                .ingredients(recipe.getIngredients())
+                .likes((long) recipe.getUserFavourites().size())
+                .imageUrl(recipe.getImageUrl()) // Include image URL in response
                 .build();
     }
 
@@ -54,6 +97,7 @@ public class RecipeService {
                         .instructions(recipe.getInstructions())
                         .ingredients(recipe.getIngredients())
                         .likes((long) recipe.getUserFavourites().size())
+                        .imageUrl(recipe.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -68,6 +112,7 @@ public class RecipeService {
                         .instructions(recipe.getInstructions())
                         .ingredients(recipe.getIngredients())
                         .likes((long) recipe.getUserFavourites().size())
+                        .imageUrl(recipe.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }

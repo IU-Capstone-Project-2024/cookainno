@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RecipeResponse {
+public class UpdateRecipeRequest {
     private Long id;
     private String name;
     private String instructions;
     private String ingredients;
-    private Long likes;
     private String imageUrl;
 }

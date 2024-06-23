@@ -26,6 +26,9 @@ public class Recipe {
     @Column(name = "ingredients", nullable = false)
     private String ingredients;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserFavourite> userFavourites;
 }
