@@ -1,4 +1,4 @@
-package com.cookainno.mobile.ui.screens.ingredients
+package com.cookainno.mobile.ui.screens.generation
 
 import android.graphics.Bitmap
 import android.net.Uri

@@ -20,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -31,10 +30,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
-import com.cookainno.mobile.ui.screens.ingredients.CamViewModel
-import com.cookainno.mobile.ui.screens.camera.CameraScreen
-import com.cookainno.mobile.ui.screens.ingredients.IngredientsScreen
-import com.cookainno.mobile.ui.screens.ingredients.IngredientsViewModel
+import com.cookainno.mobile.ui.screens.generation.CamViewModel
+import com.cookainno.mobile.ui.screens.favourites.FavouritesScreen
+import com.cookainno.mobile.ui.screens.generation.GeneratedRecipe
+import com.cookainno.mobile.ui.screens.generation.IngredientsScreen
+import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.profile.ProfileScreen
 import com.cookainno.mobile.ui.screens.recipes.RecipesScreen
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
@@ -117,13 +117,15 @@ fun HomeScreen(
             NavHost(navController = navController, startDestination = NavRoutes.RECIPES.name) {
                 composable(NavRoutes.RECIPES.name) {
                     recipesViewModel.initRepository()
+                    ingredientsViewModel.emptyRecipes()
+                    ingredientsViewModel.emptyIngredients()
                     RecipesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
                 composable(NavRoutes.CAMERA.name) {
-                    CameraScreen(camViewModel = camViewModel)
+                    FavouritesScreen()
                 }
                 composable(NavRoutes.PROFILE.name) {
                     ProfileScreen(authViewModel = authViewModel)
@@ -134,6 +136,9 @@ fun HomeScreen(
                         ingredientsViewModel = ingredientsViewModel,
                         navController = navController
                     )
+                }
+                composable(NavRoutes.GENERATED.name) {
+                    GeneratedRecipe(ingredientsViewModel = ingredientsViewModel, navController = navController)
                 }
             }
         }

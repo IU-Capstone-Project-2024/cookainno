@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import com.cookainno.mobile.data.repository.PreferencesRepository
 import com.cookainno.mobile.ui.App
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
-import com.cookainno.mobile.ui.screens.ingredients.CamViewModel
-import com.cookainno.mobile.ui.screens.ingredients.IngredientsViewModel
+import com.cookainno.mobile.ui.screens.generation.CamViewModel
+import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 import com.cookainno.mobile.utilities.ImageUtility
 import com.example.compose.CookainnoTheme
