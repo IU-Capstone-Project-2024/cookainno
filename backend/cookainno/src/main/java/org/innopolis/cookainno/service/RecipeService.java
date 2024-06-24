@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,14 +61,7 @@ public class RecipeService {
         recipeRepository.save(recipe);
 
         // Return updated recipe details
-        return RecipeResponse.builder()
-                .id(recipe.getId())
-                .name(recipe.getName())
-                .instructions(recipe.getInstructions())
-                .ingredients(recipe.getIngredients())
-                .likes((long) recipe.getUserFavourites().size())
-                .imageUrl(recipe.getImageUrl()) // Include image URL in response
-                .build();
+        return mapToRecipeResponse(recipe);
     }
 
     @Transactional(readOnly = true)
@@ -78,14 +70,8 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found"));
 
         // Return full recipe details
-        return RecipeResponse.builder()
-                .id(recipe.getId())
-                .name(recipe.getName())
-                .instructions(recipe.getInstructions())
-                .ingredients(recipe.getIngredients())
-                .likes((long) recipe.getUserFavourites().size())
-                .imageUrl(recipe.getImageUrl()) // Include image URL in response
-                .build();
+        return mapToRecipeResponse(recipe);
+
     }
 
     @Transactional
@@ -99,30 +85,16 @@ public class RecipeService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Recipe> recipePage = recipeRepository.findByNameContaining(name, pageable);
         return recipePage.stream()
-                .map(recipe -> RecipeResponse.builder()
-                        .id(recipe.getId())
-                        .name(recipe.getName())
-                        .instructions(recipe.getInstructions())
-                        .ingredients(recipe.getIngredients())
-                        .likes((long) recipe.getUserFavourites().size())
-                        .imageUrl(recipe.getImageUrl())
-                        .build())
-                .collect(Collectors.toList());
+                .map(this::mapToRecipeResponse)
+                .toList();
     }
 
     public List<RecipeResponse> getRecipesSortedByLikes(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Recipe> recipePage = recipeRepository.findAllSortedByLikes(pageable);
         return recipePage.stream()
-                .map(recipe -> RecipeResponse.builder()
-                        .id(recipe.getId())
-                        .name(recipe.getName())
-                        .instructions(recipe.getInstructions())
-                        .ingredients(recipe.getIngredients())
-                        .likes((long) recipe.getUserFavourites().size())
-                        .imageUrl(recipe.getImageUrl())
-                        .build())
-                .collect(Collectors.toList());
+                .map(this::mapToRecipeResponse)
+                .toList();
     }
 
     @Transactional
@@ -160,15 +132,8 @@ public class RecipeService {
 
         return userFavoritesPage.getContent().stream()
                 .map(UserFavourite::getRecipe)
-                .map(recipe -> RecipeResponse.builder()
-                        .id(recipe.getId())
-                        .name(recipe.getName())
-                        .instructions(recipe.getInstructions())
-                        .ingredients(recipe.getIngredients())
-                        .likes((long) recipe.getUserFavourites().size())
-                        .imageUrl(recipe.getImageUrl())
-                        .build())
-                .collect(Collectors.toList());
+                .map(this::mapToRecipeResponse)
+                .toList();
     }
 
     @Transactional
@@ -195,7 +160,7 @@ public class RecipeService {
 
         return recipePage.getContent().stream()
                 .map(this::mapToRecipeResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private RecipeResponse mapToRecipeResponse(Recipe recipe) {
@@ -207,5 +172,6 @@ public class RecipeService {
                 .likes((long) recipe.getUserFavourites().size())
                 .imageUrl(recipe.getImageUrl())
                 .build();
+
     }
 }
