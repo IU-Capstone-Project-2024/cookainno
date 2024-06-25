@@ -9,6 +9,23 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql/data
 
+  liquibase:
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - postgresql
+    env_file: ./.env
+    command:
+      - --changelog-file=db.master-changelog.xml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://postgresql:5432/${POSTGRES_DB}
+      - --username=${POSTGRES_USER}
+      - --password=${POSTGRES_PASSWORD}
+      - update
+    networks:
+      - backend
+    volumes:
+      - ./db/migrations:/liquibase/changelog
+
 volumes:
   postgresql: { }
 networks:
