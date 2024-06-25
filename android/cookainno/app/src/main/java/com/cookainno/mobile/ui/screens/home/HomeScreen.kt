@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,19 +28,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.details.RecipeDetailsScreen
-import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.favourites.FavouritesScreen
+import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.generation.GeneratedRecipe
 import com.cookainno.mobile.ui.screens.generation.IngredientsScreen
 import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.profile.ProfileScreen
 import com.cookainno.mobile.ui.screens.recipes.RecipesScreen
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
-import com.google.gson.Gson
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -71,7 +68,7 @@ fun HomeScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            navController.navigate(NavRoutes.CAMERA.name)
+                            navController.navigate(NavRoutes.FAVOURITES.name)
                         },
                         modifier = Modifier
                             .padding(10.dp)
@@ -80,7 +77,7 @@ fun HomeScreen(
                         Icon(
                             imageVector = Icons.Default.Favorite,
                             contentDescription = "Favourite icon",
-                            tint = if (currentRoute == NavRoutes.CAMERA.name) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
+                            tint = if (currentRoute == NavRoutes.FAVOURITES.name) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.graphicsLayer(alpha = 1f)
                         )
                     }
@@ -124,13 +121,14 @@ fun HomeScreen(
                     ingredientsViewModel.emptyRecipes()
                     ingredientsViewModel.emptyIngredients()
                     userViewModel.initUserId()
+                    recipesViewModel.initUserId(userViewModel.userId.value)
                     RecipesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
-                composable(NavRoutes.CAMERA.name) {
-                    FavouritesScreen()
+                composable(NavRoutes.FAVOURITES.name) {
+                    FavouritesScreen(recipesViewModel = recipesViewModel, navController = navController)
                 }
                 composable(NavRoutes.PROFILE.name) {
                     ProfileScreen(authViewModel = userViewModel)
