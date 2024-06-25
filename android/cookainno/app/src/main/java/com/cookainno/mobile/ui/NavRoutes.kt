@@ -6,6 +6,7 @@ enum class NavRoutes {
     CONFIRMATION,
     LOGIN,
     RECIPES,
+    DETAILS,
     INGREDIENTS,
     GENERATED,
     CAMERA,

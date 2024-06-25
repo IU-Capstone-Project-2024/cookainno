@@ -2,11 +2,10 @@ package com.cookainno.mobile.ui.screens.recipes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,10 +31,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,46 +43,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.cookainno.mobile.R
+import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.ui.NavRoutes
-import kotlin.math.round
 
-data class Recipe(
+data class RecipeTest(
     val imageResId: Int, val titleResId: Int, val recipe: String
 )
 
 @Composable
 fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val recipes = listOf(
-        Recipe(R.drawable.apple, R.string.apple, "apple"),
-        Recipe(
+        RecipeTest(R.drawable.apple, R.string.apple, "apple"),
+        RecipeTest(
             R.drawable.kartoshka, R.string.kartoshka, "muka, water, kartofel, brown kraska, sugar"
         ),
-        Recipe(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
-        Recipe(R.drawable.carri, R.string.carri, "yaneznayu"),
-        Recipe(R.drawable.meat, R.string.meat, "meat"),
-        Recipe(R.drawable.apple, R.string.apple, "apple"),
-        Recipe(
+        RecipeTest(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
+        RecipeTest(R.drawable.carri, R.string.carri, "yaneznayu"),
+        RecipeTest(R.drawable.meat, R.string.meat, "meat"),
+        RecipeTest(R.drawable.apple, R.string.apple, "apple"),
+        RecipeTest(
             R.drawable.kartoshka, R.string.kartoshka, "muka, water, kartofel, brown kraska, sugar"
         ),
-        Recipe(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
-        Recipe(R.drawable.carri, R.string.carri, "yaneznayu"),
-        Recipe(R.drawable.meat, R.string.meat, "meat"),
-        Recipe(R.drawable.apple, R.string.apple, "apple"),
-        Recipe(
+        RecipeTest(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
+        RecipeTest(R.drawable.carri, R.string.carri, "yaneznayu"),
+        RecipeTest(R.drawable.meat, R.string.meat, "meat"),
+        RecipeTest(R.drawable.apple, R.string.apple, "apple"),
+        RecipeTest(
             R.drawable.kartoshka, R.string.kartoshka, "muka, water, kartofel, brown kraska, sugar"
         ),
-        Recipe(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
-        Recipe(R.drawable.carri, R.string.carri, "yaneznayu"),
-        Recipe(R.drawable.meat, R.string.meat, "meat"),
+        RecipeTest(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
+        RecipeTest(R.drawable.carri, R.string.carri, "yaneznayu"),
+        RecipeTest(R.drawable.meat, R.string.meat, "meat"),
     )
+    val allRecipes by recipesViewModel.recipes.collectAsState()
     val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
     Column(
         modifier = Modifier.fillMaxSize()
@@ -99,8 +98,10 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         LazyVerticalGrid(
             columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)
         ) {
-            items(recipes) { recipe ->
-                RecipeItem(recipe = recipe, onClick = {})
+            items(allRecipes ?: emptyList()) { recipe ->
+                RecipeItem(recipe = recipe, onClick = {
+                    navController.navigate("${NavRoutes.DETAILS.name}/${recipe.id}")
+                })
             }
         }
     }
@@ -197,7 +198,6 @@ fun TopBar(
 
 @Composable
 fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
-
     var isLiked by remember {
         mutableStateOf(false)
     }
@@ -214,7 +214,7 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
             verticalArrangement = Arrangement.Top
         ) {
             Image(
-                painter = painterResource(id = recipe.imageResId),
+                painter = rememberAsyncImagePainter(model = recipe.imageUrl),
                 contentDescription = null,
                 modifier = Modifier
                     .height(140.dp)
@@ -223,7 +223,7 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
                 contentScale = ContentScale.FillBounds
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = stringResource(id = recipe.titleResId), modifier = Modifier.padding(8.dp))
+            Text(text = recipe.name, modifier = Modifier.padding(8.dp))
             Spacer(modifier = Modifier.height(16.dp))
         }
         IconButton(
@@ -241,4 +241,3 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
         }
     }
 }
-

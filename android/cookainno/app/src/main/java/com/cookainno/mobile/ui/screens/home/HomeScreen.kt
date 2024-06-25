@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,8 +29,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
+import com.cookainno.mobile.ui.screens.details.RecipeDetailsScreen
 import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.favourites.FavouritesScreen
 import com.cookainno.mobile.ui.screens.generation.GeneratedRecipe
@@ -38,11 +41,12 @@ import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.profile.ProfileScreen
 import com.cookainno.mobile.ui.screens.recipes.RecipesScreen
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
+import com.google.gson.Gson
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    authViewModel: UserViewModel,
+    userViewModel: UserViewModel,
     camViewModel: CamViewModel,
     recipesViewModel: RecipesViewModel,
     ingredientsViewModel: IngredientsViewModel
@@ -119,6 +123,7 @@ fun HomeScreen(
                     recipesViewModel.initRepository()
                     ingredientsViewModel.emptyRecipes()
                     ingredientsViewModel.emptyIngredients()
+                    userViewModel.initUserId()
                     RecipesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
@@ -128,7 +133,7 @@ fun HomeScreen(
                     FavouritesScreen()
                 }
                 composable(NavRoutes.PROFILE.name) {
-                    ProfileScreen(authViewModel = authViewModel)
+                    ProfileScreen(authViewModel = userViewModel)
                 }
                 composable(NavRoutes.INGREDIENTS.name) {
                     IngredientsScreen(
@@ -139,6 +144,17 @@ fun HomeScreen(
                 }
                 composable(NavRoutes.GENERATED.name) {
                     GeneratedRecipe(ingredientsViewModel = ingredientsViewModel, navController = navController)
+                }
+                composable("${NavRoutes.DETAILS.name}/{id}") { backStackEntry ->
+                    val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+                    if (id != null) {
+                        val recipe = recipesViewModel.recipes.collectAsState().value?.get(id-1)
+                        if (recipe != null) {
+                            RecipeDetailsScreen(recipe = recipe, navController = navController)
+                        }
+                    } else {
+                        // handle id is null
+                    }
                 }
             }
         }
