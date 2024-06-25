@@ -38,7 +38,7 @@ fun App(
         NavHost(navController = navController, startDestination = startScreen) {
             composable(NavRoutes.HOME.name) {
                 HomeScreen(
-                    authViewModel = authViewModel,
+                    userViewModel = authViewModel,
                     camViewModel = camViewModel,
                     recipesViewModel = recipesViewModel,
                     ingredientsViewModel = ingredientsViewModel

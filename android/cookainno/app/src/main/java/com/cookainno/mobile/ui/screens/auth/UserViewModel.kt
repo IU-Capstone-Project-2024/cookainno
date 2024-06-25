@@ -39,6 +39,9 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     private var authRepository: AuthRepository
 
+    private val _userId = MutableStateFlow(-1)
+    val userId: StateFlow<Int> = _userId
+
     init {
         viewModelScope.launch {
             _isSignedIn.value = checkLoggedIn()
@@ -118,6 +121,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             _isLoading.value = true
             val result =
                 authRepository.login(username = _username.value, password = _password.value)
+            _userId.value = authRepository.getUserID()
             if (result.isSuccess) {
                 _navigateToMain.value = true
             } else {
@@ -130,6 +134,14 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
     fun signOut() {
         viewModelScope.launch {
             authRepository.logout()
+        }
+    }
+
+    fun initUserId() {
+        if (_userId.value == -1) {
+            viewModelScope.launch {
+                _userId.value = authRepository.getUserID()
+            }
         }
     }
 }
