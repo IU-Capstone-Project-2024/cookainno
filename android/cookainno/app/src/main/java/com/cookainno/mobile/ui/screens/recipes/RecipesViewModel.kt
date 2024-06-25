@@ -1,5 +1,6 @@
 package com.cookainno.mobile.ui.screens.recipes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookainno.mobile.data.model.Recipe
@@ -21,11 +22,22 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository): ViewModel(
     private val _selectedRecipe = MutableStateFlow<Recipe?>(null)
     val selectedRecipe: StateFlow<Recipe?> = _selectedRecipe
 
+    private val _favouriteRecipes = MutableStateFlow<List<Recipe>?>(null)
+    val favouriteRecipes: StateFlow<List<Recipe>?> = _favouriteRecipes
+
+    private var userId = -1
+
+    private var currentFavouritesPage = 0
+
     private var currentPage = 0
     private val pageSize = 10
 
     fun initRepository() {
         recipesRepository.initToken()
+    }
+
+    fun initUserId(id: Int) {
+        userId = id
     }
 
     fun example() {
@@ -69,5 +81,28 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository): ViewModel(
 
     fun selectRecipe(recipe: Recipe) {
         _selectedRecipe.value = recipe
+    }
+
+    fun addFavouriteRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            recipesRepository.addFavouriteRecipe(userId, recipeId)
+        }
+    }
+
+    fun deleteFavouriteRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            recipesRepository.deleteFavouriteRecipe(userId, recipeId)
+        }
+    }
+
+    fun getFavouriteRecipes() {
+        viewModelScope.launch {
+            val newRecipes = recipesRepository.getFavouriteRecipes(userId, currentFavouritesPage, pageSize, false).getOrNull()
+            if (!newRecipes.isNullOrEmpty()) {
+                Log.d("TTT", "getFavouriteRecipes: $newRecipes")
+                _favouriteRecipes.value = _favouriteRecipes.value.orEmpty() + newRecipes
+                currentFavouritesPage++
+            }
+        }
     }
 }

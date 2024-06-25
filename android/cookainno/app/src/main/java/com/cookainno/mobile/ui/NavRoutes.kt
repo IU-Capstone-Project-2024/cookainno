@@ -9,6 +9,6 @@ enum class NavRoutes {
     DETAILS,
     INGREDIENTS,
     GENERATED,
-    CAMERA,
+    FAVOURITES,
     PROFILE
 }
