@@ -44,4 +44,12 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
             Result.failure(e)
         }
     }
+
+    suspend fun getRecipesSortedByLikes(page: Int, size: Int): Result<List<Recipe>> {
+        return try {
+            Result.success(recipesService?.getRecipesSortedByLikes(page, size)?.body()!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

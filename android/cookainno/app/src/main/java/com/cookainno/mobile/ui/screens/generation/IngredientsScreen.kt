@@ -155,9 +155,6 @@ fun IngredientsScreen(
                         Text("Add Ingredient")
                     }
                 }
-                item {
-                    Text(text = "$ingredientList")
-                }
             }
         }
     )
