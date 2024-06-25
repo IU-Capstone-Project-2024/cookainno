@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -33,11 +35,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +57,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.ui.NavRoutes
+import kotlinx.coroutines.flow.collectLatest
 
 data class RecipeTest(
     val imageResId: Int, val titleResId: Int, val recipe: String
@@ -60,31 +65,23 @@ data class RecipeTest(
 
 @Composable
 fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
-    val recipes = listOf(
-        RecipeTest(R.drawable.apple, R.string.apple, "apple"),
-        RecipeTest(
-            R.drawable.kartoshka, R.string.kartoshka, "muka, water, kartofel, brown kraska, sugar"
-        ),
-        RecipeTest(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
-        RecipeTest(R.drawable.carri, R.string.carri, "yaneznayu"),
-        RecipeTest(R.drawable.meat, R.string.meat, "meat"),
-        RecipeTest(R.drawable.apple, R.string.apple, "apple"),
-        RecipeTest(
-            R.drawable.kartoshka, R.string.kartoshka, "muka, water, kartofel, brown kraska, sugar"
-        ),
-        RecipeTest(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
-        RecipeTest(R.drawable.carri, R.string.carri, "yaneznayu"),
-        RecipeTest(R.drawable.meat, R.string.meat, "meat"),
-        RecipeTest(R.drawable.apple, R.string.apple, "apple"),
-        RecipeTest(
-            R.drawable.kartoshka, R.string.kartoshka, "muka, water, kartofel, brown kraska, sugar"
-        ),
-        RecipeTest(R.drawable.burger, R.string.burger, "bulka burgernaya, meat, salad, tomato, onion"),
-        RecipeTest(R.drawable.carri, R.string.carri, "yaneznayu"),
-        RecipeTest(R.drawable.meat, R.string.meat, "meat"),
-    )
     val allRecipes by recipesViewModel.recipes.collectAsState()
     val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
+
+    val listState = rememberLazyGridState()
+
+    LaunchedEffect(Unit) {
+        recipesViewModel.getRecipesSortedByLikes()
+    }
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collectLatest { lastIndex ->
+                if (lastIndex != null && lastIndex >= (allRecipes?.size ?: 0) - 1) {
+                    recipesViewModel.getRecipesSortedByLikes()
+                }
+            }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -96,11 +93,13 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
             searchQuery.value = it
         }
         LazyVerticalGrid(
+            state = listState,
             columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)
         ) {
             items(allRecipes ?: emptyList()) { recipe ->
                 RecipeItem(recipe = recipe, onClick = {
-                    navController.navigate("${NavRoutes.DETAILS.name}/${recipe.id}")
+                    recipesViewModel.selectRecipe(recipe)
+                    navController.navigate(NavRoutes.DETAILS.name)
                 })
             }
         }

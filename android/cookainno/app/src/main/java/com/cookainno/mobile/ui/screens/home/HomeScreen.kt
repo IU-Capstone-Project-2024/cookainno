@@ -145,16 +145,8 @@ fun HomeScreen(
                 composable(NavRoutes.GENERATED.name) {
                     GeneratedRecipe(ingredientsViewModel = ingredientsViewModel, navController = navController)
                 }
-                composable("${NavRoutes.DETAILS.name}/{id}") { backStackEntry ->
-                    val id = backStackEntry.arguments?.getString("id")?.toIntOrNull()
-                    if (id != null) {
-                        val recipe = recipesViewModel.recipes.collectAsState().value?.get(id-1)
-                        if (recipe != null) {
-                            RecipeDetailsScreen(recipe = recipe, navController = navController)
-                        }
-                    } else {
-                        // handle id is null
-                    }
+                composable(NavRoutes.DETAILS.name) {
+                    RecipeDetailsScreen(recipesViewModel = recipesViewModel, navController = navController)
                 }
             }
         }

@@ -18,9 +18,14 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository): ViewModel(
     private val _recipes = MutableStateFlow<List<Recipe>?>(null)
     val recipes: StateFlow<List<Recipe>?> = _recipes
 
+    private val _selectedRecipe = MutableStateFlow<Recipe?>(null)
+    val selectedRecipe: StateFlow<Recipe?> = _selectedRecipe
+
+    private var currentPage = 0
+    private val pageSize = 10
+
     fun initRepository() {
         recipesRepository.initToken()
-        getRecipes()
     }
 
     fun example() {
@@ -50,5 +55,19 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository): ViewModel(
             }
             _recipes.value = l
         }
+    }
+
+    fun getRecipesSortedByLikes() {
+        viewModelScope.launch {
+            val newRecipes = recipesRepository.getRecipesSortedByLikes(currentPage, pageSize).getOrNull()
+            if (!newRecipes.isNullOrEmpty()) {
+                _recipes.value = _recipes.value.orEmpty() + newRecipes
+                currentPage++
+            }
+        }
+    }
+
+    fun selectRecipe(recipe: Recipe) {
+        _selectedRecipe.value = recipe
     }
 }
