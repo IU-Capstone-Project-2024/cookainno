@@ -44,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -94,7 +95,7 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         }
         LazyVerticalGrid(
             state = listState,
-            columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)
+            columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp)
         ) {
             items(allRecipes ?: emptyList()) { recipe ->
                 RecipeItem(recipe = recipe, onClick = {
@@ -115,7 +116,10 @@ fun TopBar(
     onQueryChanged: (TextFieldValue) -> Unit
 ) {
     Surface(
-        color = MaterialTheme.colorScheme.primary, shape = shape, modifier = Modifier.fillMaxWidth()
+        color = MaterialTheme.colorScheme.primary, shape = shape, modifier = Modifier
+            .fillMaxWidth()
+            .alpha(0.9f)
+            .height(125.dp)
     ) {
         Column {
             Text(
@@ -123,7 +127,9 @@ fun TopBar(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 14.dp, bottom = 9.dp)
             )
             Row(
                 modifier = Modifier
@@ -157,7 +163,7 @@ fun TopBar(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(30.dp))
-                        .height(52.dp),
+                        .height(55.dp),
                     shape = RoundedCornerShape(30.dp),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -202,7 +208,7 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
     }
     Box(
         modifier = Modifier
-            .padding(6.dp)
+            .padding(4.dp)
             .background(MaterialTheme.colorScheme.surfaceBright, RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clickable(onClick = onClick)
@@ -216,14 +222,14 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
                 painter = rememberAsyncImagePainter(model = recipe.imageUrl),
                 contentDescription = null,
                 modifier = Modifier
-                    .height(140.dp)
+                    .height(133.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(20.dp)),
                 contentScale = ContentScale.FillBounds
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = recipe.name, modifier = Modifier.padding(8.dp))
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = recipe.name, modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(modifier = Modifier.height(36.dp))
         }
         IconButton(
             onClick = {
