@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CookAInno</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="instructions">Instructions:</string>
 </resources>

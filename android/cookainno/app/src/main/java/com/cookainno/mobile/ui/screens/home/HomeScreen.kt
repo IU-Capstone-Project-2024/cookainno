@@ -21,6 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
@@ -59,11 +60,12 @@ fun HomeScreen(
                 shape = RoundedCornerShape(40.dp),
                 modifier = Modifier
                     .padding(horizontal = 80.dp, vertical = 10.dp)
+                    .alpha(0.4f)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.onBackground),
+                        .background(MaterialTheme.colorScheme.scrim),
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     IconButton(
