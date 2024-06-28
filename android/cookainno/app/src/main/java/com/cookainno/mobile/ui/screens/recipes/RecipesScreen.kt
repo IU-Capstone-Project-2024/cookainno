@@ -33,6 +33,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,15 +61,14 @@ import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.ui.NavRoutes
 import kotlinx.coroutines.flow.collectLatest
 
-data class RecipeTest(
-    val imageResId: Int, val titleResId: Int, val recipe: String
-)
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val allRecipes by recipesViewModel.recipes.collectAsState()
+    val isRefreshing by recipesViewModel.isRefreshing.collectAsState()
     val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
 
+    val state = rememberPullToRefreshState()
     val listState = rememberLazyGridState()
 
     LaunchedEffect(Unit) {
@@ -92,15 +93,21 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         ) {
             searchQuery.value = it
         }
-        LazyVerticalGrid(
-            state = listState,
-            columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp)
-        ) {
-            items(allRecipes ?: emptyList()) { recipe ->
-                RecipeItem(recipe = recipe, onClick = {
-                    recipesViewModel.selectRecipe(recipe)
-                    navController.navigate(NavRoutes.DETAILS.name)
-                })
+        PullToRefreshBox(state = state, isRefreshing = isRefreshing, onRefresh = {
+            recipesViewModel.resetPagination()
+            recipesViewModel.getAllFavouriteRecipes()
+            recipesViewModel.getRecipesSortedByLikes()
+        }) {
+            LazyVerticalGrid(
+                state = listState,
+                columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp)
+            ) {
+                items(allRecipes ?: emptyList()) { recipe ->
+                    RecipeItem(recipe = recipe, recipesViewModel = recipesViewModel, onCardClick = {
+                        recipesViewModel.selectRecipe(recipe)
+                        navController.navigate(NavRoutes.DETAILS.name)
+                    })
+                }
             }
         }
     }
@@ -164,11 +171,11 @@ fun TopBar(
                         .clip(RoundedCornerShape(30.dp))
                         .height(55.dp),
                     shape = RoundedCornerShape(30.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        cursorColor = Color.Black,
-                        focusedBorderColor = MaterialTheme.colorScheme.inversePrimary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    colors = TextFieldDefaults.colors( //changed?
+//                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+//                        cursorColor = Color.Black,
+//                        focusedBorderColor = MaterialTheme.colorScheme.inversePrimary,
+//                        unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
                     )
                 )
                 Spacer(modifier = Modifier.width(20.dp))
@@ -201,16 +208,16 @@ fun TopBar(
 }
 
 @Composable
-fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
-    var isLiked by remember {
-        mutableStateOf(false)
+fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: () -> Unit) {
+    var liked by remember {
+        mutableStateOf(recipesViewModel.isFavourite(recipe))
     }
     Box(
         modifier = Modifier
             .padding(4.dp)
             .background(MaterialTheme.colorScheme.surfaceBright, RoundedCornerShape(20.dp))
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = onCardClick)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -232,13 +239,18 @@ fun RecipeItem(recipe: Recipe, onClick: () -> Unit) {
         }
         IconButton(
             onClick = {
-                isLiked = !isLiked
+                if (liked) {
+                    recipesViewModel.deleteFavouriteRecipe(recipe)
+                } else {
+                    recipesViewModel.addFavouriteRecipe(recipe)
+                }
+                liked = !liked
             }, modifier = Modifier
                 .size(60.dp)
                 .align(alignment = Alignment.BottomEnd)
         ) {
             Icon(
-                imageVector = (if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder),
+                imageVector = (if (liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder),
                 contentDescription = "favorite",
                 tint = MaterialTheme.colorScheme.background
             )
