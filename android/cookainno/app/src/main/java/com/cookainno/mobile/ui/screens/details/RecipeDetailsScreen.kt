@@ -41,7 +41,6 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.Recipe
-import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 
 @Composable
@@ -211,7 +210,7 @@ fun TopBarDetails(
                 ) {
                     IconButton(
                         onClick = {
-                            navController.navigate(NavRoutes.RECIPES.name)
+                            navController.navigateUp()
                         },
                         modifier = Modifier
                             .clip(RoundedCornerShape(30.dp))
