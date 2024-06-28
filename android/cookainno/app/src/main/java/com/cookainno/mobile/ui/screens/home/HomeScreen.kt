@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,7 +35,7 @@ import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.details.RecipeDetailsScreen
 import com.cookainno.mobile.ui.screens.favourites.FavouritesScreen
 import com.cookainno.mobile.ui.screens.generation.CamViewModel
-import com.cookainno.mobile.ui.screens.generation.GeneratedRecipe
+import com.cookainno.mobile.ui.screens.generation.GeneratedRecipeScreen
 import com.cookainno.mobile.ui.screens.generation.IngredientsScreen
 import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.profile.ProfileScreen
@@ -51,9 +52,13 @@ fun HomeScreen(
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val userId by userViewModel.userId.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    recipesViewModel.initRepository()
+    userViewModel.initUserId()
+    recipesViewModel.initUserId(userId)
+    recipesViewModel.getAllFavouriteRecipes()
     Scaffold(
-
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             Surface(
@@ -119,18 +124,18 @@ fun HomeScreen(
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = navController, startDestination = NavRoutes.RECIPES.name) {
                 composable(NavRoutes.RECIPES.name) {
-                    recipesViewModel.initRepository()
                     ingredientsViewModel.emptyRecipes()
                     ingredientsViewModel.emptyIngredients()
-                    userViewModel.initUserId()
-                    recipesViewModel.initUserId(userViewModel.userId.value)
                     RecipesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
                 composable(NavRoutes.FAVOURITES.name) {
-                    FavouritesScreen(recipesViewModel = recipesViewModel, navController = navController)
+                    FavouritesScreen(
+                        recipesViewModel = recipesViewModel,
+                        navController = navController
+                    )
                 }
                 composable(NavRoutes.PROFILE.name) {
                     ProfileScreen(authViewModel = userViewModel)
@@ -143,10 +148,16 @@ fun HomeScreen(
                     )
                 }
                 composable(NavRoutes.GENERATED.name) {
-                    GeneratedRecipe(ingredientsViewModel = ingredientsViewModel, navController = navController)
+                    GeneratedRecipeScreen(
+                        ingredientsViewModel = ingredientsViewModel,
+                        navController = navController
+                    )
                 }
                 composable(NavRoutes.DETAILS.name) {
-                    RecipeDetailsScreen(recipesViewModel = recipesViewModel, navController = navController)
+                    RecipeDetailsScreen(
+                        recipesViewModel = recipesViewModel,
+                        navController = navController
+                    )
                 }
             }
         }

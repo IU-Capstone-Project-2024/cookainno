@@ -16,6 +16,8 @@ class IngredientsViewModel : ViewModel() {
     private val generationRepository = GenerationRepository()
     private val _recipes = MutableStateFlow<List<GeneratedRecipes>>(emptyList())
     val recipes = _recipes.asStateFlow()
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading = _isLoading.asStateFlow()
 
     fun addIngredient(ingredient: String) {
         _ingredients.value += ingredient
@@ -38,13 +40,15 @@ class IngredientsViewModel : ViewModel() {
     }
 
     fun generateRecipes() {
+        _isLoading.value = true
         viewModelScope.launch {
             val response =
                 generationRepository.generateRecipes(_ingredients.value.filter { it != "" })
             if (response.isSuccess) {
                 _recipes.value = response.getOrNull()!!
+                _isLoading.value = false
             } else {
-                // proper err handling
+                _isLoading.value = false
             }
         }
     }
