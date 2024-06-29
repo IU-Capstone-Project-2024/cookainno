@@ -5,12 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cbd5e34e-1432-42f2-a807-5857e7f0487f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml/ingredient_detection/detect.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml/ingredient_detection/detect.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml/recipe generation/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/ml/recipe_generation/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml/recipe generation/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml/recipe_generation/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml/recipe generation/mistral.py" beforeDir="false" afterPath="$PROJECT_DIR$/ml/recipe_generation/mistral.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ml/recipe generation/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ml/recipe_generation/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -45,6 +58,7 @@
       <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml\ingredient_detection" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml" />
       <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml\ingredient_detection" />
     </key>
   </component>
@@ -98,5 +112,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
 </project>

@@ -1,5 +1,6 @@
 from ultralytics import YOLO
 import yaml
+from typing import List
 
 
 # A class to detect grocery items using a YOLO model
@@ -23,7 +24,7 @@ class GroceryItemDetector:
         return list(detected_items)
 
     # Detects items in an image and prints the detected items
-    def detect(self, image_path):
+    def detect(self, image_path) -> List[str]:
         results = self.model(image_path, conf=self.conf, data=self.data)
         detected_items = self.get_list_of_detected_items(results)
         return detected_items
