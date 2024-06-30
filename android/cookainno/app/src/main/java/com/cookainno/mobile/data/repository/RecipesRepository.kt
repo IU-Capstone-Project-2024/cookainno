@@ -1,6 +1,5 @@
 package com.cookainno.mobile.data.repository
 
-import android.util.Log
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.remote.AuthInterceptor
@@ -46,9 +45,9 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
         }
     }
 
-    suspend fun getRecipesSortedByLikes(page: Int, size: Int): Result<List<Recipe>> {
+    suspend fun getRecipesSortedByLikes(skip: Int, pageSize: Int): Result<List<Recipe>> {
         return try {
-            Result.success(recipesService?.getRecipesSortedByLikes(page, size)?.body()!!)
+            Result.success(recipesService?.getRecipesSortedByLikes(skip, pageSize)?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -70,9 +69,9 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
         }
     }
 
-    suspend fun getFavouriteRecipes(userId: Int, page: Int, size: Int, oldestFirst: Boolean): Result<List<Recipe>> {
+    suspend fun getFavouriteRecipes(userId: Int, skip: Int, pageSize: Int, oldestFirst: Boolean): Result<List<Recipe>> {
         return try {
-            Result.success(recipesService?.getFavouriteRecipes(userId, page, size, oldestFirst)?.body()!!)
+            Result.success(recipesService?.getFavouriteRecipes(userId, skip, pageSize, oldestFirst)?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
         }

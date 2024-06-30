@@ -68,7 +68,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         _isRefreshing.value = true
         viewModelScope.launch {
             val newRecipes =
-                recipesRepository.getRecipesSortedByLikes(currentPage, pageSize).getOrNull()
+                recipesRepository.getRecipesSortedByLikes(currentPage*pageSize, pageSize).getOrNull()
             Log.d("HIHI", "getFavouriteRecipes: ${newRecipes?.map { it.name }} : page $currentPage")
             if (!newRecipes.isNullOrEmpty()) {
                 _recipes.value = _recipes.value.orEmpty() + newRecipes
@@ -110,7 +110,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         viewModelScope.launch {
             val newRecipes = recipesRepository.getFavouriteRecipes(
                 userId,
-                currentFavouritesPage,
+                currentFavouritesPage*pageSize,
                 pageSize,
                 false
             ).getOrNull()
