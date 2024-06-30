@@ -87,7 +87,6 @@ fun RegistrationScreen(authViewModel: UserViewModel, navController: NavHostContr
                     onClick = {
                         authViewModel.signUp()
                         keyboardController?.hide()
-                        navController.navigate(NavRoutes.CONFIRMATION.name)
                     }
                 ) {
                     Text(text = "Sign Up")

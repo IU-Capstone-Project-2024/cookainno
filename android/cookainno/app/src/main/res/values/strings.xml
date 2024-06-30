@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">CookAInno</string>
-    <string name="apple">apple</string>
-    <string name="kartoshka">kartoshka</string>
-    <string name="burger">burger</string>
-    <string name="carri">carri</string>
-    <string name="meat">meat</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="instructions">Instructions:</string>
 </resources>

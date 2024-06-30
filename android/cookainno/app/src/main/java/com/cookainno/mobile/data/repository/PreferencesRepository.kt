@@ -14,17 +14,19 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "da
 class PreferencesRepository(private val context: Context) {
     private val dataStore: DataStore<Preferences> = context.dataStore
 
-    suspend fun saveToken(value: String) {
-        val dataStoreKey = stringPreferencesKey(USER_TOKEN_KEY)
+    suspend fun saveLoginData(token: String, id: Int) {
+        //val dataStoreKey = stringPreferencesKey(USER_TOKEN_KEY)
         context.dataStore.edit { preferences ->
-            preferences[dataStoreKey] = value
+            preferences[stringPreferencesKey(USER_TOKEN_KEY)] = token
+            preferences[intPreferencesKey(USER_ID_KEY)] = id
         }
     }
 
-    suspend fun deleteToken() {
-        val dataStoreKey = stringPreferencesKey(USER_TOKEN_KEY)
+    suspend fun removeLoginData() {
+        //val dataStoreKey = stringPreferencesKey(USER_TOKEN_KEY)
         context.dataStore.edit { preferences ->
-            preferences.remove(dataStoreKey)
+            preferences.remove(stringPreferencesKey(USER_TOKEN_KEY))
+            preferences.remove(stringPreferencesKey(USER_ID_KEY))
         }
         restartApp()
     }
@@ -37,10 +39,18 @@ class PreferencesRepository(private val context: Context) {
 
     companion object {
         private const val USER_TOKEN_KEY = "user_token"
+        private const val USER_ID_KEY = "user_id"
     }
 
     fun getTokenFlow(): Flow<String?> {
         val dataStoreKey = stringPreferencesKey(USER_TOKEN_KEY)
+        return context.dataStore.data.map { preferences ->
+            preferences[dataStoreKey]
+        }
+    }
+
+    fun getUserIdFlow(): Flow<Int?> {
+        val dataStoreKey = intPreferencesKey(USER_ID_KEY)
         return context.dataStore.data.map { preferences ->
             preferences[dataStoreKey]
         }

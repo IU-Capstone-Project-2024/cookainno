@@ -1,9 +1,11 @@
+import json
 import os
+from typing import List
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
-from fastapi.responses import JSONResponse
-import json
 import config
+
+# TODO: exceptions, json-conversion, context (нет рецептам из тараканов), role="system"
 
 # api_key = os.environ["MISTRAL_API_KEY"]
 
@@ -12,37 +14,39 @@ model = config.model
 client = MistralClient(api_key=api_key)
 
 
-def generate_recipes(ingredients):
+def generate_recipes(ingredients: List[str]) -> 'str':
     """
     Generate recipes based on a list of ingredients.
-
     Args:
         ingredients (list): A list of ingredients.
-
     Returns:
-        JSONResponse: A response containing the generated recipes as a JSON array.
+        str: A JSON string containing the generated recipes.
     """
     chat_response = client.chat(
         model=model,
-        messages=[ChatMessage(role="user",
+        response_format={"type": "json_object"},
+        messages=[ChatMessage(role="system",
+                              content="You are the recipes advisor. You need to provide recipes with the use of "
+                                      "client requested ingredients. Add extra ingredients only in case of crucial "
+                                      "lack of entered items. In case of not eatable ingredients response with "
+                                      "'Uneatable food'."),
+                  ChatMessage(role="user",
                               content=f"Propose recipes in which {ingredients} can be used. You need to provide 5 "
                                       f"variants of meals. It is sufficient just to show the name, ingredients list "
-                                      f"for, and instruction for the preparation for each meal. Compose a response in "
-                                      f"json format with fields: 'name', 'ingredients', and 'instruction'.")]
+                                      f"for, and instruction for the preparation for each meal. Compose a response as "
+                                      f"JSON object 'recipes': list of recipes with fields: 'name', 'ingredients', "
+                                      f"and 'instruction'.")]
     )
-    # Parse the string response to a Python object
-    recipes_list = json.loads(chat_response.choices[0].message.content)
-    # Return a JSONResponse with the list of recipes
-    return JSONResponse(content=recipes_list)
+    response = chat_response.choices[0].message.content
+    print(type(response))
+    return response
 
 
-def daily_advice(plan):
+def daily_advice(plan: str) -> str:
     """
     Generate daily advice based on a calorie plan.
-
     Args:
         plan (str): The calorie plan (normal consumption, deficit, or surplus).
-
     Returns:
         str: A short one-sentence daily advice.
     """

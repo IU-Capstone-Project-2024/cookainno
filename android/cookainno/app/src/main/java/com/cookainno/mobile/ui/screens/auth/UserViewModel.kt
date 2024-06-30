@@ -1,5 +1,6 @@
 package com.cookainno.mobile.ui.screens.auth
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookainno.mobile.data.repository.AuthRepository
@@ -38,6 +39,9 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
     val confirmationCode: StateFlow<String> = _confirmationCode
 
     private var authRepository: AuthRepository
+
+    private val _userId = MutableStateFlow(-1)
+    val userId: StateFlow<Int> = _userId
 
     init {
         viewModelScope.launch {
@@ -79,6 +83,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
                 password = _password.value
             )
             if (result.isSuccess) {
+                Log.d("PPP", "signUp: ${result.isSuccess}")
                 _navigateToConfirmation.value = true
             } else {
                 _registrationError.value = result.exceptionOrNull()?.message
@@ -89,6 +94,8 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     fun confirmCode() {
         _registrationError.value = null
+        _navigateToConfirmation.value = false
+        _navigateToMain.value = false
         viewModelScope.launch {
             _isLoading.value = true
             val result = authRepository.confirm(
@@ -118,6 +125,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             _isLoading.value = true
             val result =
                 authRepository.login(username = _username.value, password = _password.value)
+            _userId.value = authRepository.getUserID()
             if (result.isSuccess) {
                 _navigateToMain.value = true
             } else {
@@ -130,6 +138,14 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
     fun signOut() {
         viewModelScope.launch {
             authRepository.logout()
+        }
+    }
+
+    fun initUserId() {
+        if (_userId.value == -1) {
+            viewModelScope.launch {
+                _userId.value = authRepository.getUserID()
+            }
         }
     }
 }

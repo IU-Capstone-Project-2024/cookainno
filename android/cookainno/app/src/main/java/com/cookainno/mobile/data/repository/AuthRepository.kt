@@ -1,6 +1,5 @@
 package com.cookainno.mobile.data.repository
 
-import android.util.Log
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.ConfirmationRequest
 import com.cookainno.mobile.data.model.LoginRequest
@@ -61,7 +60,6 @@ class AuthRepository(private val preferencesRepository: PreferencesRepository) {
                 Result.failure(Exception(errorResult))
             }
         } catch (e: Exception) {
-            Log.d("PENIS", "confirm: ${e.message}")
             if (e is IOException) {
                 Result.failure(Exception("Please check your internet connection."))
             } else {
@@ -74,9 +72,11 @@ class AuthRepository(private val preferencesRepository: PreferencesRepository) {
         return try {
             val response = authService.loginUser(LoginRequest(username, password))
             if (response.isSuccessful && response.body() != null) {
-                response.body()?.token?.let { token ->
-                    preferencesRepository.saveToken(token)
-                }
+                response.body()!!.token?.let { response.body()!!.userId?.let { it1 ->
+                    preferencesRepository.saveLoginData(it,
+                        it1
+                    )
+                } }
                 Result.success(response.body()!!)
             } else {
                 Result.failure(Exception("Login failed"))
@@ -88,10 +88,14 @@ class AuthRepository(private val preferencesRepository: PreferencesRepository) {
 
     suspend fun logout(): Boolean {
         return try {
-            preferencesRepository.deleteToken()
+            preferencesRepository.removeLoginData()
             true
         } catch (e: Exception) {
             false
         }
+    }
+
+    suspend fun getUserID(): Int {
+        return preferencesRepository.getUserIdFlow().first() ?: -1
     }
 }
