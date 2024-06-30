@@ -30,17 +30,18 @@ import com.cookainno.mobile.ui.NavRoutes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegistrationScreen(authViewModel: UserViewModel, navController: NavHostController) {
-    val username by authViewModel.username.collectAsState()
-    val email by authViewModel.email.collectAsState()
-    val password by authViewModel.password.collectAsState()
-    val registrationError by authViewModel.registrationError.collectAsState()
-    val navigateToConfirmation by authViewModel.navigateToConfirmation.collectAsState()
+fun RegistrationScreen(userViewModel: UserViewModel, navController: NavHostController) {
+    val username by userViewModel.username.collectAsState()
+    val email by userViewModel.email.collectAsState()
+    val password by userViewModel.password.collectAsState()
+    val registrationError by userViewModel.registrationError.collectAsState()
+    val navigateToConfirmation by userViewModel.navigateToConfirmation.collectAsState()
 
     val keyboardController = LocalSoftwareKeyboardController.current //recheck
 
     LaunchedEffect(navigateToConfirmation) {
         if (navigateToConfirmation) {
+            userViewModel.resetToConfirmation()
             navController.navigate(NavRoutes.CONFIRMATION.name)
         }
     }
@@ -65,27 +66,27 @@ fun RegistrationScreen(authViewModel: UserViewModel, navController: NavHostContr
                     label = { Text(text = "Username") },
                     modifier = Modifier.padding(3.dp),
                     value = username,
-                    onValueChange = authViewModel::onUsernameChanged
+                    onValueChange = userViewModel::onUsernameChanged
                 )
                 OutlinedTextField(
                     label = { Text(text = "Email") },
                     modifier = Modifier.padding(3.dp),
                     value = email,
-                    onValueChange = authViewModel::onEmailChanged
+                    onValueChange = userViewModel::onEmailChanged
                 )
                 OutlinedTextField(
                     label = { Text(text = "Password") },
                     modifier = Modifier.padding(3.dp),
                     value = password,
                     visualTransformation = PasswordVisualTransformation(),
-                    onValueChange = authViewModel::onPasswordChanged
+                    onValueChange = userViewModel::onPasswordChanged
                 )
                 Button(
                     modifier = Modifier
                         .align(Alignment.End)
                         .padding(3.dp),
                     onClick = {
-                        authViewModel.signUp()
+                        userViewModel.signUp()
                         keyboardController?.hide()
                     }
                 ) {

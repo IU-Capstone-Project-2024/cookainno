@@ -126,19 +126,21 @@ fun HomeScreen(
                 composable(NavRoutes.RECIPES.name) {
                     ingredientsViewModel.emptyRecipes()
                     ingredientsViewModel.emptyIngredients()
+                    recipesViewModel.resetRefreshings()
                     RecipesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
                 composable(NavRoutes.FAVOURITES.name) {
+                    recipesViewModel.resetRefreshings()
                     FavouritesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
                 composable(NavRoutes.PROFILE.name) {
-                    ProfileScreen(authViewModel = userViewModel)
+                    ProfileScreen(userViewModel = userViewModel)
                 }
                 composable(NavRoutes.INGREDIENTS.name) {
                     IngredientsScreen(

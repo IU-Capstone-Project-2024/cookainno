@@ -12,6 +12,7 @@ import com.cookainno.mobile.ui.screens.LoadingScreen
 import com.cookainno.mobile.ui.screens.auth.RegistrationScreen
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.auth.ConfirmationCodeScreen
+import com.cookainno.mobile.ui.screens.auth.InitializingUserScreen
 import com.cookainno.mobile.ui.screens.auth.LoginScreen
 import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.home.HomeScreen
@@ -21,14 +22,14 @@ import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun App(
-    authViewModel: UserViewModel,
+    userViewModel: UserViewModel,
     camViewModel: CamViewModel,
     recipesViewModel: RecipesViewModel,
     ingredientsViewModel: IngredientsViewModel
 ) {
     val navController = rememberNavController()
-    val isSignedIn by authViewModel.isSignedIn.collectAsState()
-    val isLoading by authViewModel.isLoading.collectAsState()
+    val isSignedIn by userViewModel.isSignedIn.collectAsState()
+    val isLoading by userViewModel.isLoading.collectAsState()
     if (isLoading) {
         Scaffold {
             LoadingScreen()
@@ -38,20 +39,23 @@ fun App(
         NavHost(navController = navController, startDestination = startScreen) {
             composable(NavRoutes.HOME.name) {
                 HomeScreen(
-                    userViewModel = authViewModel,
+                    userViewModel = userViewModel,
                     camViewModel = camViewModel,
                     recipesViewModel = recipesViewModel,
                     ingredientsViewModel = ingredientsViewModel
                 )
             }
             composable(NavRoutes.REGISTRATION.name) {
-                RegistrationScreen(authViewModel = authViewModel, navController = navController)
+                RegistrationScreen(userViewModel = userViewModel, navController = navController)
             }
             composable(NavRoutes.CONFIRMATION.name) {
-                ConfirmationCodeScreen(authViewModel = authViewModel, navController = navController)
+                ConfirmationCodeScreen(userViewModel = userViewModel, navController = navController)
+            }
+            composable(NavRoutes.USERINIT.name) {
+                InitializingUserScreen(userViewModel = userViewModel, navController = navController)
             }
             composable(NavRoutes.LOGIN.name) {
-                LoginScreen(authViewModel = authViewModel, navController = navController)
+                LoginScreen(userViewModel = userViewModel, navController = navController)
             }
         }
     }

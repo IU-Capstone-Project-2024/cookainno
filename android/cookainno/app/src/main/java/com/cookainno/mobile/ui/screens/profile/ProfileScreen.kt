@@ -6,9 +6,10 @@ import androidx.compose.runtime.Composable
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
 
 @Composable
-fun ProfileScreen(authViewModel: UserViewModel) {
+fun ProfileScreen(userViewModel: UserViewModel) {
+    //userViewModel.updateUserData(...) // date format is yyyy-mm-dd
     Button(onClick = {
-        authViewModel.signOut()
+        userViewModel.signOut()
     }) {
         Text(text = "Sign Out")
     }

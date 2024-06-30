@@ -127,6 +127,11 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         }
     }
 
+    fun resetRefreshings() {
+        _isRefreshing.value = false
+        _isFavouriteRefreshing.value = false
+    }
+
     fun getAllFavouriteRecipes() {
         viewModelScope.launch {
             allFavourites =

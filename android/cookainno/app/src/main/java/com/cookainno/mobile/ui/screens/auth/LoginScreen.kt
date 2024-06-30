@@ -21,14 +21,16 @@ import com.cookainno.mobile.ui.NavRoutes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(authViewModel: UserViewModel, navController: NavHostController) {
+fun LoginScreen(userViewModel: UserViewModel, navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    val registrationError by authViewModel.registrationError.collectAsState()
-    val username by authViewModel.username.collectAsState()
-    val password by authViewModel.password.collectAsState()
-    val navigateToMain by authViewModel.navigateToMain.collectAsState()
+    val registrationError by userViewModel.registrationError.collectAsState()
+    val username by userViewModel.username.collectAsState()
+    val password by userViewModel.password.collectAsState()
+    val navigateToMain by userViewModel.navigateToMain.collectAsState()
     if (navigateToMain) {
-        navController.navigate(NavRoutes.HOME.name)
+        LaunchedEffect(Unit) {
+            navController.navigate(NavRoutes.HOME.name)
+        }
     }
     Scaffold {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -49,18 +51,18 @@ fun LoginScreen(authViewModel: UserViewModel, navController: NavHostController) 
                     label = { Text(text = "Username") },
                     modifier = Modifier.padding(3.dp),
                     value = username,
-                    onValueChange = authViewModel::onUsernameChanged
+                    onValueChange = userViewModel::onUsernameChanged
                 )
                 OutlinedTextField(
                     label = { Text(text = "Password") },
                     modifier = Modifier.padding(3.dp),
                     value = password,
                     visualTransformation = PasswordVisualTransformation(),
-                    onValueChange = authViewModel::onPasswordChanged
+                    onValueChange = userViewModel::onPasswordChanged
                 )
                 Button(
                     onClick = {
-                        authViewModel.signIn()
+                        userViewModel.signIn()
                         keyboardController?.hide()
                     },
                     modifier = Modifier

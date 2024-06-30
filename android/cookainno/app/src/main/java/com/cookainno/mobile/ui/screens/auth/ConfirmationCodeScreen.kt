@@ -12,6 +12,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,11 +25,14 @@ import com.cookainno.mobile.ui.NavRoutes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ConfirmationCodeScreen(authViewModel: UserViewModel, navController: NavHostController) {
-    val confirmationCode by authViewModel.confirmationCode.collectAsState()
-    val navigateToMain by authViewModel.navigateToMain.collectAsState()
-    if (navigateToMain) {
-        navController.navigate(NavRoutes.HOME.name)
+fun ConfirmationCodeScreen(userViewModel: UserViewModel, navController: NavHostController) {
+    val confirmationCode by userViewModel.confirmationCode.collectAsState()
+    val navigateToInit by userViewModel.navigateToInit.collectAsState()
+    LaunchedEffect(Unit) {
+        if (navigateToInit) {
+            userViewModel.resetToInit()
+            navController.navigate(NavRoutes.USERINIT.name)
+        }
     }
     Scaffold {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -48,11 +52,11 @@ fun ConfirmationCodeScreen(authViewModel: UserViewModel, navController: NavHostC
                     modifier = Modifier.padding(3.dp),
                     value = confirmationCode,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    onValueChange = authViewModel::onConfirmationChange
+                    onValueChange = userViewModel::onConfirmationChange
                 )
                 Button(
                     onClick = {
-                        authViewModel.confirmCode()
+                        userViewModel.confirmCode()
                     },
                     modifier = Modifier.padding(3.dp)
                 ) {

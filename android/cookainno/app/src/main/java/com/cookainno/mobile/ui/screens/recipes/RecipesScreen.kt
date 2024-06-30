@@ -41,6 +41,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -169,7 +170,8 @@ fun TopBar(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(30.dp))
-                        .height(55.dp),
+                        .height(55.dp)
+                        .background(Color.Transparent),
                     shape = RoundedCornerShape(30.dp),
                     colors = TextFieldDefaults.colors( //changed?
 //                        containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -209,7 +211,7 @@ fun TopBar(
 
 @Composable
 fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: () -> Unit) {
-    var liked by remember {
+    var liked by rememberSaveable {
         mutableStateOf(recipesViewModel.isFavourite(recipe))
     }
     Box(
