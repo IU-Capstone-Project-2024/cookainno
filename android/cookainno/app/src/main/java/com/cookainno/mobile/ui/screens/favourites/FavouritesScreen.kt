@@ -18,6 +18,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
@@ -34,8 +36,11 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun FavouritesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val favouriteRecipes by recipesViewModel.favouriteRecipes.collectAsState()
-    val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
+    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val isFavouriteRefreshing by recipesViewModel.isFavouriteRefreshing.collectAsState()
+    var isSearchingState by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     val state = rememberPullToRefreshState()
     val listState = rememberLazyGridState()
@@ -48,7 +53,11 @@ fun FavouritesScreen(recipesViewModel: RecipesViewModel, navController: NavHostC
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collectLatest { lastIndex ->
                 if (lastIndex != null && lastIndex >= (favouriteRecipes?.size ?: 0) - 1) {
-                    recipesViewModel.getFavouriteRecipes()
+                    if (!isSearchingState) {
+                        recipesViewModel.getFavouriteRecipes()
+                    } else {
+                        recipesViewModel.searchFavouriteRecipes(searchQuery.text)
+                    }
                 }
             }
     }
@@ -57,17 +66,24 @@ fun FavouritesScreen(recipesViewModel: RecipesViewModel, navController: NavHostC
         modifier = Modifier.fillMaxSize()
     ) {
         TopBar(
+            isMain = false,
             shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
-            searchQuery.value,
-            navController
-        ) {
-            searchQuery.value = it
-        }
+            query = searchQuery,
+            navController = navController,
+            onQueryChanged = { searchQuery = it },
+            onSearchClick = {
+                isSearchingState = true
+                recipesViewModel.resetFavouritePagination()
+                recipesViewModel.searchFavouriteRecipes(searchQuery.text)
+            }
+        )
         PullToRefreshBox(
             state = state,
             onRefresh = {
-                recipesViewModel.resetFavouritePagination()
-                recipesViewModel.getFavouriteRecipes()
+                if (!isSearchingState) {
+                    recipesViewModel.resetFavouritePagination()
+                    recipesViewModel.getFavouriteRecipes()
+                }
             },
             isRefreshing = isFavouriteRefreshing
         ) {

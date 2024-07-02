@@ -3,13 +3,13 @@ package com.cookainno.mobile.data.repository
 import android.util.Log
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.UserDataRequest
+import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.data.remote.AuthInterceptor
 import com.cookainno.mobile.data.remote.RecomendationService
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.log
 
 class RecomendationRepository(private val preferencesRepository: PreferencesRepository) {
     private var recomendationService: RecomendationService? = null
@@ -46,6 +46,19 @@ class RecomendationRepository(private val preferencesRepository: PreferencesRepo
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun getUserData(userId: Int): Result<UserDataResponse> {
+        return try {
+            val response = recomendationService?.getUserInfo(userId)
+            if (response?.isSuccessful == true && response.body() != null) {
+                return Result.success(response.body()!!)
+            } else {
+                return Result.failure(Exception("Unsuccessful"))
+            }
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 }

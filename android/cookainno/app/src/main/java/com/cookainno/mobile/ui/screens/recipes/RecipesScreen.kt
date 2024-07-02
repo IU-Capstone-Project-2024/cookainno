@@ -67,7 +67,10 @@ import kotlinx.coroutines.flow.collectLatest
 fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val allRecipes by recipesViewModel.recipes.collectAsState()
     val isRefreshing by recipesViewModel.isRefreshing.collectAsState()
-    val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
+    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    var isSearchingState by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     val state = rememberPullToRefreshState()
     val listState = rememberLazyGridState()
@@ -79,7 +82,11 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collectLatest { lastIndex ->
                 if (lastIndex != null && lastIndex >= (allRecipes?.size ?: 0) - 1) {
-                    recipesViewModel.getRecipesSortedByLikes()
+                    if (!isSearchingState) {
+                        recipesViewModel.getRecipesSortedByLikes()
+                    } else {
+                        recipesViewModel.searchRecipes(searchQuery.text)
+                    }
                 }
             }
     }
@@ -88,12 +95,17 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         modifier = Modifier.fillMaxSize()
     ) {
         TopBar(
+            isMain = true,
             shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
-            searchQuery.value,
-            navController
-        ) {
-            searchQuery.value = it
-        }
+            query = searchQuery,
+            navController = navController,
+            onQueryChanged = { searchQuery = it },
+            onSearchClick = {
+                isSearchingState = true
+                recipesViewModel.resetPagination()
+                recipesViewModel.searchRecipes(searchQuery.text)
+            }
+        )
         PullToRefreshBox(state = state, isRefreshing = isRefreshing, onRefresh = {
             recipesViewModel.resetPagination()
             recipesViewModel.getAllFavouriteRecipes()
@@ -115,12 +127,13 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun TopBar(
+    isMain: Boolean, // define main or favourites screen
     shape: RoundedCornerShape,
     query: TextFieldValue,
     navController: NavHostController,
-    onQueryChanged: (TextFieldValue) -> Unit
+    onQueryChanged: (TextFieldValue) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     Surface(
         color = MaterialTheme.colorScheme.primary, shape = shape, modifier = Modifier
@@ -146,6 +159,7 @@ fun TopBar(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 OutlinedTextField(
+                    singleLine = true,
                     value = query,
                     onValueChange = { onQueryChanged(it) },
                     label = {
@@ -157,7 +171,7 @@ fun TopBar(
                     trailingIcon = {
                         IconButton(
                             onClick = {
-
+                                onSearchClick()
                             },
                         ) {
                             Icon(
@@ -180,27 +194,29 @@ fun TopBar(
 //                        unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
                     )
                 )
-                Spacer(modifier = Modifier.width(20.dp))
-                Surface(
-                    modifier = Modifier,
-                    shape = RoundedCornerShape(30.dp),
-                ) {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.INGREDIENTS.name)
-                        },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(30.dp))
-                            .background(
-                                color = MaterialTheme.colorScheme.primaryContainer
-                            )
-                            .size(52.dp)
+                if (isMain) {
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Surface(
+                        modifier = Modifier,
+                        shape = RoundedCornerShape(30.dp),
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.CameraAlt,
-                            contentDescription = "camera",
-                            tint = MaterialTheme.colorScheme.inversePrimary
-                        )
+                        IconButton(
+                            onClick = {
+                                navController.navigate(NavRoutes.INGREDIENTS.name)
+                            },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(30.dp))
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer
+                                )
+                                .size(52.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "camera",
+                                tint = MaterialTheme.colorScheme.inversePrimary
+                            )
+                        }
                     }
                 }
             }
