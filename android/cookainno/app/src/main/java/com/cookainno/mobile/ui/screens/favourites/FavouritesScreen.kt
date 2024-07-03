@@ -67,6 +67,7 @@ fun FavouritesScreen(recipesViewModel: RecipesViewModel, navController: NavHostC
     ) {
         TopBar(
             isMain = false,
+            isName = false,
             shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
             query = searchQuery,
             navController = navController,

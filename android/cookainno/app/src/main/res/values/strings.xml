@@ -2,4 +2,17 @@
     <string name="app_name">CookAInno</string>
     <string name="ingredients">Ingredients:</string>
     <string name="instructions">Instructions:</string>
+    <string name="str1">Start your day with a glass of water to kickstart your metabolism ♡</string>
+    <string name="str2">Incorporate more leafy greens into your meals for essential vitamins and minerals ♡</string>
+    <string name="str3">Choose whole grains over refined grains for added fiber and nutrients ♡</string>
+    <string name="str4">Snack on fresh fruits instead of sugary treats for a natural energy boost ♡</string>
+    <string name="str5">Include a source of protein in every meal to keep you feeling full longer ♡</string>
+    <string name="str6">Limit your intake of sugary beverages; opt for herbal teas or water instead ♡</string>
+    <string name="str7">Don\'t skip breakfast; it\'s important to fuel your body for the day ahead ♡</string>
+    <string name="str8">Try to eat more plant-based meals for a variety of nutrients and benefits ♡</string>
+    <string name="str9">Add healthy fats like avocados, nuts, and olive oil to your diet ♡</string>
+    <string name="str10">Reduce your consumption of processed foods; choose fresh ingredients instead ♡</string>
+    <string name="str11">Practice portion control to avoid overeating and maintain a healthy weight ♡</string>
+    <string name="str12">Make sure to eat a variety of colorful vegetables to get a wide range of nutrients ♡</string>
+
 </resources>
