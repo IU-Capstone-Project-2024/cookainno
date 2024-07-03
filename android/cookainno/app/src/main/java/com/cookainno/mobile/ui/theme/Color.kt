@@ -1,9 +1,10 @@
+
 package com.example.compose
 import androidx.compose.ui.graphics.Color
 
-val primaryLight = Color(0xFF000000)
+val primaryLight = Color(0xFF434657)//topbar
 val onPrimaryLight = Color(0xFFFFFFFF)
-val primaryContainerLight = Color(0xFF262626)
+val primaryContainerLight = Color(0xFF495677)
 val onPrimaryContainerLight = Color(0xFFB3B1B0)
 val secondaryLight = Color(0xFF2C1B20)
 val onSecondaryLight = Color(0xFFFFFFFF)
@@ -11,15 +12,18 @@ val secondaryContainerLight = Color(0xFFE8F547)
 val onSecondaryContainerLight = Color(0xFF4B5100)
 val tertiaryLight = Color(0xFF7D3650)
 val onTertiaryLight = Color(0xFFFFFFFF)
+//val tertiaryContainerLight = Color(0xFFFFFFFF)
 val tertiaryContainerLight = Color(0xFFA85974)
 val onTertiaryContainerLight = Color(0xFFFFFFFF)
 val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
-val errorContainerLight = Color(0xFFFFDAD6)
+//val errorContainerLight = Color(0xFFFFDAD6)
+val errorContainerLight = Color(0xFFFFFFFF)
 val onErrorContainerLight = Color(0xFF410002)
-val backgroundLight = Color(0xFFFF2090)
+val backgroundLight = Color(0xFF707FA6) //fon
 //val backgroundLight = Color(0xFF771338)
-val onBackgroundLight = Color(0xFF5B1839)
+//val onBackgroundLight = Color(0xFF5B1839)
+val onBackgroundLight = Color(0xFFA7AABA) //navigator
 val surfaceLight = Color(0xFFFFF8F8)
 val onSurfaceLight = Color(0xFF27171C)
 val surfaceVariantLight = Color(0xFFE0E3E3)
@@ -30,12 +34,14 @@ val scrimLight = Color(0xFF000000)
 val inverseSurfaceLight = Color(0xFF000000)
 val inverseOnSurfaceLight = Color(0xFFFFECF0)
 val inversePrimaryLight = Color(0xFFC8C6C5)
-val surfaceDimLight = Color(0xFFF1D2DA)
-val surfaceBrightLight = Color(0xFFFFF8F8)
+//
+//val surfaceDimLight = Color(0xFFF1D2DA)
+val surfaceDimLight = Color(0xFFFFFFFF)
+val surfaceBrightLight = Color(0xFFD3D3D3)//fonfon
 val surfaceContainerLowestLight = Color(0xFFFFFFFF)
 val surfaceContainerLowLight = Color(0xFFFFF0F2)
 val surfaceContainerLight = Color(0xFFFFE8ED)
-val surfaceContainerHighLight = Color(0xFFFFE1E8)
+val surfaceContainerHighLight = Color(0xFF314371)//links
 val surfaceContainerHighestLight = Color(0xFFF9DBE2)
 
 val primaryLightMediumContrast = Color(0xFF000000)
@@ -145,7 +151,6 @@ val surfaceContainerLowDark = Color(0xFF27171C)
 val surfaceContainerDark = Color(0xFF2C1B20)
 val surfaceContainerHighDark = Color(0xFF37252A)
 val surfaceContainerHighestDark = Color(0xFF462F35)
-
 val primaryDarkMediumContrast = Color(0xFFCDCACA)
 val onPrimaryDarkMediumContrast = Color(0xFF161616)
 val primaryContainerDarkMediumContrast = Color(0xFF929090)
@@ -217,10 +222,3 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF27171C)
 val surfaceContainerDarkHighContrast = Color(0xFF2C1B20)
 val surfaceContainerHighDarkHighContrast = Color(0xFF37252A)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF432F35)
-
-
-
-
-
-
-

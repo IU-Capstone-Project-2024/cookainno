@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.LocalPinnableContainer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -171,9 +172,13 @@ fun TopBar(
                         .weight(1f)
                         .clip(RoundedCornerShape(30.dp))
                         .height(55.dp)
-                        .background(Color.Transparent),
+                        //.background(Color.White)
+                            ,
                     shape = RoundedCornerShape(30.dp),
-                    colors = TextFieldDefaults.colors( //changed?
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    //changed?
 //                        containerColor = MaterialTheme.colorScheme.primaryContainer,
 //                        cursorColor = Color.Black,
 //                        focusedBorderColor = MaterialTheme.colorScheme.inversePrimary,
