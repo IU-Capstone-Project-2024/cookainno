@@ -65,12 +65,12 @@ fun HomeScreen(
                 shape = RoundedCornerShape(40.dp),
                 modifier = Modifier
                     .padding(horizontal = 80.dp, vertical = 10.dp)
-                    .alpha(0.4f)
+                    //.alpha(0.4f)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.scrim),
+                        .background(MaterialTheme.colorScheme.onBackground),
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     IconButton(
