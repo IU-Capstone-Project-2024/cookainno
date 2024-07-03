@@ -1,5 +1,6 @@
 package com.cookainno.mobile.data.repository
 
+import android.util.Log
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.remote.AuthInterceptor
@@ -53,6 +54,14 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
         }
     }
 
+    suspend fun searchRecipes(name: String, skip: Int, pageSize: Int): Result<List<Recipe>> {
+        return try {
+            Result.success(recipesService?.searchRecipes(name, skip, pageSize)?.body()!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun addFavouriteRecipe(userId: Int, recipeId: Int): Result<Unit> {
         return try {
             Result.success(recipesService?.addFavouriteRecipe(userId, recipeId)?.body()!!)
@@ -72,6 +81,16 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
     suspend fun getFavouriteRecipes(userId: Int, skip: Int, pageSize: Int, oldestFirst: Boolean): Result<List<Recipe>> {
         return try {
             Result.success(recipesService?.getFavouriteRecipes(userId, skip, pageSize, oldestFirst)?.body()!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun searchFavouriteRecipes(userId: Int, name: String, skip: Int, pageSize: Int): Result<List<Recipe>> {
+        return try {
+            val resp = recipesService?.searchFavouriteRecipes(userId, name, skip, pageSize)
+            Log.d("CHAPMAN", "searchFavouriteRecipes: ${resp} $userId $name $skip $pageSize")
+            Result.success(resp?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
         }

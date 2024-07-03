@@ -3,6 +3,7 @@ package com.cookainno.mobile.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.data.repository.AuthRepository
 import com.cookainno.mobile.data.repository.PreferencesRepository
 import com.cookainno.mobile.data.repository.RecomendationRepository
@@ -50,6 +51,9 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     private val _date = MutableStateFlow("")
     val date: StateFlow<String> = _date
+
+    private val _userData = MutableStateFlow<UserDataResponse?>(null)
+    val userData: StateFlow<UserDataResponse?> = _userData
 
     private var authRepository: AuthRepository
     private var recomendationRepository: RecomendationRepository
@@ -167,6 +171,18 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             Log.d("UMPALUMPA", "updateUserData: ${resp.isSuccess} ${_userId.value}")
             if (resp.isSuccess) {
                 _navigateToMain.value = true
+            }
+        }
+    }
+
+    fun getUserData() {
+        recomendationRepository.initToken()
+        viewModelScope.launch {
+            val resp = recomendationRepository.getUserData(_userId.value)
+            if (resp.isSuccess) {
+                _userData.value = resp.getOrNull()
+            } else {
+                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, 25)
             }
         }
     }

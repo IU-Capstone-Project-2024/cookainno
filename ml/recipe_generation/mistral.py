@@ -1,16 +1,16 @@
-import json
 import os
 from typing import List
+
+from dotenv import load_dotenv
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
-import config
 
 # TODO: exceptions, json-conversion, context (нет рецептам из тараканов), role="system"
 
-# api_key = os.environ["MISTRAL_API_KEY"]
+load_dotenv()
+api_key = os.getenv("MISTRAL_API_KEY")
+model = os.getenv("MODEL")
 
-api_key = config.api_key
-model = config.model
 client = MistralClient(api_key=api_key)
 
 

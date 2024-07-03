@@ -7,8 +7,8 @@ from ingredient_detection.detect import GroceryItemDetector
 
 app = FastAPI()
 
-model_path = 'ml/ingredient_detection/models/model_0.pt'
-data_path = 'ml/ingredient_detection/data.yaml'
+model_path = './ingredient_detection/models/model_0.pt'
+data_path = './ingredient_detection/data.yaml'
 confidence = 0.5
 detector = GroceryItemDetector(model_path, data_path, confidence)
 
@@ -34,7 +34,7 @@ def read_advice(query: str):
 @app.post("/detect/")
 async def detect_ingredients(file: UploadFile = File(...)):
     # Usage: curl -X POST "http://127.0.0.1:8000/detect/" -F "file=@/path/to/your/image.jpg"
-    file_location = f"temp/{file.filename}"
+    file_location = f"{file.filename}"
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(file.file, file_object)
 

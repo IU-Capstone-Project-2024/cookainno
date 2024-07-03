@@ -2,11 +2,13 @@ package com.cookainno.mobile.data.repository
 
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.ConfirmationRequest
+import com.cookainno.mobile.data.model.ErrorResponse
 import com.cookainno.mobile.data.model.LoginRequest
 import com.cookainno.mobile.data.model.LoginResponse
 import com.cookainno.mobile.data.model.RegistrationRequest
 import com.cookainno.mobile.data.model.RegistrationResponse
 import com.cookainno.mobile.data.remote.AuthService
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,7 +33,10 @@ class AuthRepository(private val preferencesRepository: PreferencesRepository) {
                 Result.success(response.body()!!)
             } else {
                 val errorResult = when (response.code()) {
-                    400 -> "Client error. Try again later."
+                    400 -> {
+                        val errorResponse = Gson().fromJson(response.errorBody()?.string(), ErrorResponse::class.java)
+                        errorResponse.exception_message
+                    }
                     409 -> "A user with the same username or email already exists."
                     else -> "Unknown Error. Try again later."
                 }

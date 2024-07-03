@@ -82,6 +82,24 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         }
     }
 
+    fun searchRecipes(name: String) {
+        if (!hasMoreRecipes) return
+        _isRefreshing.value = true
+        viewModelScope.launch {
+            val newRecipes =
+                recipesRepository.searchRecipes(name, currentPage*pageSize, pageSize).getOrNull()
+            if (!newRecipes.isNullOrEmpty()) {
+                _recipes.value = _recipes.value.orEmpty() + newRecipes
+                if (newRecipes.size < pageSize) {
+                    hasMoreRecipes = false
+                } else {
+                    currentPage++
+                }
+            }
+            _isRefreshing.value = false
+        }
+    }
+
     fun isFavourite(recipe: Recipe): Boolean {
         return allFavourites?.contains(recipe)?:false
     }
@@ -116,6 +134,28 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
             ).getOrNull()
             if (!newRecipes.isNullOrEmpty()) {
                 Log.d("TTT", "getFavouriteRecipes: ${newRecipes.map { it.name }}")
+                _favouriteRecipes.value = _favouriteRecipes.value.orEmpty() + newRecipes
+                if (newRecipes.size < pageSize) {
+                    hasMoreFavouriteRecipes = false
+                } else {
+                    currentFavouritesPage++
+                }
+            }
+            _isFavouriteRefreshing.value = false
+        }
+    }
+
+    fun searchFavouriteRecipes(name: String) {
+        if (!hasMoreFavouriteRecipes) return
+        _isFavouriteRefreshing.value = true
+        viewModelScope.launch {
+            val newRecipes = recipesRepository.searchFavouriteRecipes(
+                userId,
+                name,
+                currentFavouritesPage*pageSize,
+                pageSize
+            ).getOrNull()
+            if (!newRecipes.isNullOrEmpty()) {
                 _favouriteRecipes.value = _favouriteRecipes.value.orEmpty() + newRecipes
                 if (newRecipes.size < pageSize) {
                     hasMoreFavouriteRecipes = false
