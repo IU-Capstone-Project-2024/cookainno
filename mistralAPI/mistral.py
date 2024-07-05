@@ -5,7 +5,7 @@ from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 import config
 
-# TODO: exceptions, json-conversion, context (нет рецептам из тараканов), role="system"
+# TODO: exceptions, context (нет рецептам из тараканов), role="system", лимит токенов
 
 # api_key = os.environ["MISTRAL_API_KEY"]
 
@@ -14,7 +14,7 @@ model = config.model
 client = MistralClient(api_key=api_key)
 
 
-def generate_recipes(ingredients: List[str]) -> 'str':
+def generate_recipes(ingredients: List[str]) -> str:
     """
     Generate recipes based on a list of ingredients.
     Args:
@@ -29,7 +29,7 @@ def generate_recipes(ingredients: List[str]) -> 'str':
                               content="You are the recipes advisor. You need to provide recipes with the use of "
                                       "client requested ingredients. Add extra ingredients only in case of crucial "
                                       "lack of entered items. In case of not eatable ingredients response with "
-                                      "'Uneatable food'."),
+                                      "'Not food'."),
                   ChatMessage(role="user",
                               content=f"Propose recipes in which {ingredients} can be used. You need to provide 5 "
                                       f"variants of meals. It is sufficient just to show the name, ingredients list "
