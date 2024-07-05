@@ -16,25 +16,25 @@ client = MistralClient(api_key=api_key)
 
 def generate_recipes(ingredients: List[str]) -> str:
     """
-    Generate recipes based on a list of ingredients.
+    Generate mistralAPI based on a list of ingredients.
     Args:
         ingredients (list): A list of ingredients.
     Returns:
-        str: A JSON string containing the generated recipes.
+        str: A JSON string containing the generated mistralAPI.
     """
     chat_response = client.chat(
         model=model,
         response_format={"type": "json_object"},
         messages=[ChatMessage(role="system",
-                              content="You are the recipes advisor. You need to provide recipes with the use of "
+                              content="You are the mistralAPI advisor. You need to provide mistralAPI with the use of "
                                       "client requested ingredients. Add extra ingredients only in case of crucial "
                                       "lack of entered items. In case of not eatable ingredients response with "
                                       "'Not food'."),
                   ChatMessage(role="user",
-                              content=f"Propose recipes in which {ingredients} can be used. You need to provide 5 "
+                              content=f"Propose mistralAPI in which {ingredients} can be used. You need to provide 5 "
                                       f"variants of meals. It is sufficient just to show the name, ingredients list "
                                       f"for, and instruction for the preparation for each meal. Compose a response as "
-                                      f"JSON object 'recipes': list of recipes with fields: 'name', 'ingredients', "
+                                      f"JSON object 'mistralAPI': list of mistralAPI with fields: 'name', 'ingredients', "
                                       f"and 'instruction'.")]
     )
     response = chat_response.choices[0].message.content
