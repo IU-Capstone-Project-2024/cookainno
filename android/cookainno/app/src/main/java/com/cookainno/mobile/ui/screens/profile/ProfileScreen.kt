@@ -1,8 +1,9 @@
 package com.cookainno.mobile.ui.screens.profile
 
-import android.content.res.Resources
-import android.graphics.Picture
-import android.service.autofill.UserData
+import android.app.AlertDialog
+import android.content.Context
+import android.text.InputType
+import android.widget.EditText
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.layout.LazyLayout
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -27,7 +27,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,7 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +46,6 @@ import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
-import com.cookainno.mobile.ui.screens.generation.animatedGradientBackground
 import com.cookainno.mobile.ui.screens.recipes.TopBar
 import kotlin.random.Random
 
@@ -97,7 +95,16 @@ fun ProfileScreen(userViewModel: UserViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-
+            item {
+                if (userData != null) {
+                    // Display user profile using userDataState
+                    Text("Username: ${userData!!.username.toString()}")
+                    Text("Email: ${userData!!.email}")
+                    Text("Height: ${userData!!.height}")
+                    Text("Weight: ${userData!!.weight}")
+                    Text("Date: ${userData!!.date}")
+                }
+            }
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -188,8 +195,7 @@ fun ProfileScreen(userViewModel: UserViewModel) {
                             ), color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        UserDataSection(userData = userData) {
-                        }
+                        UserDataSection(userViewModel, userData = userData, LocalContext.current)
                     }
                 }
 
@@ -205,7 +211,12 @@ fun ProfileScreen(userViewModel: UserViewModel) {
 
 
 @Composable
-fun UserDataRow(label: String, value: String, onRedactClick: () -> Unit) {
+fun UserDataRow(
+    userViewModel: UserViewModel,
+    label: String,
+    value: String,
+    onRedactClick: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -220,6 +231,7 @@ fun UserDataRow(label: String, value: String, onRedactClick: () -> Unit) {
         )
         TextButton(
             onClick = onRedactClick,
+
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.scrim,
@@ -240,23 +252,91 @@ fun UserDataRow(label: String, value: String, onRedactClick: () -> Unit) {
 }
 
 @Composable
-fun UserDataSection(userData: UserDataResponse?, onRedactClick: (String) -> Unit) {
+fun UserDataSection(
+    userViewModel: UserViewModel,
+    userData: UserDataResponse?,
+    context: Context
+) {
+
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
         UserDataRow(
+            userViewModel = userViewModel,
             label = "Weight",
             value = userData?.weight.toString(),
-            onRedactClick = { onRedactClick("weight") })
+
+            onRedactClick = {
+                showInputDialog(
+                    context = context,
+                    "Change Weight",
+                    onInputReceived = { input ->
+                        //userViewModel.onWeightChange(input)
+                        userViewModel.updateUserData(
+                            weight = input.toInt(),
+                            height = userData?.height!!,
+                            date = userData.date
+                        )
+                    })
+            })
         Divider(color = Color.Gray, thickness = 1.dp)
         UserDataRow(
+            userViewModel = userViewModel,
             label = "Height",
             value = userData?.height.toString(),
-            onRedactClick = { onRedactClick("height") })
+            onRedactClick = {
+                showInputDialog(
+                    context = context,
+                    "Change Weight",
+                    onInputReceived = { input ->
+                        userViewModel.onWeightChange(input)
+                    })
+                //userViewModel.updateUserData(height.toInt(), weight.toInt(), date)
+
+                //userViewModel.updateUserData(date,= weight = ,height=)
+            })
         Divider(color = Color.Gray, thickness = 1.dp)
         UserDataRow(
+            userViewModel = userViewModel,
             label = "Daily Calories",
             value = "3000000",
-            onRedactClick = { onRedactClick("daily_calories") })
+            onRedactClick = {
+                showInputDialog(
+                    context = context,
+                    "Change Weight",
+                    onInputReceived = { input ->
+                        userViewModel.onWeightChange(input)
+                    })
+                //userViewModel.updateUserData(date,= weight = ,height=)
+            })
+        Divider(color = Color.Gray, thickness = 1.dp)
+        /*UserDataRow(
+            userViewModel = userViewModel,
+            label = "Date",
+            value = userData!!.date,
+            onRedactClick = {
+                showInputDialog(
+                    context = context,
+                    "Change Weight",
+                    onInputReceived = { input ->
+                        userViewModel.onWeightChange(input)
+                    })
+                //userViewModel.updateUserData(date,= weight = ,height=)
+            })*/
     }
+}
+
+fun showInputDialog(context: Context, title: String, onInputReceived: (String) -> Unit) {
+    val dialogBuilder = AlertDialog.Builder(context)
+    val inputField = EditText(context)
+    inputField.inputType = InputType.TYPE_CLASS_NUMBER
+    dialogBuilder.setTitle(title)
+    dialogBuilder.setView(inputField)
+    dialogBuilder.setPositiveButton("OK") { _, _ ->
+        onInputReceived(inputField.text.toString())
+    }
+    dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+        dialog.cancel()
+    }
+    dialogBuilder.show()
 }

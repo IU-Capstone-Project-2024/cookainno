@@ -42,7 +42,6 @@ fun LoginScreen(userViewModel: UserViewModel, navController: NavHostController) 
     val navigateToMain by userViewModel.navigateToMain.collectAsState()
 
     val usernameFocusRequester = remember { FocusRequester() }
-    val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
 
     if (navigateToMain) {

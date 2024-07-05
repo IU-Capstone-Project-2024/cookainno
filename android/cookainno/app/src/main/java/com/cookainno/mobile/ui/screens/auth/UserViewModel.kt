@@ -182,7 +182,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             if (resp.isSuccess) {
                 _userData.value = resp.getOrNull()
             } else {
-                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, 25)
+                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "2005-03-01")
             }
         }
     }
