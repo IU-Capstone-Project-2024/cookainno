@@ -166,7 +166,7 @@ public class UserService {
         User user = repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        int age = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
+//        int age = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
 
         return new GetUserInfoResponse(
                 user.getId(),
@@ -174,7 +174,7 @@ public class UserService {
                 user.getEmail(),
                 user.getHeight(),
                 user.getWeight(),
-                age
+                user.getDateOfBirth()
         );
     }
 
