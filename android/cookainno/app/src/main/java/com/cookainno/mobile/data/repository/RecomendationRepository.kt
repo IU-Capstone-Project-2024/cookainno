@@ -4,15 +4,28 @@ import android.util.Log
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.UserDataRequest
 import com.cookainno.mobile.data.model.UserDataResponse
+import com.cookainno.mobile.data.remote.AdviceService
 import com.cookainno.mobile.data.remote.AuthInterceptor
 import com.cookainno.mobile.data.remote.RecomendationService
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class RecomendationRepository(private val preferencesRepository: PreferencesRepository) {
     private var recomendationService: RecomendationService? = null
+    private val adviceService = Retrofit.Builder()
+            .baseUrl(Constants.ML_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build())
+            .build()
+            .create(AdviceService::class.java)
+
     fun initToken() {
         if (recomendationService == null) {
             recomendationService = Retrofit.Builder()
@@ -28,7 +41,12 @@ class RecomendationRepository(private val preferencesRepository: PreferencesRepo
         }
     }
 
-    suspend fun putUserData(userId: Int, height: Int, weight: Int, date: String): Result<Response<Unit>> {
+    suspend fun putUserData(
+        userId: Int,
+        height: Int,
+        weight: Int,
+        date: String
+    ): Result<Response<Unit>> {
         return try {
             val res = recomendationService?.updateInfo(
                 UserDataRequest(
@@ -58,6 +76,21 @@ class RecomendationRepository(private val preferencesRepository: PreferencesRepo
                 return Result.failure(Exception("Unsuccessful"))
             }
         } catch (e: Exception) {
+            return Result.failure(e)
+        }
+    }
+
+    suspend fun generateAdvice(type: String): Result<String> {
+        return try {
+            val response = adviceService.generateAdvice(type)
+            Log.d("UGLY BIDEN", "generateAdvice: ${response.body()}")
+            if (response.isSuccessful && response.body() != null) {
+                return Result.success(response.body()!!)
+            } else {
+                return Result.failure(Exception("Unsuccessful"))
+            }
+        } catch (e: Exception) {
+            Log.d("UGLY BIDEN", "generateAdvice: ${e.message}")
             return Result.failure(e)
         }
     }

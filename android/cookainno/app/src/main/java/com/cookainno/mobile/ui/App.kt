@@ -38,6 +38,7 @@ fun App(
         val startScreen = if (isSignedIn) NavRoutes.HOME.name else NavRoutes.LOGIN.name
         NavHost(navController = navController, startDestination = startScreen) {
             composable(NavRoutes.HOME.name) {
+                userViewModel.generateAdvice()
                 HomeScreen(
                     userViewModel = userViewModel,
                     camViewModel = camViewModel,
