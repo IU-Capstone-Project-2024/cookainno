@@ -24,7 +24,7 @@ data class UserDataResponse(
     val email: String,
     val height: Int,
     val weight: Int,
-    val age: Int
+    val dateOfBirth: String
 )
 
 data class ErrorResponse(

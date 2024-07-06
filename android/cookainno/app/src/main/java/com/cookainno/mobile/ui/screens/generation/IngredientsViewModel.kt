@@ -7,6 +7,7 @@ import com.cookainno.mobile.data.repository.GenerationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
 class IngredientsViewModel : ViewModel() {
     private val _ingredients = MutableStateFlow<List<String>>(emptyList())
@@ -16,7 +17,7 @@ class IngredientsViewModel : ViewModel() {
     private val generationRepository = GenerationRepository()
     private val _recipes = MutableStateFlow<List<GeneratedRecipes>>(emptyList())
     val recipes = _recipes.asStateFlow()
-    private val _isLoading = MutableStateFlow<Boolean>(false)
+    private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
     fun addIngredient(ingredient: String) {
@@ -45,11 +46,22 @@ class IngredientsViewModel : ViewModel() {
             val response =
                 generationRepository.generateRecipes(_ingredients.value.filter { it != "" })
             if (response.isSuccess) {
-                _recipes.value = response.getOrNull()!!
+                _recipes.value = response.getOrNull()!!.recipes
                 _isLoading.value = false
             } else {
                 _isLoading.value = false
             }
+        }
+    }
+
+    fun detectIngredients(file: File) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val response = generationRepository.detectIngredients(file)
+            if (response.isSuccess && !response.getOrNull().isNullOrEmpty()) {
+                _ingredients.value += response.getOrNull()!!
+            }
+            _isLoading.value = false
         }
     }
 
