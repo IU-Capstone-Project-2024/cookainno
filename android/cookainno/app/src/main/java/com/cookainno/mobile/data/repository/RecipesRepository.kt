@@ -2,12 +2,15 @@ package com.cookainno.mobile.data.repository
 
 import android.util.Log
 import com.cookainno.mobile.data.Constants
+import com.cookainno.mobile.data.model.GeneratedRecipe
 import com.cookainno.mobile.data.model.Recipe
+import com.cookainno.mobile.data.model.RecipeToAdd
 import com.cookainno.mobile.data.remote.AuthInterceptor
 import com.cookainno.mobile.data.remote.RecipesService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.log
 
 class RecipesRepository(private val preferencesRepository: PreferencesRepository) {
     private var recipesService: RecipesService? = null
@@ -43,6 +46,21 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
             Result.success(recipesService?.getRecipes()?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun addGeneratedRecipe(recipe: RecipeToAdd): Result<Unit> {
+        try {
+            val resp = recipesService?.addNewRecipe(recipe)
+            Log.d("DUBMBLEDORE", "addGeneratedRecipe: ${resp?.code()}")
+            return if (resp?.isSuccessful == true) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Error while adding recipe to DB"))
+            }
+        } catch (e: Exception) {
+            Log.d("DUBMBLEDORE", "addGeneratedRecipe: ${e.message}")
+            return Result.failure(e)
         }
     }
 

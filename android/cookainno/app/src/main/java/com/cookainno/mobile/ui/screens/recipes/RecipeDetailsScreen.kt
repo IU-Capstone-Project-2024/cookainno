@@ -1,4 +1,4 @@
-package com.cookainno.mobile.ui.screens.details
+package com.cookainno.mobile.ui.screens.recipes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,7 +41,6 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.Recipe
-import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
 
 @Composable
 fun RecipeDetailsScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {

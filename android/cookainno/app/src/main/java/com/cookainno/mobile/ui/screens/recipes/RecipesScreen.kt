@@ -117,11 +117,16 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
                 recipesViewModel.searchRecipes(searchQuery.text)
             }
         )
-        PullToRefreshBox(state = state, isRefreshing = isRefreshing, onRefresh = {
-            recipesViewModel.resetPagination()
-            recipesViewModel.getAllFavouriteRecipes()
-            recipesViewModel.getRecipesSortedByLikes()
-        }) {
+        PullToRefreshBox(
+            state = state,
+            isRefreshing = isRefreshing,
+            contentAlignment = Alignment.TopCenter,
+            modifier = Modifier.fillMaxWidth(),
+            onRefresh = {
+                recipesViewModel.resetPagination()
+                recipesViewModel.getAllFavouriteRecipes()
+                recipesViewModel.getRecipesSortedByLikes()
+            }) {
             LazyVerticalGrid(
                 state = listState,
                 columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)

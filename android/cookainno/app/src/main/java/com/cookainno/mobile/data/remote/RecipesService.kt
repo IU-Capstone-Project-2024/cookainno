@@ -1,7 +1,10 @@
 package com.cookainno.mobile.data.remote
 
+import com.cookainno.mobile.data.model.GeneratedRecipe
 import com.cookainno.mobile.data.model.Recipe
+import com.cookainno.mobile.data.model.RecipeToAdd
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -14,6 +17,9 @@ interface RecipesService {
 
     @GET("recipes/{id}")
     suspend fun getRecipe(@Path("id") id: Int): Response<Recipe>
+
+    @POST("recipes")
+    suspend fun addNewRecipe(@Body recipe: RecipeToAdd): Response<Unit>
 
     @GET("recipes")
     suspend fun getRecipes(): Response<List<Recipe>>
