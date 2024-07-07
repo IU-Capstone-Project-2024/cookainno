@@ -7,7 +7,7 @@ from ingredient_detection.detect import GroceryItemDetector
 
 app = FastAPI()
 
-model_path = './ingredient_detection/models/model_0.pt'
+model_path = './ingredient_detection/models/model_1.pt'
 data_path = './ingredient_detection/data.yaml'
 confidence = 0.5
 detector = GroceryItemDetector(model_path, data_path, confidence)
