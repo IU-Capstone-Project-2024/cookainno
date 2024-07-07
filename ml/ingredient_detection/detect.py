@@ -31,7 +31,7 @@ class GroceryItemDetector:
 
 
 def main():
-    model_path = 'models/model_0.pt'  # Path to the pretrained model
+    model_path = 'models/model_1.pt'  # Path to the pretrained model
     data_path = 'data.yaml'  # Path to the data configuration YAML file
     conf = 0.5  # Set the thresholds for probability that the cell contains an object
 
