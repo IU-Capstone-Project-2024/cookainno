@@ -102,7 +102,7 @@ fun ProfileScreen(userViewModel: UserViewModel) {
                     Text("Email: ${userData!!.email}")
                     Text("Height: ${userData!!.height}")
                     Text("Weight: ${userData!!.weight}")
-                    Text("Date: ${userData!!.date}")
+                    Text("Date: ${userData!!.dateOfBirth}")
                 }
             }
             item {
@@ -275,7 +275,7 @@ fun UserDataSection(
                         userViewModel.updateUserData(
                             weight = input.toInt(),
                             height = userData?.height!!,
-                            date = userData.date
+                            date = userData.dateOfBirth.toString()
                         )
                     })
             })

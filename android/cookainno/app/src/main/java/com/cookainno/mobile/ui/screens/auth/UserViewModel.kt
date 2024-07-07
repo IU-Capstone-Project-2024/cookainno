@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class UserViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
     private val _isSignedIn = MutableStateFlow(false)
@@ -182,7 +183,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             if (resp.isSuccess) {
                 _userData.value = resp.getOrNull()
             } else {
-                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "2005-03-01")
+                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "1111-11-11")
             }
         }
     }
