@@ -2,23 +2,32 @@ package com.cookainno.mobile.ui.screens.generation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cookainno.mobile.data.model.GeneratedRecipes
+import com.cookainno.mobile.data.model.GeneratedRecipe
+import com.cookainno.mobile.data.model.RecipeToAdd
 import com.cookainno.mobile.data.repository.GenerationRepository
+import com.cookainno.mobile.data.repository.PreferencesRepository
+import com.cookainno.mobile.data.repository.RecipesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 
-class IngredientsViewModel : ViewModel() {
+class IngredientsViewModel(preferencesRepository: PreferencesRepository) : ViewModel() {
     private val _ingredients = MutableStateFlow<List<String>>(emptyList())
 
     val ingredients = _ingredients.asStateFlow()
 
     private val generationRepository = GenerationRepository()
-    private val _recipes = MutableStateFlow<List<GeneratedRecipes>>(emptyList())
+    private val recipesRepository = RecipesRepository(preferencesRepository)
+
+    private val _recipes = MutableStateFlow<List<GeneratedRecipe>>(emptyList())
     val recipes = _recipes.asStateFlow()
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
+
+    fun initRepository() {
+        recipesRepository.initToken()
+    }
 
     fun addIngredient(ingredient: String) {
         _ingredients.value += ingredient
@@ -47,6 +56,7 @@ class IngredientsViewModel : ViewModel() {
                 generationRepository.generateRecipes(_ingredients.value.filter { it != "" })
             if (response.isSuccess) {
                 _recipes.value = response.getOrNull()!!.recipes
+                addRecipeToRemote()
                 _isLoading.value = false
             } else {
                 _isLoading.value = false
@@ -63,6 +73,20 @@ class IngredientsViewModel : ViewModel() {
             }
             _isLoading.value = false
         }
+    }
+
+    private fun addRecipeToRemote() {
+        viewModelScope.launch {
+            if (_recipes.value.isNotEmpty()) {
+                recipesRepository.addGeneratedRecipe(convertToRecipeToAdd(_recipes.value[0]))
+            }
+        }
+    }
+
+    private fun convertToRecipeToAdd(recipe: GeneratedRecipe): RecipeToAdd {
+        val oldIngredients = recipe.ingredients.toString()
+        val ingredients = oldIngredients.substring(1, oldIngredients.length-2)
+        return RecipeToAdd(recipe.name, ingredients, recipe.instructions, recipe.imageUrl)
     }
 
     fun emptyIngredients() {

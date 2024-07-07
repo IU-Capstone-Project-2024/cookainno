@@ -19,7 +19,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -41,13 +40,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -55,7 +50,6 @@ import com.cookainno.mobile.R
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.generation.animatedGradientBackground
 import java.util.Calendar
-import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -160,7 +154,7 @@ fun InitializingUserScreen(userViewModel: UserViewModel, navController: NavHostC
                         userViewModel.updateUserData(
                             height.toInt(),
                             weight.toInt(),
-                            date.toString()
+                            date
                         )
                         keyboardController?.hide()
                     },

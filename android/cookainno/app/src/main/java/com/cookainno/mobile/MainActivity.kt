@@ -20,9 +20,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             CookainnoTheme {
                 val authViewModel = UserViewModel(preferencesRepository)
-                val camViewModel = CamViewModel(imageUtility = cameraUtility)
                 val recipesViewModel = RecipesViewModel(preferencesRepository)
-                val ingredientsViewModel = IngredientsViewModel()
+                val ingredientsViewModel = IngredientsViewModel(preferencesRepository)
+                val camViewModel = CamViewModel(cameraUtility)
                 App(
                     userViewModel = authViewModel,
                     camViewModel = camViewModel,

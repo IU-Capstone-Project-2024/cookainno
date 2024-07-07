@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
@@ -32,7 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
-import com.cookainno.mobile.ui.screens.details.RecipeDetailsScreen
+import com.cookainno.mobile.ui.screens.recipes.RecipeDetailsScreen
 import com.cookainno.mobile.ui.screens.favourites.FavouritesScreen
 import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.generation.GeneratedRecipeScreen
@@ -55,6 +54,7 @@ fun HomeScreen(
     val userId by userViewModel.userId.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     recipesViewModel.initRepository()
+    ingredientsViewModel.initRepository()
     userViewModel.initUserId()
     recipesViewModel.initUserId(userId)
     recipesViewModel.getAllFavouriteRecipes()

@@ -3,7 +3,7 @@ package com.cookainno.mobile.data.repository
 import android.util.Log
 import com.cookainno.mobile.data.Constants
 import com.cookainno.mobile.data.model.GenRecipesResponse
-import com.cookainno.mobile.data.model.GeneratedRecipes
+import com.cookainno.mobile.data.model.GeneratedRecipe
 import com.cookainno.mobile.data.remote.GenerationService
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -45,9 +45,13 @@ class GenerationRepository {
         }
     }
 
-    private fun parseRecipesFromJson(json: String): List<GeneratedRecipes> {
+    private fun parseRecipesFromJson(json: String): List<GeneratedRecipe> {
         val gson = Gson()
         val response = gson.fromJson(json, GenRecipesResponse::class.java)
+        // remove when images will be generated
+        for (i in response.recipes) {
+            i.imageUrl = "https://png.pngitem.com/pimgs/s/391-3918617_clip-art-hd-png-download.png"
+        }
         return response.recipes
     }
 

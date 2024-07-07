@@ -269,11 +269,11 @@ fun UserDataSection(
                         userViewModel.updateUserData(
                             weight = input.toInt(),
                             height = userData?.height!!,
-                            date = userData.dateOfBirth.toString()
+                            date = userData.dateOfBirth
                         )
                     })
             })
-        Divider(color = Color.Gray, thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         UserDataRow(
             userViewModel = userViewModel,
             label = "Height",
@@ -286,11 +286,11 @@ fun UserDataSection(
                         userViewModel.updateUserData(
                             weight = userData?.weight!!,
                             height = input.toInt(),
-                            date = userData.dateOfBirth.toString()
+                            date = userData.dateOfBirth
                         )
                     })
             })
-        Divider(color = Color.Gray, thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         UserDataRow(
             userViewModel = userViewModel,
             label = "Daily Calories",
@@ -298,7 +298,7 @@ fun UserDataSection(
             onRedactClick = {
             }
         )
-        Divider(color = Color.Gray, thickness = 1.dp)
+        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
     }
 }
 
