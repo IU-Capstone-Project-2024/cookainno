@@ -20,7 +20,14 @@ interface RecipesService {
 
     @GET("recipes/sorted-by-likes")
     suspend fun getRecipesSortedByLikes(
-        @Query("page") page: Int,
+        @Query("page") skip: Int,
+        @Query("size") size: Int
+    ): Response<List<Recipe>>
+
+    @GET("recipes/search")
+    suspend fun searchRecipes(
+        @Query("name") name: String,
+        @Query("page") skip: Int,
         @Query("size") size: Int
     ): Response<List<Recipe>>
 
@@ -39,8 +46,16 @@ interface RecipesService {
     @GET("recipes/{userId}/favorites")
     suspend fun getFavouriteRecipes(
         @Path("userId") userId: Int,
-        @Query("page") page: Int,
+        @Query("page") skip: Int,
         @Query("size") size: Int,
         @Query("oldestFirst") oldestFirst: Boolean
+    ): Response<List<Recipe>>
+
+    @GET("recipes/{userId}/favorites/search")
+    suspend fun searchFavouriteRecipes(
+        @Path("userId") userId: Int,
+        @Query("name") name: String,
+        @Query("page") skip: Int,
+        @Query("size") size: Int
     ): Response<List<Recipe>>
 }

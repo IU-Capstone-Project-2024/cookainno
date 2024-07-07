@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,15 +39,41 @@ public class UserService {
      * @return созданный пользователь
      */
     public User create(User user) {
-        if (repository.existsByUsername(user.getUsername())) {
+
+        if (user.isEnabled() && repository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
         }
 
-        if (repository.existsByEmail(user.getEmail())) {
+        if (user.isEnabled() && repository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Пользователь с таким email уже существует");
         }
 
+        if (repository.existsByUsername(user.getUsername())) {
+            User existingUserByUsername = repository.findByUsername(user.getUsername()).get();
+            return update(existingUserByUsername, user);
+        }
+        if (repository.existsByEmail(user.getEmail())) {
+            User existingUserByUsername = repository.findByEmail(user.getEmail()).get();
+            return update(existingUserByUsername, user);
+        }
+
         return save(user);
+    }
+
+    private User update(User existingUser, User newUser) {
+        existingUser.setUsername(newUser.getUsername());
+        existingUser.setEmail(newUser.getEmail());
+        existingUser.setConfirmationCode(newUser.getConfirmationCode());
+
+        return repository.save(existingUser);
+    }
+
+    public void delete(User user) {
+        repository.delete(user);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 
     /**
@@ -139,7 +166,7 @@ public class UserService {
         User user = repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        int age = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
+//        int age = Period.between(user.getDateOfBirth(), LocalDate.now()).getYears();
 
         return new GetUserInfoResponse(
                 user.getId(),
@@ -147,7 +174,7 @@ public class UserService {
                 user.getEmail(),
                 user.getHeight(),
                 user.getWeight(),
-                age
+                user.getDateOfBirth()
         );
     }
 

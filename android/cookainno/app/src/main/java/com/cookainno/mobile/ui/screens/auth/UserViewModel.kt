@@ -3,8 +3,10 @@ package com.cookainno.mobile.ui.screens.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.data.repository.AuthRepository
 import com.cookainno.mobile.data.repository.PreferencesRepository
+import com.cookainno.mobile.data.repository.RecomendationRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -19,6 +21,9 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     private val _navigateToConfirmation = MutableStateFlow(false)
     val navigateToConfirmation: StateFlow<Boolean> = _navigateToConfirmation
+
+    private val _navigateToInit = MutableStateFlow(false)
+    val navigateToInit: StateFlow<Boolean> = _navigateToInit
 
     private val _navigateToMain = MutableStateFlow(false)
     val navigateToMain: StateFlow<Boolean> = _navigateToMain
@@ -38,7 +43,23 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
     private val _confirmationCode = MutableStateFlow("")
     val confirmationCode: StateFlow<String> = _confirmationCode
 
+    private val _height = MutableStateFlow("")
+    val height: StateFlow<String> = _height
+
+    private val _weight = MutableStateFlow("")
+    val weight: StateFlow<String> = _weight
+
+    private val _date = MutableStateFlow("")
+    val date: StateFlow<String> = _date
+
+    private val _advice = MutableStateFlow("You are beautiful as you are!")
+    val advice: StateFlow<String> = _advice
+
+    private val _userData = MutableStateFlow<UserDataResponse?>(null)
+    val userData: StateFlow<UserDataResponse?> = _userData
+
     private var authRepository: AuthRepository
+    private var recomendationRepository: RecomendationRepository
 
     private val _userId = MutableStateFlow(-1)
     val userId: StateFlow<Int> = _userId
@@ -49,6 +70,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             _isLoading.value = false
         }
         authRepository = AuthRepository(preferencesRepository)
+        recomendationRepository = RecomendationRepository(preferencesRepository)
     }
 
     fun onUsernameChanged(newUsername: String) {
@@ -67,6 +89,18 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
         _confirmationCode.value = newConfirmation
     }
 
+    fun onHeightChange(newHeight: String) {
+        _height.value = newHeight
+    }
+
+    fun onWeightChange(newWeight: String) {
+        _weight.value = newWeight
+    }
+
+    fun onDateChange(newDate: String) {
+        _date.value = newDate
+    }
+
     private suspend fun checkLoggedIn(): Boolean {
         val token = preferencesRepository.getTokenFlow().first()
         return token != null
@@ -74,7 +108,6 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     fun signUp() {
         _registrationError.value = null
-        _navigateToConfirmation.value = false
         viewModelScope.launch {
             _isLoading.value = true
             val result = authRepository.register(
@@ -94,8 +127,6 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     fun confirmCode() {
         _registrationError.value = null
-        _navigateToConfirmation.value = false
-        _navigateToMain.value = false
         viewModelScope.launch {
             _isLoading.value = true
             val result = authRepository.confirm(
@@ -106,7 +137,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
                 val loginResult =
                     authRepository.login(username = _username.value, password = _password.value)
                 if (loginResult.isSuccess) {
-                    _navigateToMain.value = true
+                    _navigateToInit.value = true
                 } else {
                     _registrationError.value = loginResult.exceptionOrNull()?.message
                 }
@@ -131,8 +162,58 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             } else {
                 _registrationError.value = result.exceptionOrNull()?.message
             }
+            initUserId()
             _isLoading.value = false
         }
+    }
+
+    fun updateUserData(height: Int, weight: Int, date: String) {
+        recomendationRepository.initToken()
+        viewModelScope.launch {
+            val resp = recomendationRepository.putUserData(_userId.value, height, weight, date)
+            Log.d("UMPALUMPA", "updateUserData: ${resp.isSuccess} ${_userId.value}")
+            if (resp.isSuccess) {
+                _navigateToMain.value = true
+            }
+        }
+    }
+
+    fun getUserData() {
+        recomendationRepository.initToken()
+        viewModelScope.launch {
+            val resp = recomendationRepository.getUserData(_userId.value)
+            if (resp.isSuccess) {
+                _userData.value = resp.getOrNull()
+                _weight.value = resp.getOrNull()?.weight.toString()
+                _height.value = resp.getOrNull()?.height.toString()
+                _date.value = resp.getOrNull()?.dateOfBirth.toString()
+            } else {
+                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "1970-01-01")
+            }
+        }
+    }
+
+    fun generateAdvice() {
+        viewModelScope.launch {
+            val resp = recomendationRepository.generateAdvice("normal consumption")
+            if (resp.isSuccess && resp.getOrNull() != null) {
+                _advice.value = resp.getOrNull()!!
+            } else {
+                _advice.value = "You are beautiful as you are!"
+            }
+        }
+    }
+
+    fun resetToConfirmation() {
+        _navigateToConfirmation.value = false
+    }
+
+    fun resetToInit() {
+        _navigateToInit.value = false
+    }
+
+    fun resetToMain() {
+        _navigateToMain.value = false
     }
 
     fun signOut() {

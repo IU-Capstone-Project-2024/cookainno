@@ -4,6 +4,7 @@ enum class NavRoutes {
     HOME,
     REGISTRATION,
     CONFIRMATION,
+    USERINIT,
     LOGIN,
     RECIPES,
     DETAILS,

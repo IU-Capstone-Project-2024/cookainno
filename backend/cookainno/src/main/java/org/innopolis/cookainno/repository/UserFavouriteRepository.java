@@ -1,7 +1,7 @@
 package org.innopolis.cookainno.repository;
 
-import org.innopolis.cookainno.entity.User;
 import org.innopolis.cookainno.entity.Recipe;
+import org.innopolis.cookainno.entity.User;
 import org.innopolis.cookainno.entity.UserFavourite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -46,9 +46,17 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
         }
     }
 
-    suspend fun getRecipesSortedByLikes(page: Int, size: Int): Result<List<Recipe>> {
+    suspend fun getRecipesSortedByLikes(skip: Int, pageSize: Int): Result<List<Recipe>> {
         return try {
-            Result.success(recipesService?.getRecipesSortedByLikes(page, size)?.body()!!)
+            Result.success(recipesService?.getRecipesSortedByLikes(skip, pageSize)?.body()!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun searchRecipes(name: String, skip: Int, pageSize: Int): Result<List<Recipe>> {
+        return try {
+            Result.success(recipesService?.searchRecipes(name, skip, pageSize)?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -70,9 +78,19 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
         }
     }
 
-    suspend fun getFavouriteRecipes(userId: Int, page: Int, size: Int, oldestFirst: Boolean): Result<List<Recipe>> {
+    suspend fun getFavouriteRecipes(userId: Int, skip: Int, pageSize: Int, oldestFirst: Boolean): Result<List<Recipe>> {
         return try {
-            Result.success(recipesService?.getFavouriteRecipes(userId, page, size, oldestFirst)?.body()!!)
+            Result.success(recipesService?.getFavouriteRecipes(userId, skip, pageSize, oldestFirst)?.body()!!)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun searchFavouriteRecipes(userId: Int, name: String, skip: Int, pageSize: Int): Result<List<Recipe>> {
+        return try {
+            val resp = recipesService?.searchFavouriteRecipes(userId, name, skip, pageSize)
+            Log.d("CHAPMAN", "searchFavouriteRecipes: ${resp} $userId $name $skip $pageSize")
+            Result.success(resp?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -42,11 +42,11 @@ public class AuthenticationService {
                 .confirmationCode(String.format("%04d", new Random().nextInt(10000)))
                 .build();
 
-        userService.create(user);
+        var userSaved = userService.create(user);
 
         emailService.sendConfirmationEmail(user.getEmail(), user.getConfirmationCode());
 
-        return new JwtAuthenticationResponse("User registered successfully. Please check your email for the confirmation code.", user.getId());
+        return new JwtAuthenticationResponse("User registered successfully. Please check your email for the confirmation code.", userSaved.getId());
     }
 
     /**
@@ -65,10 +65,10 @@ public class AuthenticationService {
                 .confirmationCode(String.format("%04d", new Random().nextInt(10000)))
                 .build();
 
-        userService.create(user);
+        var userSaved = userService.create(user);
 
         var jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwt, user.getId());
+        return new JwtAuthenticationResponse(jwt, userSaved.getId());
     }
 
     /**

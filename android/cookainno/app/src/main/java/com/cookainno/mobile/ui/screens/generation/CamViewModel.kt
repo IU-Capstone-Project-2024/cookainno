@@ -1,28 +1,32 @@
 package com.cookainno.mobile.ui.screens.generation
 
-import android.graphics.Bitmap
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cookainno.mobile.utilities.ImageUtility
+import java.io.File
 
 class CamViewModel(private val imageUtility: ImageUtility): ViewModel() {
 
-    private val _imageBitmap = MutableLiveData<Bitmap>()
-    val imageBitmap: LiveData<Bitmap> = _imageBitmap
+    private val _camFile = MutableLiveData<File?>()
+    val fileFromCam: MutableLiveData<File?> = _camFile
 
-    private val _imageUri = MutableLiveData<Uri>()
-    val imageUri: LiveData<Uri> = _imageUri
+    private val _galleryFile = MutableLiveData<File?>()
+    val fileFromGallery: LiveData<File?> = _galleryFile
 
     init {
-        imageUtility.onImageTaken = { bitmap ->
-            _imageBitmap.postValue(bitmap)
+        imageUtility.onImageTaken = { uri ->
+            _camFile.postValue(uri)
         }
 
         imageUtility.onImageSelected = { uri ->
-            _imageUri.postValue(uri)
+            _galleryFile.postValue(uri)
         }
+    }
+
+    fun resetImages() {
+        _camFile.postValue(null)
+        _galleryFile.postValue(null)
     }
 
     fun runCamera() {

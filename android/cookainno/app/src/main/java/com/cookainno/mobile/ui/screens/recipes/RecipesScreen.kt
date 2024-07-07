@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Favorite
@@ -32,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -41,16 +45,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.LocalPinnableContainer
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +69,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.ui.NavRoutes
+import com.cookainno.mobile.ui.screens.generation.animatedGradientBackground
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +77,10 @@ import kotlinx.coroutines.flow.collectLatest
 fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val allRecipes by recipesViewModel.recipes.collectAsState()
     val isRefreshing by recipesViewModel.isRefreshing.collectAsState()
-    val searchQuery = remember { mutableStateOf(TextFieldValue("")) }
+    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    var isSearchingState by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     val state = rememberPullToRefreshState()
     val listState = rememberLazyGridState()
@@ -78,7 +92,11 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collectLatest { lastIndex ->
                 if (lastIndex != null && lastIndex >= (allRecipes?.size ?: 0) - 1) {
-                    recipesViewModel.getRecipesSortedByLikes()
+                    if (!isSearchingState) {
+                        recipesViewModel.getRecipesSortedByLikes()
+                    } else {
+                        recipesViewModel.searchRecipes(searchQuery.text)
+                    }
                 }
             }
     }
@@ -87,12 +105,18 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         modifier = Modifier.fillMaxSize()
     ) {
         TopBar(
+            isMain = true,
+            isName = false,
             shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
-            searchQuery.value,
-            navController
-        ) {
-            searchQuery.value = it
-        }
+            query = searchQuery,
+            navController = navController,
+            onQueryChanged = { searchQuery = it },
+            onSearchClick = {
+                isSearchingState = true
+                recipesViewModel.resetPagination()
+                recipesViewModel.searchRecipes(searchQuery.text)
+            }
+        )
         PullToRefreshBox(state = state, isRefreshing = isRefreshing, onRefresh = {
             recipesViewModel.resetPagination()
             recipesViewModel.getAllFavouriteRecipes()
@@ -100,7 +124,7 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
         }) {
             LazyVerticalGrid(
                 state = listState,
-                columns = GridCells.Fixed(2), contentPadding = PaddingValues(10.dp)
+                columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)
             ) {
                 items(allRecipes ?: emptyList()) { recipe ->
                     RecipeItem(recipe = recipe, recipesViewModel = recipesViewModel, onCardClick = {
@@ -114,18 +138,21 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun TopBar(
+    isMain: Boolean, // define main or favourites screen,
+    isName: Boolean, //define profile and pages with only app name topbar
     shape: RoundedCornerShape,
     query: TextFieldValue,
     navController: NavHostController,
-    onQueryChanged: (TextFieldValue) -> Unit
+    onQueryChanged: (TextFieldValue) -> Unit,
+    onSearchClick: () -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Surface(
         color = MaterialTheme.colorScheme.primary, shape = shape, modifier = Modifier
             .fillMaxWidth()
-            .alpha(0.9f)
-            .height(125.dp)
+            .height(if (!isName) 125.dp else 75.dp)
     ) {
         Column {
             Text(
@@ -137,85 +164,105 @@ fun TopBar(
                     .padding(horizontal = 20.dp)
                     .padding(top = 14.dp, bottom = 9.dp)
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                OutlinedTextField(
-                    value = query,
-                    onValueChange = { onQueryChanged(it) },
-                    label = {
-                        Text(
-                            "Search",
-                            color = MaterialTheme.colorScheme.inversePrimary,
+            if (!isName) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TextField(
+                        singleLine = true,
+                        value = query,
+                        onValueChange = { onQueryChanged(it) },
+
+                        label = {
+                            Text(
+                                "Search",
+                                color = MaterialTheme.colorScheme.inversePrimary,
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                                onSearchClick()
+                            }
+                        ),
+                        trailingIcon = {
+                            IconButton(
+                                modifier = Modifier.align(Alignment.CenterVertically),
+                                onClick = {
+                                    onSearchClick()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "search",
+                                    tint = MaterialTheme.colorScheme.inversePrimary
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(30.dp)),
+                        shape = RoundedCornerShape(30.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedIndicatorColor = Color.White,
+                            unfocusedIndicatorColor = Color.White,
                         )
-                    },
-                    trailingIcon = {
+                    )
+
+                    Spacer(modifier = Modifier.width(20.dp))
+                    if (isMain) {
                         IconButton(
                             onClick = {
-
+                                navController.navigate(NavRoutes.INGREDIENTS.name)
                             },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(30.dp))
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer
+                                )
+                                /* .animatedGradientBackground(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.background,
+                                    MaterialTheme.colorScheme.surfaceBright
+                                ),
+                            )*/
+                                .align(Alignment.CenterVertically)
+                                .size(57.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = "search",
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "camera",
                                 tint = MaterialTheme.colorScheme.inversePrimary
                             )
                         }
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(30.dp))
-                        .height(55.dp),
-                    shape = RoundedCornerShape(30.dp),
-                    colors = TextFieldDefaults.colors( //changed?
-//                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-//                        cursorColor = Color.Black,
-//                        focusedBorderColor = MaterialTheme.colorScheme.inversePrimary,
-//                        unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                    )
-                )
-                Spacer(modifier = Modifier.width(20.dp))
-                Surface(
-                    modifier = Modifier,
-                    shape = RoundedCornerShape(30.dp),
-                ) {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.INGREDIENTS.name)
-                        },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(30.dp))
-                            .background(
-                                color = MaterialTheme.colorScheme.primaryContainer
-                            )
-                            .size(52.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.CameraAlt,
-                            contentDescription = "camera",
-                            tint = MaterialTheme.colorScheme.inversePrimary
-                        )
                     }
                 }
+                Spacer(modifier = Modifier.height(14.dp))
             }
-            Spacer(modifier = Modifier.height(14.dp))
         }
     }
 }
 
 @Composable
 fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: () -> Unit) {
-    var liked by remember {
+    var liked by rememberSaveable {
         mutableStateOf(recipesViewModel.isFavourite(recipe))
     }
+    val favouriteRecipes by recipesViewModel.favouriteRecipes.collectAsState()
+
     Box(
         modifier = Modifier
             .padding(4.dp)
-            .background(MaterialTheme.colorScheme.surfaceBright, RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest, RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clickable(onClick = onCardClick)
     ) {
@@ -234,8 +281,12 @@ fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: 
                 contentScale = ContentScale.FillBounds
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = recipe.name, modifier = Modifier.padding(horizontal = 10.dp))
-            Spacer(modifier = Modifier.height(36.dp))
+            Text(
+                text = recipe.name,
+                modifier = Modifier.padding(horizontal = 10.dp),
+                color = MaterialTheme.colorScheme.scrim
+            )
+            Spacer(modifier = Modifier.height(40.dp))
         }
         IconButton(
             onClick = {
@@ -252,7 +303,7 @@ fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: 
             Icon(
                 imageVector = (if (liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder),
                 contentDescription = "favorite",
-                tint = MaterialTheme.colorScheme.background
+                tint = MaterialTheme.colorScheme.tertiary
             )
         }
     }

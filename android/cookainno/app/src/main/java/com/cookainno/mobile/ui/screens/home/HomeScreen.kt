@@ -65,12 +65,12 @@ fun HomeScreen(
                 shape = RoundedCornerShape(40.dp),
                 modifier = Modifier
                     .padding(horizontal = 80.dp, vertical = 10.dp)
-                    .alpha(0.4f)
+                    //.alpha(0.4f)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.scrim),
+                        .background(MaterialTheme.colorScheme.onBackground),
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     IconButton(
@@ -126,19 +126,21 @@ fun HomeScreen(
                 composable(NavRoutes.RECIPES.name) {
                     ingredientsViewModel.emptyRecipes()
                     ingredientsViewModel.emptyIngredients()
+                    recipesViewModel.resetRefreshings()
                     RecipesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
                 composable(NavRoutes.FAVOURITES.name) {
+                    recipesViewModel.resetRefreshings()
                     FavouritesScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController
                     )
                 }
                 composable(NavRoutes.PROFILE.name) {
-                    ProfileScreen(authViewModel = userViewModel)
+                    ProfileScreen(userViewModel = userViewModel)
                 }
                 composable(NavRoutes.INGREDIENTS.name) {
                     IngredientsScreen(

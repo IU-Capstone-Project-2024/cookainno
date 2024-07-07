@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 val recipesViewModel = RecipesViewModel(preferencesRepository)
                 val ingredientsViewModel = IngredientsViewModel()
                 App(
-                    authViewModel = authViewModel,
+                    userViewModel = authViewModel,
                     camViewModel = camViewModel,
                     recipesViewModel = recipesViewModel,
                     ingredientsViewModel = ingredientsViewModel

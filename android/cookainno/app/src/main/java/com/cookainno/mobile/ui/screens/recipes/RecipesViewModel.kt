@@ -68,8 +68,26 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         _isRefreshing.value = true
         viewModelScope.launch {
             val newRecipes =
-                recipesRepository.getRecipesSortedByLikes(currentPage, pageSize).getOrNull()
+                recipesRepository.getRecipesSortedByLikes(currentPage*pageSize, pageSize).getOrNull()
             Log.d("HIHI", "getFavouriteRecipes: ${newRecipes?.map { it.name }} : page $currentPage")
+            if (!newRecipes.isNullOrEmpty()) {
+                _recipes.value = _recipes.value.orEmpty() + newRecipes
+                if (newRecipes.size < pageSize) {
+                    hasMoreRecipes = false
+                } else {
+                    currentPage++
+                }
+            }
+            _isRefreshing.value = false
+        }
+    }
+
+    fun searchRecipes(name: String) {
+        if (!hasMoreRecipes) return
+        _isRefreshing.value = true
+        viewModelScope.launch {
+            val newRecipes =
+                recipesRepository.searchRecipes(name, currentPage*pageSize, pageSize).getOrNull()
             if (!newRecipes.isNullOrEmpty()) {
                 _recipes.value = _recipes.value.orEmpty() + newRecipes
                 if (newRecipes.size < pageSize) {
@@ -110,7 +128,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         viewModelScope.launch {
             val newRecipes = recipesRepository.getFavouriteRecipes(
                 userId,
-                currentFavouritesPage,
+                currentFavouritesPage*pageSize,
                 pageSize,
                 false
             ).getOrNull()
@@ -125,6 +143,33 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
             }
             _isFavouriteRefreshing.value = false
         }
+    }
+
+    fun searchFavouriteRecipes(name: String) {
+        if (!hasMoreFavouriteRecipes) return
+        _isFavouriteRefreshing.value = true
+        viewModelScope.launch {
+            val newRecipes = recipesRepository.searchFavouriteRecipes(
+                userId,
+                name,
+                currentFavouritesPage*pageSize,
+                pageSize
+            ).getOrNull()
+            if (!newRecipes.isNullOrEmpty()) {
+                _favouriteRecipes.value = _favouriteRecipes.value.orEmpty() + newRecipes
+                if (newRecipes.size < pageSize) {
+                    hasMoreFavouriteRecipes = false
+                } else {
+                    currentFavouritesPage++
+                }
+            }
+            _isFavouriteRefreshing.value = false
+        }
+    }
+
+    fun resetRefreshings() {
+        _isRefreshing.value = false
+        _isFavouriteRefreshing.value = false
     }
 
     fun getAllFavouriteRecipes() {
