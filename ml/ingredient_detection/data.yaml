@@ -1,32 +1,47 @@
 names:
-- Apples
-- Banana
-- Bun
-- Cabbage
-- Cold Drink
-- Dry Fruit
-- Eggs
-- Grapes
-- Green Seeds
-- Milk
-- Oil
-- Pineapple
-- Snacks
-- Vegetables
-- Water Bottle
+- apple
+- avocado
+- banana
 - bell pepper
+- blueberries
 - bread
+- broccoli
+- butter
 - carrot
+- champignons
+- cheese
+- chicken
+- corn
 - cucumber
-- fasol
+- egg
+- eggplant
+- eggs
+- flour
 - garlic
-- hot pepper
+- green beans
+- kiwi
+- lemon
+- lettuce
+- lime
+- mango
+- meat
+- milk
+- nectarine
+- oil
 - onion
+- orange
+- pasta
 - peas
-- salad
-- tin
+- pomegranate
+- potato
+- red beans
+- shrimp
+- spinach
+- strawberries
 - tomato
-nc: 27
+- white beans
+- yogurt
+nc: 42
 
 test: /data
 
