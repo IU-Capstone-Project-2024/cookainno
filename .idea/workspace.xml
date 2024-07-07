@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbd5e34e-1432-42f2-a807-5857e7f0487f" name="Changes" comment="created api for grocery detector" />
+    <list default="true" id="cbd5e34e-1432-42f2-a807-5857e7f0487f" name="Changes" comment="created api for grocery detector">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -124,5 +126,8 @@
     <MESSAGE value="update" />
     <MESSAGE value="created api for grocery detector" />
     <option name="LAST_COMMIT_MESSAGE" value="created api for grocery detector" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/cookainn0$detect.coverage" NAME="detect Coverage Results" MODIFIED="1720362142017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ml/ingredient_detection" />
   </component>
 </project>
