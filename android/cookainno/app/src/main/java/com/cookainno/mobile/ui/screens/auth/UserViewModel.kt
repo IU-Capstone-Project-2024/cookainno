@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.Date
 
 class UserViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
     private val _isSignedIn = MutableStateFlow(false)
@@ -52,6 +51,9 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
 
     private val _date = MutableStateFlow("")
     val date: StateFlow<String> = _date
+
+    private val _advice = MutableStateFlow("You are beautiful as you are!")
+    val advice: StateFlow<String> = _advice
 
     private val _userData = MutableStateFlow<UserDataResponse?>(null)
     val userData: StateFlow<UserDataResponse?> = _userData
@@ -182,8 +184,22 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             val resp = recomendationRepository.getUserData(_userId.value)
             if (resp.isSuccess) {
                 _userData.value = resp.getOrNull()
+                _weight.value = resp.getOrNull()?.weight.toString()
+                _height.value = resp.getOrNull()?.height.toString()
+                _date.value = resp.getOrNull()?.dateOfBirth.toString()
             } else {
-                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "1111-11-11")
+                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "1970-01-01")
+            }
+        }
+    }
+
+    fun generateAdvice() {
+        viewModelScope.launch {
+            val resp = recomendationRepository.generateAdvice("normal consumption")
+            if (resp.isSuccess && resp.getOrNull() != null) {
+                _advice.value = resp.getOrNull()!!
+            } else {
+                _advice.value = "You are beautiful as you are!"
             }
         }
     }

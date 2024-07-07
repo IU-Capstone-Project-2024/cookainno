@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,11 +57,19 @@ fun IngredientsScreen(
     val ingredientList = ingredientsViewModel.ingredients.collectAsState().value
     val generatedRecipes = ingredientsViewModel.recipes.collectAsState().value
     val isLoading by ingredientsViewModel.isLoading.collectAsState()
+    val imageCam by camViewModel.fileFromCam.observeAsState()
+    val imageGallery by camViewModel.fileFromGallery.observeAsState()
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
-
     val coroutineScope = rememberCoroutineScope()
-
+    if (imageCam != null) {
+        ingredientsViewModel.detectIngredients(imageCam!!)
+        camViewModel.resetImages()
+    }
+    if (imageGallery != null) {
+        ingredientsViewModel.detectIngredients(imageGallery!!)
+        camViewModel.resetImages()
+    }
     LaunchedEffect(key1 = generatedRecipes) {
         if (generatedRecipes.isNotEmpty()) {
             coroutineScope.launch {
@@ -83,8 +92,14 @@ fun IngredientsScreen(
                     sheetState = sheetState
                 ) {
                     BottomSheetContent(
-                        onCameraClick = camViewModel::runCamera,
-                        onGalleryClick = camViewModel::runGallery
+                        onCameraClick = {
+                            camViewModel.runCamera()
+                            showBottomSheet = false
+                        },
+                        onGalleryClick = {
+                            camViewModel.runGallery()
+                            showBottomSheet = false
+                        }
                     )
                 }
             }

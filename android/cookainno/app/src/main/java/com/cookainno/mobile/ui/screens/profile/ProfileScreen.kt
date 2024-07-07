@@ -2,6 +2,9 @@ package com.cookainno.mobile.ui.screens.profile
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Picture
+import android.service.autofill.UserData
 import android.text.InputType
 import android.widget.EditText
 import androidx.compose.foundation.Image
@@ -18,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.layout.LazyLayout
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -27,6 +31,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,7 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -46,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
+import com.cookainno.mobile.ui.screens.generation.animatedGradientBackground
 import com.cookainno.mobile.ui.screens.recipes.TopBar
 import kotlin.random.Random
 
@@ -95,16 +101,7 @@ fun ProfileScreen(userViewModel: UserViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            item {
-                if (userData != null) {
-                    // Display user profile using userDataState
-                    Text("Username: ${userData!!.username.toString()}")
-                    Text("Email: ${userData!!.email}")
-                    Text("Height: ${userData!!.height}")
-                    Text("Weight: ${userData!!.weight}")
-                    Text("Date: ${userData!!.dateOfBirth}")
-                }
-            }
+
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -231,7 +228,6 @@ fun UserDataRow(
         )
         TextButton(
             onClick = onRedactClick,
-
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.scrim,
