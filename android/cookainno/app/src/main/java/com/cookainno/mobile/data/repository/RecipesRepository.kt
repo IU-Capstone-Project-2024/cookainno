@@ -2,7 +2,6 @@ package com.cookainno.mobile.data.repository
 
 import android.util.Log
 import com.cookainno.mobile.data.Constants
-import com.cookainno.mobile.data.model.GeneratedRecipe
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.model.RecipeToAdd
 import com.cookainno.mobile.data.remote.AuthInterceptor
@@ -10,7 +9,6 @@ import com.cookainno.mobile.data.remote.RecipesService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.log
 
 class RecipesRepository(private val preferencesRepository: PreferencesRepository) {
     private var recipesService: RecipesService? = null

@@ -3,7 +3,6 @@ package com.cookainno.mobile.ui.screens.generation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookainno.mobile.data.model.GeneratedRecipe
-import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.model.RecipeToAdd
 import com.cookainno.mobile.data.repository.GenerationRepository
 import com.cookainno.mobile.data.repository.PreferencesRepository

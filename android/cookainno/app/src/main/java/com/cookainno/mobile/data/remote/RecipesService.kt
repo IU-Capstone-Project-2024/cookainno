@@ -1,6 +1,5 @@
 package com.cookainno.mobile.data.remote
 
-import com.cookainno.mobile.data.model.GeneratedRecipe
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.model.RecipeToAdd
 import retrofit2.Response
