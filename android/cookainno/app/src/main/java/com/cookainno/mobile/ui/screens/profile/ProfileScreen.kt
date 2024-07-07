@@ -2,10 +2,9 @@ package com.cookainno.mobile.ui.screens.profile
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Picture
-import android.service.autofill.UserData
 import android.text.InputType
+import android.view.Gravity
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,7 +30,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,9 +38,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -51,7 +49,6 @@ import androidx.navigation.compose.rememberNavController
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
-import com.cookainno.mobile.ui.screens.generation.animatedGradientBackground
 import com.cookainno.mobile.ui.screens.recipes.TopBar
 import kotlin.random.Random
 
@@ -66,23 +63,25 @@ fun ProfileScreen(userViewModel: UserViewModel) {
 
     val randomImage = imageList[Random.nextInt(imageList.size)]
 
-    val adviceStrings = listOf(
-        stringResource(id = R.string.str1),
-        stringResource(id = R.string.str2),
-        stringResource(id = R.string.str3),
-        stringResource(id = R.string.str4),
-        stringResource(id = R.string.str5),
-        stringResource(id = R.string.str6),
-        stringResource(id = R.string.str7),
-        stringResource(id = R.string.str8),
-        stringResource(id = R.string.str9),
-        stringResource(id = R.string.str10),
-        stringResource(id = R.string.str11),
-        stringResource(id = R.string.str12)
-    )
-    val randomAdvice = remember { adviceStrings.random() }
+    /* val adviceStrings = listOf(
+         stringResource(id = R.string.str1),
+         stringResource(id = R.string.str2),
+         stringResource(id = R.string.str3),
+         stringResource(id = R.string.str4),
+         stringResource(id = R.string.str5),
+         stringResource(id = R.string.str6),
+         stringResource(id = R.string.str7),
+         stringResource(id = R.string.str8),
+         stringResource(id = R.string.str9),
+         stringResource(id = R.string.str10),
+         stringResource(id = R.string.str11),
+         stringResource(id = R.string.str12)
+     )*/
+    //val randomAdvice = remember { adviceStrings.random() }
 
     userViewModel.getUserData()
+    val randomAdvice = remember { userViewModel.advice.value }
+
     Column {
         TopBar(
             isMain = false,
@@ -221,23 +220,22 @@ fun UserDataRow(
             .padding(vertical = 8.dp)
     ) {
         Text(
-            text = label,
+            text = "$label: $value",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.weight(1f)
         )
-        TextButton(
+        if (label != "Daily Calories") TextButton(
             onClick = onRedactClick,
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.scrim,
                     shape = RoundedCornerShape(20.dp)
                 )
-                .width(100.dp)
                 .height(40.dp)
         ) {
             Text(
-                text = "$value  ✎",
+                text = "✎",
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.White,
                 modifier = Modifier
@@ -283,56 +281,81 @@ fun UserDataSection(
             onRedactClick = {
                 showInputDialog(
                     context = context,
-                    "Change Weight",
+                    "Change Height",
                     onInputReceived = { input ->
-                        userViewModel.onWeightChange(input)
+                        userViewModel.updateUserData(
+                            weight = userData?.weight!!,
+                            height = input.toInt(),
+                            date = userData.dateOfBirth.toString()
+                        )
                     })
-                //userViewModel.updateUserData(height.toInt(), weight.toInt(), date)
-
-                //userViewModel.updateUserData(date,= weight = ,height=)
             })
         Divider(color = Color.Gray, thickness = 1.dp)
         UserDataRow(
             userViewModel = userViewModel,
             label = "Daily Calories",
-            value = "3000000",
+            value = "300000",
             onRedactClick = {
-                showInputDialog(
-                    context = context,
-                    "Change Weight",
-                    onInputReceived = { input ->
-                        userViewModel.onWeightChange(input)
-                    })
-                //userViewModel.updateUserData(date,= weight = ,height=)
-            })
+            }
+        )
         Divider(color = Color.Gray, thickness = 1.dp)
-        /*UserDataRow(
-            userViewModel = userViewModel,
-            label = "Date",
-            value = userData!!.date,
-            onRedactClick = {
-                showInputDialog(
-                    context = context,
-                    "Change Weight",
-                    onInputReceived = { input ->
-                        userViewModel.onWeightChange(input)
-                    })
-                //userViewModel.updateUserData(date,= weight = ,height=)
-            })*/
     }
 }
 
 fun showInputDialog(context: Context, title: String, onInputReceived: (String) -> Unit) {
     val dialogBuilder = AlertDialog.Builder(context)
-    val inputField = EditText(context)
-    inputField.inputType = InputType.TYPE_CLASS_NUMBER
-    dialogBuilder.setTitle(title)
-    dialogBuilder.setView(inputField)
-    dialogBuilder.setPositiveButton("OK") { _, _ ->
-        onInputReceived(inputField.text.toString())
+    val inputField = EditText(context).apply {
+        inputType = InputType.TYPE_CLASS_NUMBER
+        hint = "Enter number"
+        setPadding(45, 24, 45, 24)
+
+        setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                setBackgroundColor(Color.White.toArgb())
+            } else {
+                setBackgroundColor(Color.White.toArgb())
+            }
+        }
     }
-    dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
-        dialog.cancel()
+
+    dialogBuilder.apply {
+        setTitle(title)
+        setView(inputField)
+        setPositiveButton("OK") { _, _ ->
+            onInputReceived(inputField.text.toString())
+        }
+        setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
     }
-    dialogBuilder.show()
+
+    val dialog = dialogBuilder.create()
+
+    inputField.requestFocus()
+    dialog.window?.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
+    inputField.setOnEditorActionListener { _, actionId, _ ->
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            onInputReceived(inputField.text.toString())
+            dialog.dismiss()
+            true
+        } else {
+            false
+        }
+    }
+
+    dialog.setCanceledOnTouchOutside(false)
+    dialog.show()
+
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.let { button ->
+        button.setTextColor(Color.Gray.toArgb())
+        button.gravity = Gravity.CENTER
+        button.setPadding(24, 16, 24, 16)
+    }
+
+    dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.let { button ->
+        button.setTextColor(Color.Gray.toArgb())
+        button.gravity = Gravity.CENTER
+        button.setPadding(24, 16, 24, 16)
+    }
 }
