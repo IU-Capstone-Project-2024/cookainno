@@ -2,6 +2,7 @@ package com.cookainno.mobile.ui.screens.generation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.cookainno.mobile.ui.NavRoutes
@@ -134,6 +137,12 @@ fun IngredientsScreen(
                                     onValueChange = { newValue ->
                                         ingredientsViewModel.updateIngredient(index, newValue)
                                     },
+                                    colors = TextFieldDefaults.colors(
+                                        focusedContainerColor = Color.White,
+                                        unfocusedContainerColor = Color.White,
+                                        focusedIndicatorColor = Color.White,
+                                        unfocusedIndicatorColor = Color.White,
+                                    ),
                                     modifier = Modifier
                                         .weight(1f)
                                         .clip(shape = RoundedCornerShape(30.dp))
@@ -203,28 +212,30 @@ fun IngredientsScreen(
 
 @Composable
 fun BottomSheetContent(onCameraClick: () -> Unit, onGalleryClick: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 25.dp)
-    ) {
-        TextButton(
-            onClick = {
-                onCameraClick()
-            },
-            modifier = Modifier.fillMaxWidth()
+    Box(Modifier.background(color = Color.White)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 25.dp)
         ) {
-            Icon(Icons.Default.CameraAlt, contentDescription = "Camera")
-            Text(text = "Open Camera")
-        }
-        TextButton(
-            onClick = {
-                onGalleryClick()
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.PhotoLibrary, contentDescription = "Gallery")
-            Text(text = "Open Gallery")
+            TextButton(
+                onClick = {
+                    onCameraClick()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.CameraAlt, contentDescription = "Camera")
+                Text(text = "Open Camera")
+            }
+            TextButton(
+                onClick = {
+                    onGalleryClick()
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.PhotoLibrary, contentDescription = "Gallery")
+                Text(text = "Open Gallery")
+            }
         }
     }
 }
