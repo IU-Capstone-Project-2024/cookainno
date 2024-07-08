@@ -26,6 +26,27 @@ services:
     volumes:
       - ./db/migrations:/liquibase/changelog
 
+#  back:
+#    image: vladis7love/cookainno_back:latest
+#    depends_on:
+#      - liquibase
+#    ports:
+#      - "8080:8080"
+#    env_file: ./.env
+#    networks:
+#      - backend
+#    tty: true
+#
+#  ml:
+#    image: vladis7love/cookainno_ml:latest
+#    depends_on:
+#      - liquibase
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - backend
+#    tty: true
+
 volumes:
   postgresql: { }
 networks:
