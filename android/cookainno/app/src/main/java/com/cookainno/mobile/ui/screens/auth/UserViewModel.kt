@@ -1,6 +1,8 @@
 package com.cookainno.mobile.ui.screens.auth
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookainno.mobile.data.model.UserDataResponse
@@ -11,6 +13,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class UserViewModel(private val preferencesRepository: PreferencesRepository) : ViewModel() {
     private val _isSignedIn = MutableStateFlow(false)
@@ -178,6 +183,21 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
         }
     }
 
+    fun calculateCalories(weight: Int, height: Int, age: Int): Int {
+        val bmr: Double = 10 * weight + 6.25 * height - 5 * age - 100
+        val calories = bmr * 1.2
+        return calories.toInt()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun calculateAge(dateOfBirth: String): Int {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val dob = LocalDate.parse(dateOfBirth, formatter)
+        val currentDate = LocalDate.now()
+        val age = Period.between(dob, currentDate).years
+        return age
+    }
+
     fun getUserData() {
         recomendationRepository.initToken()
         viewModelScope.launch {
@@ -188,7 +208,8 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
                 _height.value = resp.getOrNull()?.height.toString()
                 _date.value = resp.getOrNull()?.dateOfBirth.toString()
             } else {
-                _userData.value = UserDataResponse(-1, "User", "example@example.com", 0, 0, "1970-01-01")
+                _userData.value =
+                    UserDataResponse(-1, "User", "example@example.com", 0, 0, "1970-01-01")
             }
         }
     }
