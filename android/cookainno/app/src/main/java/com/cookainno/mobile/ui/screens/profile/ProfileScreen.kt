@@ -2,10 +2,12 @@ package com.cookainno.mobile.ui.screens.profile
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.text.InputType
 import android.view.Gravity
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +53,7 @@ import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.recipes.TopBar
 import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProfileScreen(userViewModel: UserViewModel) {
     //userViewModel.updateUserData(...) // date format is yyyy-mm-dd
@@ -244,6 +247,7 @@ fun UserDataRow(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UserDataSection(
     userViewModel: UserViewModel,
@@ -290,14 +294,19 @@ fun UserDataSection(
                     })
             })
         HorizontalDivider(thickness = 1.dp, color = Color.Gray)
-        UserDataRow(
-            userViewModel = userViewModel,
-            label = "Daily Calories",
-            value = "300000",
-            onRedactClick = {
-            }
-        )
-        HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+        if (userData != null) {
+            UserDataRow(
+                userViewModel = userViewModel,
+                label = "Daily Calories",
+                value = userViewModel.calculateCalories(
+                    userData.weight,
+                    userData.height,
+                    userViewModel.calculateAge(userData.dateOfBirth)
+                ).toString(),
+                onRedactClick = {
+                }
+            )
+        }
     }
 }
 
