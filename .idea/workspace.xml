@@ -38,7 +38,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;M:/Innopolis_Study/PythonProjects/cookainno/ml/ingredient_detection&quot;,
+    &quot;last_opened_file_path&quot;: &quot;M:/Innopolis_Study/PythonProjects/cookainn0/ml/ingredient_detection&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -49,6 +49,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection" />
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection\models" />
       <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml\ingredient_detection" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -101,6 +103,7 @@
       <updated>1719083388985</updated>
       <workItem from="1719083390470" duration="784000" />
       <workItem from="1719086015742" duration="2366000" />
+      <workItem from="1720367114749" duration="1159000" />
     </task>
     <task id="LOCAL-00001" summary="created api for grocery detector">
       <created>1719680227717</created>
@@ -121,6 +124,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update" />
