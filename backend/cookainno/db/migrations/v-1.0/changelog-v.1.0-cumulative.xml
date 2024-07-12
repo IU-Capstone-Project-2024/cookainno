@@ -7,5 +7,6 @@
 
     <include file="init-scripts/2024-06-25--01-create-recipes-table.sql" relativeToChangelogFile="true"/>
     <include file="fill-scripts/2024-06-25--02-fill-recipes-table.sql" relativeToChangelogFile="true"/>
+    <include file="fill-scripts/2024-07-12--03-alter-recipes-table.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

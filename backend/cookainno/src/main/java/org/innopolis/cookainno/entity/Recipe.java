@@ -20,10 +20,10 @@ public class Recipe {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "instructions", nullable = false)
+    @Column(name = "instructions", nullable = false, length = 8192)
     private String instructions;
 
-    @Column(name = "ingredients", nullable = false)
+    @Column(name = "ingredients", nullable = false, length = 2048)
     private String ingredients;
 
     @Column(name = "image_url")
