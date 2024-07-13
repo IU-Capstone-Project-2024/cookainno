@@ -1,8 +1,10 @@
 package com.cookainno.mobile
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import com.cookainno.mobile.data.repository.PreferencesRepository
 import com.cookainno.mobile.ui.App
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
@@ -13,6 +15,7 @@ import com.cookainno.mobile.utilities.ImageUtility
 import com.example.compose.CookainnoTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val cameraUtility = ImageUtility(this)

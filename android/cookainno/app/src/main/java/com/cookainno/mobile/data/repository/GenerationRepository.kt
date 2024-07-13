@@ -1,7 +1,7 @@
 package com.cookainno.mobile.data.repository
 
 import android.util.Log
-import com.cookainno.mobile.data.Constants
+import com.cookainno.mobile.BuildConfig
 import com.cookainno.mobile.data.model.GenRecipesResponse
 import com.cookainno.mobile.data.model.GeneratedRecipe
 import com.cookainno.mobile.data.remote.GenerationService
@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit
 
 class GenerationRepository {
     private val httpClient = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(20, TimeUnit.SECONDS)
-        .writeTimeout(20, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
         .build()
 
     private val generationService = Retrofit.Builder()
-        .baseUrl(Constants.ML_URL)
+        .baseUrl(BuildConfig.ML_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(httpClient)
         .build()

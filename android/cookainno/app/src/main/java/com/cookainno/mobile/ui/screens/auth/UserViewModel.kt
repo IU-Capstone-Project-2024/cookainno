@@ -178,6 +178,7 @@ class UserViewModel(private val preferencesRepository: PreferencesRepository) : 
             val resp = recomendationRepository.putUserData(_userId.value, height, weight, date)
             Log.d("UMPALUMPA", "updateUserData: ${resp.isSuccess} ${_userId.value}")
             if (resp.isSuccess) {
+                getUserData()
                 _navigateToMain.value = true
             }
         }

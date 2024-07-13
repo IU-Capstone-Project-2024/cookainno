@@ -1,7 +1,7 @@
 package com.cookainno.mobile.data.repository
 
 import android.util.Log
-import com.cookainno.mobile.data.Constants
+import com.cookainno.mobile.BuildConfig
 import com.cookainno.mobile.data.model.UserDataRequest
 import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.data.remote.AdviceService
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 class RecomendationRepository(private val preferencesRepository: PreferencesRepository) {
     private var recomendationService: RecomendationService? = null
     private val adviceService = Retrofit.Builder()
-            .baseUrl(Constants.ML_URL)
+            .baseUrl(BuildConfig.ML_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -29,7 +29,7 @@ class RecomendationRepository(private val preferencesRepository: PreferencesRepo
     fun initToken() {
         if (recomendationService == null) {
             recomendationService = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(BuildConfig.BASE_URL)
                 .client(
                     OkHttpClient().newBuilder()
                         .addInterceptor(AuthInterceptor(preferencesRepository))

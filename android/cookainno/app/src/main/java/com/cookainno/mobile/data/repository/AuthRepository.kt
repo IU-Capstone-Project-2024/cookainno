@@ -1,6 +1,6 @@
 package com.cookainno.mobile.data.repository
 
-import com.cookainno.mobile.data.Constants
+import com.cookainno.mobile.BuildConfig
 import com.cookainno.mobile.data.model.ConfirmationRequest
 import com.cookainno.mobile.data.model.ErrorResponse
 import com.cookainno.mobile.data.model.LoginRequest
@@ -17,7 +17,7 @@ import java.io.IOException
 class AuthRepository(private val preferencesRepository: PreferencesRepository) {
 
     private var authService: AuthService = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL) // server base url
+        .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(AuthService::class.java)

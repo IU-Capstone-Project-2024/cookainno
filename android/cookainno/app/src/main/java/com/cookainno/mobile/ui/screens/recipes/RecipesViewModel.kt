@@ -1,6 +1,7 @@
 package com.cookainno.mobile.ui.screens.recipes
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookainno.mobile.data.model.Recipe
@@ -9,6 +10,7 @@ import com.cookainno.mobile.data.repository.RecipesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel() {
     private val recipesRepository = RecipesRepository(preferencesRepository)
@@ -49,6 +51,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
 
     fun initUserId(id: Int) {
         userId = id
+        getAllFavouriteRecipes()
     }
 
     fun example() {
@@ -68,8 +71,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         _isRefreshing.value = true
         viewModelScope.launch {
             val newRecipes =
-                recipesRepository.getRecipesSortedByLikes(currentPage*pageSize, pageSize).getOrNull()
-            Log.d("HIHI", "getFavouriteRecipes: ${newRecipes?.map { it.name }} : page $currentPage")
+                recipesRepository.getRecipesSortedByLikes(currentPage, pageSize).getOrNull()
             if (!newRecipes.isNullOrEmpty()) {
                 _recipes.value = _recipes.value.orEmpty() + newRecipes
                 if (newRecipes.size < pageSize) {
@@ -87,7 +89,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         _isRefreshing.value = true
         viewModelScope.launch {
             val newRecipes =
-                recipesRepository.searchRecipes(name, currentPage*pageSize, pageSize).getOrNull()
+                recipesRepository.searchRecipes(name, currentPage, pageSize).getOrNull()
             if (!newRecipes.isNullOrEmpty()) {
                 _recipes.value = _recipes.value.orEmpty() + newRecipes
                 if (newRecipes.size < pageSize) {
@@ -128,7 +130,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         viewModelScope.launch {
             val newRecipes = recipesRepository.getFavouriteRecipes(
                 userId,
-                currentFavouritesPage*pageSize,
+                currentFavouritesPage,
                 pageSize,
                 false
             ).getOrNull()
@@ -152,7 +154,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
             val newRecipes = recipesRepository.searchFavouriteRecipes(
                 userId,
                 name,
-                currentFavouritesPage*pageSize,
+                currentFavouritesPage,
                 pageSize
             ).getOrNull()
             if (!newRecipes.isNullOrEmpty()) {

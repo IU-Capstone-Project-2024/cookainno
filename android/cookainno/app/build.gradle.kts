@@ -21,12 +21,18 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"http://10.90.138.208:8080/\"")
+            buildConfigField("String", "ML_URL", "\"http://10.90.138.208:8000/\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"http://10.90.138.208:8080/\"")
+            buildConfigField("String", "ML_URL", "\"http://10.90.138.208:8000/\"")
         }
     }
     compileOptions {
@@ -49,6 +55,9 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
