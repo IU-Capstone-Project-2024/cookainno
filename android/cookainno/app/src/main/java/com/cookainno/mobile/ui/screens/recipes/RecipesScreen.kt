@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,6 +57,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -93,7 +95,6 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
                 }
             }
     }
-
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -117,12 +118,13 @@ fun RecipesScreen(recipesViewModel: RecipesViewModel, navController: NavHostCont
             modifier = Modifier.fillMaxWidth(),
             onRefresh = {
                 recipesViewModel.resetPagination()
-                recipesViewModel.getAllFavouriteRecipes()
                 recipesViewModel.getRecipesSortedByLikes()
             }) {
             LazyVerticalGrid(
                 state = listState,
-                columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxHeight()
             ) {
                 items(allRecipes ?: emptyList()) { recipe ->
                     RecipeItem(recipe = recipe, recipesViewModel = recipesViewModel, onCardClick = {
@@ -255,7 +257,6 @@ fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: 
     var liked by rememberSaveable {
         mutableStateOf(recipesViewModel.isFavourite(recipe))
     }
-    val favouriteRecipes by recipesViewModel.favouriteRecipes.collectAsState()
 
     Box(
         modifier = Modifier
@@ -279,30 +280,36 @@ fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: 
                 contentScale = ContentScale.FillBounds
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = recipe.name,
-                modifier = Modifier.padding(horizontal = 10.dp),
-                color = MaterialTheme.colorScheme.scrim
-            )
-            Spacer(modifier = Modifier.height(40.dp))
-        }
-        IconButton(
-            onClick = {
-                if (liked) {
-                    recipesViewModel.deleteFavouriteRecipe(recipe)
-                } else {
-                    recipesViewModel.addFavouriteRecipe(recipe)
+            Row {
+                Text(
+                    text = recipe.name,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .weight(0.85f),
+                    color = MaterialTheme.colorScheme.scrim
+                )
+                IconButton(
+                    onClick = {
+                        if (liked) {
+                            recipesViewModel.deleteFavouriteRecipe(recipe)
+                        } else {
+                            recipesViewModel.addFavouriteRecipe(recipe)
+                        }
+                        liked = !liked
+                    }, modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.3f)
+                        .padding(horizontal = 8.dp)
+                ) {
+                    Icon(
+                        imageVector = (if (liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder),
+                        contentDescription = "favorite",
+                        tint = MaterialTheme.colorScheme.tertiary
+                    )
                 }
-                liked = !liked
-            }, modifier = Modifier
-                .size(60.dp)
-                .align(alignment = Alignment.BottomEnd)
-        ) {
-            Icon(
-                imageVector = (if (liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder),
-                contentDescription = "favorite",
-                tint = MaterialTheme.colorScheme.tertiary
-            )
+            }
         }
     }
 }

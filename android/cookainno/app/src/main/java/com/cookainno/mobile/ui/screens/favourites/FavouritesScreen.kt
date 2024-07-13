@@ -3,6 +3,7 @@ package com.cookainno.mobile.ui.screens.favourites
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -94,7 +95,9 @@ fun FavouritesScreen(recipesViewModel: RecipesViewModel, navController: NavHostC
         ) {
             LazyVerticalGrid(
                 state = listState,
-                columns = GridCells.Fixed(2), contentPadding = PaddingValues(16.dp)
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxHeight()
             ) {
                 items(favouriteRecipes ?: emptyList()) { recipe ->
                     RecipeItem(recipe = recipe, recipesViewModel = recipesViewModel, onCardClick = {

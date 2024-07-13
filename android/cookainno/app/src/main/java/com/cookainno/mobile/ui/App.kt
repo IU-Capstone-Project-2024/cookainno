@@ -1,6 +1,8 @@
 package com.cookainno.mobile.ui
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,7 +20,9 @@ import com.cookainno.mobile.ui.screens.generation.CamViewModel
 import com.cookainno.mobile.ui.screens.home.HomeScreen
 import com.cookainno.mobile.ui.screens.generation.IngredientsViewModel
 import com.cookainno.mobile.ui.screens.recipes.RecipesViewModel
+import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun App(
@@ -39,11 +43,13 @@ fun App(
         NavHost(navController = navController, startDestination = startScreen) {
             composable(NavRoutes.HOME.name) {
                 userViewModel.generateAdvice()
+                userViewModel.initUserId()
                 HomeScreen(
                     userViewModel = userViewModel,
                     camViewModel = camViewModel,
                     recipesViewModel = recipesViewModel,
-                    ingredientsViewModel = ingredientsViewModel
+                    ingredientsViewModel = ingredientsViewModel,
+                    pic = Random.nextInt(4)
                 )
             }
             composable(NavRoutes.REGISTRATION.name) {

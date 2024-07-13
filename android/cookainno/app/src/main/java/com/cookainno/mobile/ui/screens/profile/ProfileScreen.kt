@@ -55,7 +55,7 @@ import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProfileScreen(userViewModel: UserViewModel) {
+fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
     //userViewModel.updateUserData(...) // date format is yyyy-mm-dd
     val userData by userViewModel.userData.collectAsState()
 
@@ -63,23 +63,7 @@ fun ProfileScreen(userViewModel: UserViewModel) {
         R.drawable.potato, R.drawable.strawberry, R.drawable.watermelon, R.drawable.peach
     )
 
-    val randomImage = imageList[Random.nextInt(imageList.size)]
-
-    /* val adviceStrings = listOf(
-         stringResource(id = R.string.str1),
-         stringResource(id = R.string.str2),
-         stringResource(id = R.string.str3),
-         stringResource(id = R.string.str4),
-         stringResource(id = R.string.str5),
-         stringResource(id = R.string.str6),
-         stringResource(id = R.string.str7),
-         stringResource(id = R.string.str8),
-         stringResource(id = R.string.str9),
-         stringResource(id = R.string.str10),
-         stringResource(id = R.string.str11),
-         stringResource(id = R.string.str12)
-     )*/
-    //val randomAdvice = remember { adviceStrings.random() }
+    val randomImage = imageList[pic]
 
     userViewModel.getUserData()
     val randomAdvice = remember { userViewModel.advice.value }

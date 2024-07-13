@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,6 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,14 +51,26 @@ import com.cookainno.mobile.data.model.Recipe
 fun RecipeDetailsScreen(recipesViewModel: RecipesViewModel, navController: NavHostController) {
     val recipe by recipesViewModel.selectedRecipe.collectAsState()
     recipe?.let {
-        RecipeDetails(recipe = it, navController)
+        RecipeDetails(recipe = it, navController, recipesViewModel.isFavourite(it), recipesViewModel::addFavouriteRecipe, recipesViewModel::deleteFavouriteRecipe)
     } ?: run {
         Text(text = "Recipe not found")
     }
 }
 
 @Composable
-fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
+fun RecipeDetails(
+    recipe: Recipe,
+    navController: NavHostController,
+    isLiked: Boolean,
+    like: (recipe: Recipe) -> Unit,
+    removeLike: (recipe: Recipe) -> Unit
+) {
+    var liked by rememberSaveable {
+        mutableStateOf(isLiked)
+    }
+    var numLikes by rememberSaveable {
+        mutableIntStateOf(recipe.likes)
+    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -109,15 +126,27 @@ fun RecipeDetails(recipe: Recipe, navController: NavHostController) {
                                 .weight(1f)
                                 .padding(horizontal = 14.dp)
                         )
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = "favorite",
-                            tint = MaterialTheme.colorScheme.background,
-                            modifier = Modifier.size(24.dp)
-                        )
+                        IconButton(onClick = {
+                            if (liked) {
+                                removeLike(recipe)
+                                numLikes--
+                                liked = false
+                            } else {
+                                like(recipe)
+                                numLikes++
+                                liked = true
+                            }
+                        }) {
+                            Icon(
+                                imageVector = if (liked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = "favorite",
+                                tint = MaterialTheme.colorScheme.background,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = recipe.likes.toString(),
+                            text = "$numLikes",
                             Modifier.padding(end = 14.dp)
                         )
                     }

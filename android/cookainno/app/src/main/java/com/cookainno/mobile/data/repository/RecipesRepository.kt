@@ -1,7 +1,7 @@
 package com.cookainno.mobile.data.repository
 
 import android.util.Log
-import com.cookainno.mobile.data.Constants
+import com.cookainno.mobile.BuildConfig
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.model.RecipeToAdd
 import com.cookainno.mobile.data.remote.AuthInterceptor
@@ -15,7 +15,7 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
     fun initToken() {
         if (recipesService == null) {
             recipesService = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(BuildConfig.BASE_URL)
                 .client(
                     OkHttpClient().newBuilder()
                         .addInterceptor(AuthInterceptor(preferencesRepository))
@@ -96,7 +96,9 @@ class RecipesRepository(private val preferencesRepository: PreferencesRepository
 
     suspend fun getFavouriteRecipes(userId: Int, skip: Int, pageSize: Int, oldestFirst: Boolean): Result<List<Recipe>> {
         return try {
-            Result.success(recipesService?.getFavouriteRecipes(userId, skip, pageSize, oldestFirst)?.body()!!)
+            val resp = recipesService?.getFavouriteRecipes(userId, skip, pageSize, oldestFirst)
+            Log.d("KOLOKOL", "getFavouriteRecipes: ${resp?.raw()} ${resp?.body()}")
+            Result.success(resp?.body()!!)
         } catch (e: Exception) {
             Result.failure(e)
         }
