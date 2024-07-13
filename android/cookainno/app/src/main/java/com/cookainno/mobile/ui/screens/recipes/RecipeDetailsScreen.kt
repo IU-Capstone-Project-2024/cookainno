@@ -27,8 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -68,9 +68,7 @@ fun RecipeDetails(
     var liked by rememberSaveable {
         mutableStateOf(isLiked)
     }
-    var numLikes by rememberSaveable {
-        mutableIntStateOf(recipe.likes)
-    }
+    val recompose = remember { mutableStateOf(0) }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -129,11 +127,15 @@ fun RecipeDetails(
                         IconButton(onClick = {
                             if (liked) {
                                 removeLike(recipe)
-                                numLikes--
+                                recipe.likes--
+                                recompose.value++
+                                recompose.value--
                                 liked = false
                             } else {
                                 like(recipe)
-                                numLikes++
+                                recipe.likes++
+                                recompose.value++
+                                recompose.value--
                                 liked = true
                             }
                         }) {
@@ -146,7 +148,7 @@ fun RecipeDetails(
                         }
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "$numLikes",
+                            text = "${recipe.likes + recompose.value}",
                             Modifier.padding(end = 14.dp)
                         )
                     }
