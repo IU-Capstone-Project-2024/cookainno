@@ -82,6 +82,8 @@ public class RecipeService {
     }
 
     public List<RecipeResponse> searchRecipesByName(String name, int page, int size) {
+        name = name.toLowerCase().trim();
+
         Pageable pageable = PageRequest.of(page, size);
         Page<Recipe> recipePage = recipeRepository.findByNameContaining(name, pageable);
         return recipePage.stream()
@@ -152,6 +154,8 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public List<RecipeResponse> searchFavoriteRecipesByName(Long userId, String name, int page, int size) {
+        name  = name.toLowerCase().trim();
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
