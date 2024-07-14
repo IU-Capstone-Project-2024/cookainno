@@ -7,7 +7,7 @@ from ingredient_detection.detect import GroceryItemDetector
 
 app = FastAPI()
 
-model_path = './ingredient_detection/models/model_1.pt'
+model_path = './ingredient_detection/models/model_2.pt'
 data_path = './ingredient_detection/data.yaml'
 confidence = 0.5
 detector = GroceryItemDetector(model_path, data_path, confidence)
@@ -41,4 +41,3 @@ async def detect_ingredients(file: UploadFile = File(...)):
     detected_items = detector.detect(file_location)
     os.remove(file_location)
     return detected_items
-
