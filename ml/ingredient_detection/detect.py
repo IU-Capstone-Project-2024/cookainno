@@ -31,12 +31,12 @@ class GroceryItemDetector:
 
 
 def main():
-    model_path = 'models/model_1.pt'  # Path to the pretrained model
+    model_path = 'models/model_2.pt'  # Path to the pretrained model
     data_path = 'data.yaml'  # Path to the data configuration YAML file
     conf = 0.5  # Set the thresholds for probability that the cell contains an object
 
     # Path to the image for detection
-    image_path = 'data/Retail-Cart-fast_mov-43_jpg.rf.6940ef907e87f0956850883ecdc982f0.jpg'
+    image_path = 'test_data/DSC_5981_JPG_jpg.rf.24ed0ea2f6f5f43301a1d6b914279d7a.jpg'
 
     detector = GroceryItemDetector(model_path, data_path, conf)
     result = detector.detect(image_path)

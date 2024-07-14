@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbd5e34e-1432-42f2-a807-5857e7f0487f" name="Changes" comment="created api for grocery detector">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="cbd5e34e-1432-42f2-a807-5857e7f0487f" name="Changes" comment="created api for grocery detector" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,7 +36,11 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+<<<<<<< HEAD
     &quot;last_opened_file_path&quot;: &quot;M:/Innopolis_Study/PythonProjects/cookainn0/ml/ingredient_detection&quot;,
+=======
+    &quot;last_opened_file_path&quot;: &quot;M:/Innopolis_Study/PythonProjects/cookainn0/ml/ingredient_detection/models&quot;,
+>>>>>>> 662bb27 (added test images and new model for ingredients detection)
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -49,11 +51,18 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+<<<<<<< HEAD
       <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection" />
       <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection\models" />
+=======
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection\models" />
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection\test_data" />
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection" />
+>>>>>>> 662bb27 (added test images and new model for ingredients detection)
       <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml\ingredient_detection" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="M:\Innopolis_Study\PythonProjects\cookainn0\ml\ingredient_detection" />
       <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml" />
       <recent name="M:\Innopolis_Study\PythonProjects\cookainno\ml\ingredient_detection" />
     </key>
@@ -104,6 +113,12 @@
       <workItem from="1719083390470" duration="784000" />
       <workItem from="1719086015742" duration="2366000" />
       <workItem from="1720367114749" duration="1159000" />
+<<<<<<< HEAD
+=======
+      <workItem from="1720384260429" duration="383000" />
+      <workItem from="1720617287040" duration="3000" />
+      <workItem from="1720959030789" duration="786000" />
+>>>>>>> 662bb27 (added test images and new model for ingredients detection)
     </task>
     <task id="LOCAL-00001" summary="created api for grocery detector">
       <created>1719680227717</created>
