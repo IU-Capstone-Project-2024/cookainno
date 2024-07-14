@@ -77,7 +77,7 @@ class IngredientsViewModel(preferencesRepository: PreferencesRepository) : ViewM
 
     private fun addRecipeToRemote() {
         viewModelScope.launch {
-            if (_recipes.value.isNotEmpty()) {
+            if (_recipes.value != null && _recipes.value.isNotEmpty() && _recipes.value[0] != null) {
                 recipesRepository.addGeneratedRecipe(convertToRecipeToAdd(_recipes.value[0]))
             }
         }
