@@ -229,12 +229,6 @@ fun TopBar(
                                 .background(
                                     color = MaterialTheme.colorScheme.primaryContainer
                                 )
-                                /* .animatedGradientBackground(
-                                colors = listOf(
-                                    MaterialTheme.colorScheme.background,
-                                    MaterialTheme.colorScheme.surfaceBright
-                                ),
-                            )*/
                                 .align(Alignment.CenterVertically)
                                 .size(57.dp)
                         ) {
@@ -263,6 +257,7 @@ fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: 
             .padding(4.dp)
             .background(MaterialTheme.colorScheme.surfaceContainerLowest, RoundedCornerShape(20.dp))
             .fillMaxWidth()
+            .height(200.dp)
             .clickable(onClick = onCardClick)
     ) {
         Column(

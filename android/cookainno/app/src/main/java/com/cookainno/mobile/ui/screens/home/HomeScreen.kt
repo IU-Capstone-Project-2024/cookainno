@@ -66,64 +66,65 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            Surface(
-                shape = RoundedCornerShape(40.dp),
-                modifier = Modifier
-                    .padding(horizontal = 80.dp, vertical = 10.dp)
-                //.alpha(0.4f)
-            ) {
-                Row(
+            if (currentRoute != NavRoutes.DETAILS.name) {
+                Surface(
+                    shape = RoundedCornerShape(40.dp),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.onBackground),
-                    horizontalArrangement = Arrangement.Center,
+                        .padding(horizontal = 80.dp, vertical = 10.dp)
                 ) {
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.FAVOURITES.name)
-                        },
+                    Row(
                         modifier = Modifier
-                            .padding(10.dp)
-                            .weight(1f)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.onBackground),
+                        horizontalArrangement = Arrangement.Center,
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Favorite,
-                            contentDescription = "Favourite icon",
-                            tint = if (currentRoute == NavRoutes.FAVOURITES.name) Color.White
-                            else MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.graphicsLayer(alpha = 1f)
-                        )
-                    }
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.RECIPES.name)
-                        },
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Home,
-                            contentDescription = "Home icon",
-                            tint = if (currentRoute == NavRoutes.RECIPES.name) Color.White
-                            else (MaterialTheme.colorScheme.onPrimaryContainer),
-                            modifier = Modifier.graphicsLayer(alpha = 1f)
-                        )
-                    }
-                    IconButton(
-                        onClick = {
-                            navController.navigate(NavRoutes.PROFILE.name)
-                        },
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Profile icon",
-                            tint = if (currentRoute == NavRoutes.PROFILE.name) Color.White
-                            else MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
+                        IconButton(
+                            onClick = {
+                                navController.navigate(NavRoutes.FAVOURITES.name)
+                            },
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .weight(1f)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = "Favourite icon",
+                                tint = if (currentRoute == NavRoutes.FAVOURITES.name) Color.White
+                                else MaterialTheme.colorScheme.onPrimaryContainer,
+                                modifier = Modifier.graphicsLayer(alpha = 1f)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                navController.navigate(NavRoutes.RECIPES.name)
+                            },
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .weight(1f)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Home,
+                                contentDescription = "Home icon",
+                                tint = if (currentRoute == NavRoutes.RECIPES.name) Color.White
+                                else (MaterialTheme.colorScheme.onPrimaryContainer),
+                                modifier = Modifier.graphicsLayer(alpha = 1f)
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                navController.navigate(NavRoutes.PROFILE.name)
+                            },
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .weight(1f)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = "Profile icon",
+                                tint = if (currentRoute == NavRoutes.PROFILE.name) Color.White
+                                else MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
+                        }
                     }
                 }
             }
