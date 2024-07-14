@@ -1,16 +1,15 @@
 package com.cookainno.mobile.ui.screens.recipes
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookainno.mobile.data.model.Recipe
 import com.cookainno.mobile.data.repository.PreferencesRepository
 import com.cookainno.mobile.data.repository.RecipesRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel() {
     private val recipesRepository = RecipesRepository(preferencesRepository)
@@ -70,6 +69,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
         if (!hasMoreRecipes) return
         _isRefreshing.value = true
         viewModelScope.launch {
+            if (currentPage == 0) delay(250)
             val newRecipes =
                 recipesRepository.getRecipesSortedByLikes(currentPage, pageSize).getOrNull()
             if (!newRecipes.isNullOrEmpty()) {
@@ -107,6 +107,7 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
     }
 
     fun selectRecipe(recipe: Recipe) {
+        Log.d("RECHECK", "selectRecipe: $recipe")
         _selectedRecipe.value = recipe
     }
 

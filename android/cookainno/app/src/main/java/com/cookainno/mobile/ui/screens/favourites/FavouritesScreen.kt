@@ -101,6 +101,7 @@ fun FavouritesScreen(recipesViewModel: RecipesViewModel, navController: NavHostC
             ) {
                 items(favouriteRecipes ?: emptyList()) { recipe ->
                     RecipeItem(recipe = recipe, recipesViewModel = recipesViewModel, onCardClick = {
+                        recipesViewModel.selectRecipe(recipe)
                         navController.navigate(NavRoutes.DETAILS.name)
                     })
                 }
