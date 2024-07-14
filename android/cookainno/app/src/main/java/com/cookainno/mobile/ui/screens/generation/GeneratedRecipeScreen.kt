@@ -104,7 +104,7 @@ fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) 
                             text = recipe.name,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.inverseSurface,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(horizontal = 14.dp)
@@ -117,7 +117,7 @@ fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) 
                     text = stringResource(id = R.string.ingredients),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(horizontal = 30.dp)
                         .padding(bottom = 8.dp)
@@ -127,7 +127,7 @@ fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) 
                         Text(
                             text = "• $ingredient",
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(horizontal = 40.dp, vertical = 2.dp)
                         )
                     }
@@ -137,7 +137,7 @@ fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) 
                     text = stringResource(id = R.string.instructions),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(horizontal = 30.dp)
                         .padding(bottom = 8.dp)
@@ -149,7 +149,7 @@ fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) 
                         Text(
                             text = "• $instruction",
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSecondary,
+                            color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(horizontal = 40.dp, vertical = 2.dp)
                         )
                     }
@@ -225,14 +225,14 @@ fun TopBarDetails(
                     modifier = Modifier
                         .padding(8.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.surfaceBright,
+                            color = MaterialTheme.colorScheme.primary,
                             shape = RoundedCornerShape(30.dp)
                         )
                         .clip(RoundedCornerShape(30.dp))
                         .height(55.dp)
                         .width(350.dp)
                         .padding(14.dp),
-                    color = MaterialTheme.colorScheme.inverseSurface
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
