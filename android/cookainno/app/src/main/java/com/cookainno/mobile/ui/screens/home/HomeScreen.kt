@@ -66,7 +66,7 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            if (currentRoute != NavRoutes.DETAILS.name) {
+            if (currentRoute == NavRoutes.RECIPES.name || currentRoute== NavRoutes.FAVOURITES.name || currentRoute==NavRoutes.PROFILE.name) {
                 Surface(
                     shape = RoundedCornerShape(40.dp),
                     modifier = Modifier

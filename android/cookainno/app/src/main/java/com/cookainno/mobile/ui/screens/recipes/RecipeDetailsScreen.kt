@@ -94,14 +94,6 @@ fun RecipeDetails(
             item {
                 Spacer(modifier = Modifier.height((screenHeight / 2.5 - 30).dp))
             }
-            /*item {
-                TopBarDetails(
-                    //shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
-                    recipe = recipe, navController = navController
-                )
-
-                //Spacer(modifier = Modifier.height(10.dp))
-            }*/
             item {
                 Column(
                     modifier = Modifier
@@ -111,16 +103,8 @@ fun RecipeDetails(
                             color = Color.White,
                             RoundedCornerShape(topStartPercent = 10, topEndPercent = 10)
                         )
-                    //.clip(shape = RoundedCornerShape(topStartPercent = 30))
-                    //.clip(RoundedCornerShape(20.dp)),
                 ) {
-                    Column(
-                        /*.background(
-                            MaterialTheme.colorScheme.surfaceBright,
-                            RoundedCornerShape(20.dp)
-                        )*/
-                    ) {
-
+                    Column{
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -180,7 +164,6 @@ fun RecipeDetails(
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
-                                //.padding(horizontal = 30.dp)
                                 .padding(bottom = 8.dp)
                         )
 
@@ -206,7 +189,6 @@ fun RecipeDetails(
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
-                                //.padding(horizontal = 30.dp)
                                 .padding(bottom = 8.dp)
                         )
 

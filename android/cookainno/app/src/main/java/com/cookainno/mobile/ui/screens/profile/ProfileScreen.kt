@@ -78,14 +78,12 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
             onQueryChanged = {},
         ) {}
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
+            item { Spacer(modifier = Modifier.height(16.dp)) }
 
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
