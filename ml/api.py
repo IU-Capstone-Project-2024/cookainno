@@ -34,7 +34,7 @@ def read_advice(query: str):
 @app.get("/generate_image/{query}")
 def generate_image(query: str):
     # Usage example: localhost:8000/generate_image/carbonara
-    img_path = image_generation.download_image(query)
+    img_path = image_generation.get_image_url(query)
     if not img_path.is_file():
         return {"error": "Image not found"}
     return img_path
