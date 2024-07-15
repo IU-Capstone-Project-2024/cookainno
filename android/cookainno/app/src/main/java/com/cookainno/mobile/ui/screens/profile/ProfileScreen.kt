@@ -73,7 +73,7 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
         TopBar(
             isMain = false,
             isName = true,
-            shape = RoundedCornerShape(bottomStartPercent = 35, bottomEndPercent = 35),
+            shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
             query = TextFieldValue(),
             navController = rememberNavController(),
             onQueryChanged = {},
@@ -152,7 +152,7 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = randomAdvice,
+                            text = "$randomAdvice\n(C)Jason Statham",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground
                         )

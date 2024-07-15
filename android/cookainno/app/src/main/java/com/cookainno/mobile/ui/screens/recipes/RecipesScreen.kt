@@ -1,8 +1,10 @@
 package com.cookainno.mobile.ui.screens.recipes
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +41,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,8 +54,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -149,17 +155,42 @@ fun TopBar(
     onSearchClick: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    var expanded by remember { mutableStateOf(false) }
+
+    DisposableEffect(expanded) {
+        if (expanded) {
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+        onDispose { }
+    }
     Box(
         modifier = Modifier
-            .shadow(elevation = 8.dp, shape = shape)
-            .clip(shape)
+            .background(color = MaterialTheme.colorScheme.primary, shape = shape)
+            .fillMaxWidth()
+            .animateContentSize()
+            .height(if (expanded && !isName) 125.dp else 75.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                expanded = !expanded
+            }
     ) {
-        Surface(
-            color = MaterialTheme.colorScheme.primary, shape = shape, modifier = Modifier
-                .fillMaxWidth()
-                .height(if (!isName) 125.dp else 75.dp)
-        ) {
-            Column {
+        Column {
+            if (isName) {
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 22.dp, bottom = 9.dp)
+                )
+            } else if (expanded) {
                 Text(
                     text = stringResource(id = R.string.app_name),
                     fontSize = 24.sp,
@@ -169,80 +200,150 @@ fun TopBar(
                         .padding(horizontal = 20.dp)
                         .padding(top = 14.dp, bottom = 9.dp)
                 )
-                if (!isName) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        TextField(
-                            singleLine = true,
-                            value = query,
-                            onValueChange = { onQueryChanged(it) },
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TextField(
+                        singleLine = true,
+                        value = query,
+                        onValueChange = { onQueryChanged(it) },
 
-                            label = {
-                                Text(
-                                    "Search",
-                                    color = MaterialTheme.colorScheme.inversePrimary,
-                                )
-                            },
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                imeAction = ImeAction.Done
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    keyboardController?.hide()
-                                    onSearchClick()
-                                }
-                            ),
-                            trailingIcon = {
-                                IconButton(
-                                    modifier = Modifier.align(Alignment.CenterVertically),
-                                    onClick = {
-                                        onSearchClick()
-                                    },
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Search,
-                                        contentDescription = "search",
-                                        tint = MaterialTheme.colorScheme.inversePrimary
-                                    )
-                                }
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                                .clip(RoundedCornerShape(30.dp)),
-                            shape = RoundedCornerShape(30.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedContainerColor = Color.White,
-                                unfocusedContainerColor = Color.White,
-                                focusedIndicatorColor = Color.White,
-                                unfocusedIndicatorColor = Color.White,
+                        label = {
+                            Text(
+                                "Search",
+                                color = MaterialTheme.colorScheme.inversePrimary,
                             )
-                        )
-
-                        Spacer(modifier = Modifier.width(20.dp))
-                        if (isMain) {
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                                onSearchClick()
+                            }
+                        ),
+                        trailingIcon = {
                             IconButton(
-                                onClick = {
-                                    navController.navigate(NavRoutes.INGREDIENTS.name)
-                                },
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(30.dp))
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primaryContainer
-                                    )
-                                    .align(Alignment.CenterVertically)
-                                    .size(57.dp)
+                                    .align(Alignment.CenterVertically),
+                                onClick = {
+                                    onSearchClick()
+                                },
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.CameraAlt,
-                                    contentDescription = "camera",
-                                    tint = MaterialTheme.colorScheme.onPrimary
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "search",
+                                    tint = MaterialTheme.colorScheme.inversePrimary,
                                 )
                             }
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(30.dp))
+                            .focusRequester(focusRequester),
+                        shape = RoundedCornerShape(30.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedIndicatorColor = Color.White,
+                            unfocusedIndicatorColor = Color.White,
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.width(20.dp))
+                    if (isMain) {
+                        IconButton(
+                            onClick = {
+                                navController.navigate(NavRoutes.INGREDIENTS.name)
+                            },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(30.dp))
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer
+                                )
+                                .align(Alignment.CenterVertically)
+                                .size(57.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "camera",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 5.dp, end = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 14.dp, bottom = 9.dp)
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+
+                    IconButton(
+                        onClick = {
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(30.dp))
+                            .background(
+                                color = MaterialTheme.colorScheme.primaryContainer
+                            )
+                            .align(Alignment.CenterVertically)
+                            .size(57.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                expanded = !expanded
+                            }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "search",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                expanded = !expanded
+                            }
+                        )
+                    }
+
+                    if (isMain) {
+                        IconButton(
+                            onClick = {
+                                navController.navigate(NavRoutes.INGREDIENTS.name)
+                            },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(30.dp))
+                                .background(
+                                    color = MaterialTheme.colorScheme.primaryContainer
+                                )
+                                .align(Alignment.CenterVertically)
+                                .size(57.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "camera",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     }
                 }
@@ -250,6 +351,7 @@ fun TopBar(
         }
     }
 }
+
 
 @Composable
 fun RecipeItem(recipe: Recipe, recipesViewModel: RecipesViewModel, onCardClick: () -> Unit) {
