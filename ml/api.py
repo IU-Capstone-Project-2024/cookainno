@@ -3,6 +3,7 @@ from fastapi import FastAPI, Query, File, UploadFile
 import shutil
 import os
 import recipe_generation.mistral as mistral
+import recipe_generation.image_generation as image_generation
 from ingredient_detection.detect import GroceryItemDetector
 
 app = FastAPI()
@@ -30,6 +31,13 @@ def read_advice(query: str):
     # Usage example: http://127.0.0.1:8000/advice/deficit
     return mistral.daily_advice(query)
 
+@app.get("/generate_image/{query}")
+def generate_image(query: str):
+    # Usage example: localhost:8000/generate_image/carbonara
+    img_path = image_generation.download_image(query)
+    if not img_path.is_file():
+        return {"error": "Image not found"}
+    return img_path
 
 @app.post("/detect/")
 async def detect_ingredients(file: UploadFile = File(...)):
