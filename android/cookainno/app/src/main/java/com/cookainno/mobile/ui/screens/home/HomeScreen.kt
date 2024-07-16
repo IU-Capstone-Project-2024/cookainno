@@ -3,6 +3,14 @@ package com.cookainno.mobile.ui.screens.home
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.defaultDecayAnimationSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,7 +74,7 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            if (currentRoute == NavRoutes.RECIPES.name || currentRoute== NavRoutes.FAVOURITES.name || currentRoute==NavRoutes.PROFILE.name) {
+            if (currentRoute == NavRoutes.RECIPES.name || currentRoute == NavRoutes.FAVOURITES.name || currentRoute == NavRoutes.PROFILE.name) {
                 Surface(
                     shape = RoundedCornerShape(40.dp),
                     modifier = Modifier
@@ -132,7 +140,9 @@ fun HomeScreen(
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = navController, startDestination = NavRoutes.RECIPES.name) {
-                composable(NavRoutes.RECIPES.name) {
+                composable(
+                    NavRoutes.RECIPES.name,
+                ) {
                     ingredientsViewModel.emptyRecipes()
                     ingredientsViewModel.emptyIngredients()
                     recipesViewModel.resetRefreshings()
@@ -141,7 +151,28 @@ fun HomeScreen(
                         navController = navController
                     )
                 }
-                composable(NavRoutes.FAVOURITES.name) {
+                composable(
+                    NavRoutes.FAVOURITES.name,
+                    enterTransition = {
+                        fadeIn(
+                            animationSpec = tween(
+                                1000, easing = LinearEasing)
+                        ) + slideIntoContainer(
+                            animationSpec = tween(1000, easing = EaseIn),
+                            towards = AnimatedContentTransitionScope.SlideDirection.End
+                        )
+                    },
+                    exitTransition = {
+                        fadeOut(
+                            animationSpec = tween(
+                                1000, easing = LinearEasing
+                            )
+                        ) + slideOutOfContainer(
+                            animationSpec = tween(1000, easing = EaseOut),
+                            towards = AnimatedContentTransitionScope.SlideDirection.Start
+                        )
+                    }
+                    ) {
                     ingredientsViewModel.emptyRecipes()
                     recipesViewModel.resetRefreshings()
                     FavouritesScreen(
@@ -149,23 +180,94 @@ fun HomeScreen(
                         navController = navController
                     )
                 }
-                composable(NavRoutes.PROFILE.name) {
+                composable(
+                    NavRoutes.PROFILE.name,
+                    enterTransition = {
+                        fadeIn(
+                            animationSpec = tween(1000, easing = LinearEasing)
+                        ) + slideIntoContainer(
+                            animationSpec = tween(1000, easing = EaseIn),
+                            towards = AnimatedContentTransitionScope.SlideDirection.Start
+                        )
+                    },
+                    exitTransition = {
+                        fadeOut(
+                            animationSpec = tween(
+                                1000, easing = LinearEasing
+                            )
+                        ) + slideOutOfContainer(
+                            animationSpec = tween(1000, easing = EaseOut),
+                            towards = AnimatedContentTransitionScope.SlideDirection.End
+                        )
+                    }
+                    ) {
                     ProfileScreen(userViewModel = userViewModel, pic)
                 }
-                composable(NavRoutes.INGREDIENTS.name) {
+                composable(
+                    NavRoutes.INGREDIENTS.name,
+                    enterTransition = {
+                        fadeIn(
+                            animationSpec = tween(1000, easing = LinearEasing)
+                        ) + slideIntoContainer(
+                            animationSpec = tween(1000, easing = EaseIn),
+                            towards = AnimatedContentTransitionScope.SlideDirection.Start
+                        )
+                    },
+                    exitTransition = {
+                        fadeOut(
+                            animationSpec = tween(
+                                1000, easing = LinearEasing
+                            )
+                        ) + slideOutOfContainer(
+                            animationSpec = tween(1000, easing = EaseOut),
+                            towards = AnimatedContentTransitionScope.SlideDirection.End
+                        )
+                    }
+                    ) {
                     IngredientsScreen(
                         camViewModel = camViewModel,
                         ingredientsViewModel = ingredientsViewModel,
                         navController = navController
                     )
                 }
-                composable(NavRoutes.GENERATED.name) {
+                composable(
+                    NavRoutes.GENERATED.name,
+                    exitTransition = {
+                        fadeOut(
+                            animationSpec = tween(
+                                1000, easing = LinearEasing
+                            )
+                        ) + slideOutOfContainer(
+                            animationSpec = tween(1000, easing = EaseOut),
+                            towards = AnimatedContentTransitionScope.SlideDirection.End
+                        )
+                    }
+                    ) {
                     GeneratedRecipeScreen(
                         ingredientsViewModel = ingredientsViewModel,
                         navController = navController
                     )
                 }
-                composable(NavRoutes.DETAILS.name) {
+                composable(
+                    NavRoutes.DETAILS.name,
+                    enterTransition = {
+                        fadeIn(
+                            animationSpec = tween(1000, easing = LinearEasing)
+                        ) + slideIntoContainer(
+                            animationSpec = tween(1000, easing = EaseIn),
+                            towards = AnimatedContentTransitionScope.SlideDirection.Start
+                        )
+                    },
+                    exitTransition = {
+                        fadeOut(
+                            animationSpec = tween(
+                                1000, easing = LinearEasing
+                            )
+                        ) + slideOutOfContainer(
+                            animationSpec = tween(1000, easing = EaseOut),
+                            towards = AnimatedContentTransitionScope.SlideDirection.End
+                        )
+                    }) {
                     RecipeDetailsScreen(
                         recipesViewModel = recipesViewModel,
                         navController = navController

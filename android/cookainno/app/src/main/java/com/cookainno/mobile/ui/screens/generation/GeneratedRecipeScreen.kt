@@ -191,6 +191,28 @@ fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) 
                 }
             }
         }
+        Surface(
+            modifier = Modifier.padding(12.dp),
+            shape = RoundedCornerShape(30.dp),
+        ) {
+            IconButton(
+                onClick = {
+                    navController.navigateUp()
+                },
+                modifier = Modifier
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(
+                        color = Color.White
+                    )
+                    .size(40.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBackIosNew,
+                    contentDescription = "back",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
     }
 }
 

@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -72,7 +73,7 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
         TopBar(
             isMain = false,
             isName = true,
-            shape = RoundedCornerShape(bottomStartPercent = 35, bottomEndPercent = 35),
+            shape = RoundedCornerShape(bottomStartPercent = 25, bottomEndPercent = 25),
             query = TextFieldValue(),
             navController = rememberNavController(),
             onQueryChanged = {},
@@ -83,7 +84,10 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            item { Spacer(modifier = Modifier.height(16.dp)) }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             item {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -127,7 +131,9 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp)), colors = CardColors(
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp)) // Add shadow here
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardColors(
                         containerColor = Color.White,
                         contentColor = Color.Black,
                         disabledContainerColor = Color.White,
@@ -146,11 +152,12 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = randomAdvice,
+                            text = "$randomAdvice\n(C)Jason Statham",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground
                         )
                     }
+
                 }
             }
 
@@ -159,7 +166,9 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
                     modifier = Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp)), colors = CardColors(
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp)) // Add shadow here
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardColors(
                         containerColor = Color.White,
                         contentColor = Color.Black,
                         disabledContainerColor = Color.White,
@@ -170,12 +179,18 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Parameters", style = MaterialTheme.typography.titleMedium.copy(
+                            text = "Parameters",
+                            style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.SemiBold, fontSize = 20.sp
-                            ), color = MaterialTheme.colorScheme.onBackground
+                            ),
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        UserDataSection(userViewModel, userData = userData, LocalContext.current)
+                        UserDataSection(
+                            userViewModel,
+                            userData = userData,
+                            LocalContext.current
+                        )
                     }
                 }
 
@@ -250,7 +265,6 @@ fun UserDataSection(
                     context = context,
                     "Change Weight",
                     onInputReceived = { input ->
-                        //userViewModel.onWeightChange(input)
                         userViewModel.updateUserData(
                             weight = input.toInt(),
                             height = userData?.height!!,
