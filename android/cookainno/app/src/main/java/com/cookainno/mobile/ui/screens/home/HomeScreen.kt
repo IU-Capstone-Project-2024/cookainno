@@ -8,7 +8,6 @@ import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -29,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -151,28 +149,7 @@ fun HomeScreen(
                         navController = navController
                     )
                 }
-                composable(
-                    NavRoutes.FAVOURITES.name,
-                    enterTransition = {
-                        fadeIn(
-                            animationSpec = tween(
-                                1000, easing = LinearEasing)
-                        ) + slideIntoContainer(
-                            animationSpec = tween(1000, easing = EaseIn),
-                            towards = AnimatedContentTransitionScope.SlideDirection.End
-                        )
-                    },
-                    exitTransition = {
-                        fadeOut(
-                            animationSpec = tween(
-                                1000, easing = LinearEasing
-                            )
-                        ) + slideOutOfContainer(
-                            animationSpec = tween(1000, easing = EaseOut),
-                            towards = AnimatedContentTransitionScope.SlideDirection.Start
-                        )
-                    }
-                    ) {
+                composable(NavRoutes.FAVOURITES.name) {
                     ingredientsViewModel.emptyRecipes()
                     recipesViewModel.resetRefreshings()
                     FavouritesScreen(
@@ -182,48 +159,12 @@ fun HomeScreen(
                 }
                 composable(
                     NavRoutes.PROFILE.name,
-                    enterTransition = {
-                        fadeIn(
-                            animationSpec = tween(1000, easing = LinearEasing)
-                        ) + slideIntoContainer(
-                            animationSpec = tween(1000, easing = EaseIn),
-                            towards = AnimatedContentTransitionScope.SlideDirection.Start
-                        )
-                    },
-                    exitTransition = {
-                        fadeOut(
-                            animationSpec = tween(
-                                1000, easing = LinearEasing
-                            )
-                        ) + slideOutOfContainer(
-                            animationSpec = tween(1000, easing = EaseOut),
-                            towards = AnimatedContentTransitionScope.SlideDirection.End
-                        )
-                    }
-                    ) {
+                ) {
                     ProfileScreen(userViewModel = userViewModel, pic)
                 }
                 composable(
                     NavRoutes.INGREDIENTS.name,
-                    enterTransition = {
-                        fadeIn(
-                            animationSpec = tween(1000, easing = LinearEasing)
-                        ) + slideIntoContainer(
-                            animationSpec = tween(1000, easing = EaseIn),
-                            towards = AnimatedContentTransitionScope.SlideDirection.Start
-                        )
-                    },
-                    exitTransition = {
-                        fadeOut(
-                            animationSpec = tween(
-                                1000, easing = LinearEasing
-                            )
-                        ) + slideOutOfContainer(
-                            animationSpec = tween(1000, easing = EaseOut),
-                            towards = AnimatedContentTransitionScope.SlideDirection.End
-                        )
-                    }
-                    ) {
+                ) {
                     IngredientsScreen(
                         camViewModel = camViewModel,
                         ingredientsViewModel = ingredientsViewModel,
@@ -232,17 +173,7 @@ fun HomeScreen(
                 }
                 composable(
                     NavRoutes.GENERATED.name,
-                    exitTransition = {
-                        fadeOut(
-                            animationSpec = tween(
-                                1000, easing = LinearEasing
-                            )
-                        ) + slideOutOfContainer(
-                            animationSpec = tween(1000, easing = EaseOut),
-                            towards = AnimatedContentTransitionScope.SlideDirection.End
-                        )
-                    }
-                    ) {
+                ) {
                     GeneratedRecipeScreen(
                         ingredientsViewModel = ingredientsViewModel,
                         navController = navController
@@ -252,19 +183,19 @@ fun HomeScreen(
                     NavRoutes.DETAILS.name,
                     enterTransition = {
                         fadeIn(
-                            animationSpec = tween(1000, easing = LinearEasing)
+                            animationSpec = tween(300, easing = LinearEasing)
                         ) + slideIntoContainer(
-                            animationSpec = tween(1000, easing = EaseIn),
+                            animationSpec = tween(300, easing = EaseIn),
                             towards = AnimatedContentTransitionScope.SlideDirection.Start
                         )
                     },
                     exitTransition = {
                         fadeOut(
                             animationSpec = tween(
-                                1000, easing = LinearEasing
+                                300, easing = LinearEasing
                             )
                         ) + slideOutOfContainer(
-                            animationSpec = tween(1000, easing = EaseOut),
+                            animationSpec = tween(300, easing = EaseOut),
                             towards = AnimatedContentTransitionScope.SlideDirection.End
                         )
                     }) {
