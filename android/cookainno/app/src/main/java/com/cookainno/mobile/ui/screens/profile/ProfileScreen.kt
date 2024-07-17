@@ -52,7 +52,6 @@ import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.UserDataResponse
 import com.cookainno.mobile.ui.screens.auth.UserViewModel
 import com.cookainno.mobile.ui.screens.recipes.TopBar
-import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -152,7 +151,7 @@ fun ProfileScreen(userViewModel: UserViewModel, pic: Int) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "$randomAdvice\n(C)Jason Statham",
+                            text = randomAdvice,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -228,7 +227,7 @@ fun UserDataRow(
             onClick = onRedactClick,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.scrim,
+                    color = MaterialTheme.colorScheme.inverseSurface,
                     shape = RoundedCornerShape(20.dp)
                 )
                 .height(40.dp)
