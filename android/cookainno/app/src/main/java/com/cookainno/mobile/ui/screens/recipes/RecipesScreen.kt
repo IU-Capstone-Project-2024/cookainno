@@ -222,12 +222,6 @@ fun TopBar(
                         value = query,
                         onValueChange = { onQueryChanged(it) },
 
-                        label = {
-                            Text(
-                                "Search",
-                                color = MaterialTheme.colorScheme.inversePrimary,
-                            )
-                        },
                         keyboardOptions = KeyboardOptions.Default.copy(
                             imeAction = ImeAction.Done
                         ),
