@@ -5,13 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.NavigateBefore
 import androidx.compose.material.icons.automirrored.filled.NavigateNext
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
@@ -44,7 +47,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cookainno.mobile.ui.NavRoutes
 import com.cookainno.mobile.ui.screens.LoadingScreen
@@ -65,6 +71,12 @@ fun IngredientsScreen(
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+
+
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp
+    val screenWidth = configuration.screenWidthDp
+
     if (imageCam != null) {
         ingredientsViewModel.detectIngredients(imageCam!!)
         camViewModel.resetImages()
@@ -107,10 +119,64 @@ fun IngredientsScreen(
                 }
             }
 
-            Column {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 if (isLoading) {
                     LoadingScreen()
                 } else {
+                    LazyColumn(verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.primary),) {
+                        item {
+                            Row(
+                                Modifier
+                                    .background(color = MaterialTheme.colorScheme.primary)
+                            ) {
+                                IconButton(modifier = Modifier
+                                    .padding(8.dp)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        shape = RoundedCornerShape(30.dp)
+                                    ),
+                                    onClick = {
+                                        navController.navigateUp() // check for null ingredients
+                                    }) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.NavigateBefore,
+                                        tint = MaterialTheme.colorScheme.inversePrimary,
+                                        contentDescription = "before"
+                                    )
+                                }
+                                Text(
+                                    text = "Ingredients",
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White,
+                                    modifier = Modifier
+                                        .padding(horizontal = 52.dp)
+                                        .align(Alignment.CenterVertically)
+                                )
+                                IconButton(modifier = Modifier
+                                    .padding(8.dp)
+                                    .background(
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        shape = RoundedCornerShape(30.dp)
+                                    ),
+                                    onClick = {
+                                        ingredientsViewModel.generateRecipes() // check for null ingredients
+                                    }) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.NavigateNext,
+                                        tint = MaterialTheme.colorScheme.inversePrimary,
+                                        contentDescription = "Next"
+                                    )
+                                }
+                            }
+                        }
+                    }
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -120,8 +186,7 @@ fun IngredientsScreen(
                                     bottomEndPercent = 10,
                                     bottomStartPercent = 10
                                 )
-                            )
-                            .alpha(0.8f),
+                            ),
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -158,7 +223,7 @@ fun IngredientsScreen(
                             }
                         }
                         item {
-                            Row {
+                            Row (modifier = Modifier.padding(8.dp)){
                                 Button(
                                     modifier = Modifier
                                         .padding(bottom = 8.dp)
@@ -171,6 +236,7 @@ fun IngredientsScreen(
                                     Icon(Icons.Default.Add, contentDescription = "Add Ingredient")
                                     Text("Add Ingredient")
                                 }
+                                Spacer(modifier = Modifier.width(((screenWidth - 140)/2).dp))
                                 IconButton(
                                     modifier = Modifier
                                         .padding(bottom = 8.dp, start = 8.dp)
@@ -184,21 +250,6 @@ fun IngredientsScreen(
                                         Icons.Default.CameraAlt,
                                         contentDescription = "Open Camera",
                                         tint = MaterialTheme.colorScheme.inversePrimary
-                                    )
-                                }
-                                IconButton(modifier = Modifier
-                                    .padding(bottom = 8.dp, start = 8.dp)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                        shape = RoundedCornerShape(30.dp)
-                                    ),
-                                    onClick = {
-                                        ingredientsViewModel.generateRecipes() // check for null ingredients
-                                    }) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.NavigateNext,
-                                        tint = MaterialTheme.colorScheme.inversePrimary,
-                                        contentDescription = "Next"
                                     )
                                 }
                             }
