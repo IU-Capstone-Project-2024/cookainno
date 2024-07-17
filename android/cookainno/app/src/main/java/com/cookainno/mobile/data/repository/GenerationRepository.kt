@@ -48,10 +48,10 @@ class GenerationRepository {
     private fun parseRecipesFromJson(json: String): List<GeneratedRecipe> {
         val gson = Gson()
         val response = gson.fromJson(json, GenRecipesResponse::class.java)
-        // remove when images will be generated
-        for (i in response.recipes) {
-            i.imageUrl = "https://png.pngitem.com/pimgs/s/391-3918617_clip-art-hd-png-download.png"
-        }
+        // placeholder: remove when images will be generated
+//        for (i in response.recipes) {
+//            i.image_url = "https://png.pngitem.com/pimgs/s/391-3918617_clip-art-hd-png-download.png"
+//        }
         return response.recipes
     }
 

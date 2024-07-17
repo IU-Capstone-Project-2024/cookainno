@@ -86,7 +86,7 @@ class IngredientsViewModel(preferencesRepository: PreferencesRepository) : ViewM
     private fun convertToRecipeToAdd(recipe: GeneratedRecipe): RecipeToAdd {
         val oldIngredients = recipe.ingredients.toString()
         val ingredients = oldIngredients.substring(1, oldIngredients.length-2)
-        return RecipeToAdd(recipe.name, ingredients, recipe.instructions, recipe.imageUrl)
+        return RecipeToAdd(recipe.name, ingredients, recipe.instructions, recipe.image_url)
     }
 
     fun emptyIngredients() {

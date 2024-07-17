@@ -10,7 +10,7 @@ data class GeneratedRecipe(
     @SerializedName("name") val name: String,
     @SerializedName("ingredients") val ingredients: List<String>,
     @SerializedName("instruction") val instructions: String,
-    var imageUrl: String
+    var image_url: String
 )
 
 data class RecipeToAdd(

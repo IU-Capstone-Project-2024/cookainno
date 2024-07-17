@@ -8,7 +8,6 @@ import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.defaultDecayAnimationSpec
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -29,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -161,12 +159,12 @@ fun HomeScreen(
                 }
                 composable(
                     NavRoutes.PROFILE.name,
-                    ) {
+                ) {
                     ProfileScreen(userViewModel = userViewModel, pic)
                 }
                 composable(
                     NavRoutes.INGREDIENTS.name,
-                    ) {
+                ) {
                     IngredientsScreen(
                         camViewModel = camViewModel,
                         ingredientsViewModel = ingredientsViewModel,
@@ -175,7 +173,7 @@ fun HomeScreen(
                 }
                 composable(
                     NavRoutes.GENERATED.name,
-                    ) {
+                ) {
                     GeneratedRecipeScreen(
                         ingredientsViewModel = ingredientsViewModel,
                         navController = navController

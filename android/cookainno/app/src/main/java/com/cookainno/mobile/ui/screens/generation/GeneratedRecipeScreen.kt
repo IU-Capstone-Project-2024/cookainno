@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,22 +33,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.cookainno.mobile.R
 import com.cookainno.mobile.data.model.GeneratedRecipe
-import com.cookainno.mobile.data.model.Recipe
-import com.cookainno.mobile.ui.NavRoutes
 
 @Composable
 fun GeneratedRecipeScreen(
@@ -67,8 +62,8 @@ fun GeneratedRecipeScreen(
 fun RecipeDetailsGen(recipe: GeneratedRecipe, navController: NavHostController) {
     Log.d("ROSENBERG", "RecipeDetailsGen: ${recipe}")
 
-    var isLiked = false;
-    var liked by rememberSaveable {
+    val isLiked = false
+    val liked by rememberSaveable {
         mutableStateOf(isLiked)
     }
 
@@ -223,7 +218,7 @@ fun RecipeImage(recipe: GeneratedRecipe) {
     val imageHeight = remember { screenHeight / 2.5 }
 
     Image(
-        painter = rememberAsyncImagePainter(model = recipe.imageUrl),
+        painter = rememberAsyncImagePainter(model = recipe.image_url),
         contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
