@@ -103,7 +103,9 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
     }
 
     fun isFavourite(recipe: Recipe): Boolean {
-        return allFavourites?.contains(recipe)?:false
+        Log.d("FAVCHECK", "isFavourite: ${recipe.name} ${allFavourites?.contains(recipe)?:false}")
+        Log.d("ALLFAVS", "isFavourite: ${allFavourites?.map { it.name }}")
+        return allFavourites?.map { it.name }?.contains(recipe.name)?:false
     }
 
     fun selectRecipe(recipe: Recipe) {
@@ -112,15 +114,15 @@ class RecipesViewModel(preferencesRepository: PreferencesRepository) : ViewModel
     }
 
     fun addFavouriteRecipe(recipe: Recipe) {
+        allFavourites?.add(recipe)
         viewModelScope.launch {
-            allFavourites?.add(recipe)
             recipesRepository.addFavouriteRecipe(userId, recipe.id)
         }
     }
 
     fun deleteFavouriteRecipe(recipe: Recipe) {
+        allFavourites?.remove(recipe)
         viewModelScope.launch {
-            allFavourites?.remove(recipe)
             recipesRepository.deleteFavouriteRecipe(userId, recipe.id)
         }
     }

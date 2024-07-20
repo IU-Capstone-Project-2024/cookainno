@@ -26,7 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
@@ -261,7 +261,7 @@ fun TopBar(
                                 .size(57.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.CameraAlt,
+                                imageVector = Icons.Default.AutoAwesome,
                                 contentDescription = "camera",
                                 tint = MaterialTheme.colorScheme.onPrimary
                             )
@@ -285,7 +285,7 @@ fun TopBar(
                             .padding(horizontal = 20.dp)
                             .padding(top = 14.dp, bottom = 9.dp)
                     )
-                    Spacer(modifier = Modifier.width(20.dp))
+                    Spacer(modifier = Modifier.width(50.dp))
 
                     IconButton(
                         onClick = {
@@ -331,7 +331,7 @@ fun TopBar(
                                 .size(57.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.CameraAlt,
+                                imageVector = Icons.Default.AutoAwesome,
                                 contentDescription = "camera",
                                 tint = MaterialTheme.colorScheme.onPrimary
                             )
