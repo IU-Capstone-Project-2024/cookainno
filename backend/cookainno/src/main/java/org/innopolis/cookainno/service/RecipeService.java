@@ -82,10 +82,9 @@ public class RecipeService {
     }
 
     public List<RecipeResponse> searchRecipesByName(String name, int page, int size) {
-        name = name.toLowerCase().trim();
-
+        name  = name.toLowerCase().trim();
         Pageable pageable = PageRequest.of(page, size);
-        Page<Recipe> recipePage = recipeRepository.findByNameContaining(name, pageable);
+        Page<Recipe> recipePage = recipeRepository.findByNameContainingIgnoreCase(name, pageable);
         return recipePage.stream()
                 .map(this::mapToRecipeResponse)
                 .toList();
@@ -160,7 +159,7 @@ public class RecipeService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Recipe> recipePage = recipeRepository.findByNameContainingAndUserFavouritesUser(name, user, pageable);
+        Page<Recipe> recipePage = recipeRepository.findByNameContainingIgnoreCaseAndUserFavouritesUser(name, user, pageable);
 
         return recipePage.getContent().stream()
                 .map(this::mapToRecipeResponse)

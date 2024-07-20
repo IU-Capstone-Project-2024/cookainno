@@ -1,9 +1,13 @@
 import os
+import json
+
 from typing import List
 
 from dotenv import load_dotenv
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
+
+from recipe_generation.image_generation import get_image_url
 
 # TODO: exceptions, json-conversion, context (нет рецептам из тараканов), role="system"
 
@@ -31,15 +35,20 @@ def generate_recipes(ingredients: List[str]) -> 'str':
                                       "lack of entered items. In case of not eatable ingredients response with "
                                       "'Uneatable food'."),
                   ChatMessage(role="user",
-                              content=f"Propose recipes in which {ingredients} can be used. You need to provide 5 "
+                              content=f"Propose recipes in which {ingredients} can be used. You need to provide 2 "
                                       f"variants of meals. It is sufficient just to show the name, ingredients list "
                                       f"for, and instruction for the preparation for each meal. Compose a response as "
                                       f"JSON object 'recipes': list of recipes with fields: 'name', 'ingredients', "
                                       f"and 'instruction'.")]
     )
-    response = chat_response.choices[0].message.content
-    print(type(response))
-    return response
+    response = json.loads(chat_response.choices[0].message.content)
+
+    for recipe in response.get("recipes", []):
+        recipe_name = recipe.get("name", "")
+        image_url = get_image_url(recipe_name)
+        recipe["image_url"] = image_url
+
+    return json.dumps(response, indent=4)
 
 
 def daily_advice(plan: str) -> str:
